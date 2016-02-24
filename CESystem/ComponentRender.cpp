@@ -4,10 +4,8 @@
 ComponentRender::ComponentRender(bool(&ckey)[SIZE])
 {
 	ckey[COMPONENT_RENDER] = true;
-	positionX = 10;
-	positionY = 10;
+	shape.setPosition(0, 0);
 	shape.setRadius(30);
-	shape.setPosition(positionX, positionY);
 	shape.setFillColor(sf::Color::Blue);
 }
 
@@ -17,22 +15,21 @@ ComponentRender::~ComponentRender()
 }
 
 
-void ComponentRender::setPosition(int x, int y)
+void ComponentRender::setPosition(sf::Vector2f position)
 {
-	positionX = x;
-	positionY = y;
+	shape.setPosition(position);
 }
 
 
-int ComponentRender::getPositionX()
+float ComponentRender::getPositionX()
 {
-	return positionX;
+	return shape.getPosition().x;
 }
 
 
-int ComponentRender::getPositionY()
+float ComponentRender::getPositionY()
 {
-	return positionY;
+	return shape.getPosition().y;
 }
 
 

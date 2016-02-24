@@ -3,17 +3,27 @@
 
 #include "EntityPlayer.h"
 #include "RenderSystem.h"
-
+#include "MovementSystem.h"
 
 
 int main()
 {
-	sf::RenderWindow window(sf::VideoMode(200, 200), "SFML works!");
-	sf::CircleShape shape(100.f);
-	shape.setFillColor(sf::Color::Green);
+	std::vector<Entity*> entityList;
+
+	sf::RenderWindow window(sf::VideoMode(800, 800), "Component Enitity System");
+	window.setFramerateLimit(60);
 
 	RenderSystem renderSystem(window);
-	renderSystem.entityList.push_back(new EntityPlayer);
+	MovementSystem movementSystem;
+
+	for (int i = 0; i < 800; i++)
+	{
+		EntityPlayer* player = new EntityPlayer;
+		player->render->setPosition(sf::Vector2f(i, i));
+		player->movement->setRotation(180);
+		player->movement->setSpeed(1*(1+(i*0.01)));
+		entityList.push_back(player);
+	}
 
 	/*
 	The Loop
@@ -28,8 +38,8 @@ int main()
 		}
 
 		window.clear();
-		renderSystem.RunSystem();
-		//window.draw(shape);
+		movementSystem.runSystem(entityList);
+		renderSystem.runSystem(entityList);
 		window.display();
 	}
 

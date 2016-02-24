@@ -6,16 +6,14 @@
 class ComponentRender : public Component
 {
 private:
-	int positionX;
-	int positionY;
 	sf::CircleShape shape;
 
 public:
 	ComponentRender(bool(&ckey)[SIZE]);
 	~ComponentRender();
 
-	void setPosition(int x, int y);
-	int getPositionX();
-	int getPositionY();
+	void setPosition(sf::Vector2f);
+	float getPositionX();
+	float getPositionY();
 	sf::CircleShape getShape();
 };

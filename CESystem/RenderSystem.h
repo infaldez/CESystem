@@ -1,17 +1,16 @@
 #pragma once
 
 #include <vector>
-#include "Entity.h"
 #include <SFML\Graphics.hpp>
+
+#include "Entity.h"
 
 class RenderSystem
 {
-public:
-	std::vector<Entity*> entityList;
+private:
 	sf::RenderWindow *window;
-
-	void AddEntity(Entity *entity);
-	void RunSystem();
+public:
+	void runSystem(std::vector<Entity*> &entityList);
 
 	RenderSystem(sf::RenderWindow&);
 	~RenderSystem();

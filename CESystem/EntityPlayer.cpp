@@ -4,6 +4,7 @@
 EntityPlayer::EntityPlayer()
 {
 	render = new ComponentRender(componentKey);
+	movement = new ComponentMovement(componentKey);
 }
 
 

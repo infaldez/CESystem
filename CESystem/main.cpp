@@ -1,4 +1,10 @@
 #include <SFML/Graphics.hpp>
+#include <iostream>
+
+#include "EntityPlayer.h"
+#include "RenderSystem.h"
+
+
 
 int main()
 {
@@ -6,6 +12,12 @@ int main()
 	sf::CircleShape shape(100.f);
 	shape.setFillColor(sf::Color::Green);
 
+	RenderSystem renderSystem(window);
+	renderSystem.entityList.push_back(new EntityPlayer);
+
+	/*
+	The Loop
+	*/
 	while (window.isOpen())
 	{
 		sf::Event event;
@@ -16,7 +28,8 @@ int main()
 		}
 
 		window.clear();
-		window.draw(shape);
+		renderSystem.RunSystem();
+		//window.draw(shape);
 		window.display();
 	}
 

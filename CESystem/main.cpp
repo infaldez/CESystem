@@ -4,7 +4,9 @@
 #include "EntityPlayer.h"
 #include "RenderSystem.h"
 #include "MovementSystem.h"
+#include "CollisionSystem.h"
 
+#include <math.h>
 
 int main()
 {
@@ -15,13 +17,14 @@ int main()
 
 	RenderSystem renderSystem(window);
 	MovementSystem movementSystem;
+	CollisionSystem collisionSystem;
 
 	for (int i = 0; i < 800; i++)
 	{
 		EntityPlayer* player = new EntityPlayer;
 		player->render->setPosition(sf::Vector2f(i, i));
-		player->movement->setRotation(180);
-		player->movement->setSpeed(1*(1+(i*0.01)));
+		player->movement->setRotation(i);
+		player->movement->setSpeed(1);
 		entityList.push_back(player);
 	}
 
@@ -39,6 +42,7 @@ int main()
 
 		window.clear();
 		movementSystem.runSystem(entityList);
+		//collisionSystem.runSystem(entityList);
 		renderSystem.runSystem(entityList);
 		window.display();
 	}

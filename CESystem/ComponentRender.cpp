@@ -6,6 +6,7 @@ ComponentRender::ComponentRender(bool(&ckey)[SIZE])
 	ckey[COMPONENT_RENDER] = true;
 	shape.setPosition(0, 0);
 	shape.setRadius(30);
+	shape.setOrigin(30,30);
 	shape.setFillColor(sf::Color::Blue);
 }
 

@@ -1,4 +1,5 @@
 #include "RenderSystem.h"
+
 #include "Entity.h"
 #include "Component.h"
 #include "EntityPlayer.h"

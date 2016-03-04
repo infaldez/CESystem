@@ -22,9 +22,7 @@ void MovementSystem::runSystem(std::vector<Entity*> &entityList)
 		{	
 			int rotation = ((EntityPlayer*)entityList.at(i))->movement->getRotation();
 			float speed = ((EntityPlayer*)entityList.at(i))->movement->getSpeed();
-			sf::CircleShape shape = ((EntityPlayer*)entityList.at(i))->render->getShape();
-			
-			//std::cout << shape.getPosition().x << std::endl;
+			sf::CircleShape shape = ((EntityPlayer*)entityList.at(i))->render->getShape();	
 
 			this->scale = countScale(rotation);
 			this->velocity = countVelocity(this->scale, speed);

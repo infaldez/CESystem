@@ -83,6 +83,7 @@
     <ClCompile Include="Component.cpp" />
     <ClCompile Include="ComponentCollision.cpp" />
     <ClCompile Include="ComponentMovement.cpp" />
+    <ClCompile Include="ComponentPlayerInput.cpp" />
     <ClCompile Include="ComponentRender.cpp" />
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="EntityPlayer.cpp" />
@@ -95,6 +96,7 @@
     <ClInclude Include="Component.h" />
     <ClInclude Include="ComponentCollision.h" />
     <ClInclude Include="ComponentMovement.h" />
+    <ClInclude Include="ComponentPlayerInput.h" />
     <ClInclude Include="ComponentRender.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="EntityPlayer.h" />

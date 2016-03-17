@@ -6,8 +6,7 @@
 #include "ComponentCollision.h"
 #include "ComponentPlayerInput.h"
 
-
-class EntityPlayer : public Entity
+class EntityNonPlayer : public Entity
 {
 public:
 	ComponentRender *render;
@@ -15,7 +14,7 @@ public:
 	ComponentCollision *collision;
 	ComponentPlayerInput *playerInput;
 
-	EntityPlayer();
-	~EntityPlayer();
+	EntityNonPlayer();
+	~EntityNonPlayer();
 };
 

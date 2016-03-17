@@ -9,7 +9,7 @@ private:
 	sf::CircleShape shape;
 
 public:
-	ComponentRender(bool(&ckey)[SIZE]);
+	ComponentRender(bool(&ckey)[components::SIZE]);
 	~ComponentRender();
 
 	void setPosition(sf::Vector2f);

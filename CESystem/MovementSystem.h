@@ -4,6 +4,8 @@
 #include <SFML\Graphics.hpp>
 
 #include "Entity.h"
+#include "ComponentMovement.h"
+#include "ComponentRender.h"
 
 class MovementSystem
 {

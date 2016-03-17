@@ -3,6 +3,8 @@
 #include <math.h>
 #include "EntityPlayer.h"
 
+#include "InputSystem.h"
+
 #include <iostream>
 
 MovementSystem::MovementSystem()
@@ -14,30 +16,48 @@ MovementSystem::~MovementSystem()
 {
 }
 
+/*
+	TODO:
+	Split this to smaller functions
+*/
 void MovementSystem::runSystem(std::vector<Entity*> &entityList)
 {
 	for (int i = 0; i < entityList.size(); i++)
 	{
-		if (entityList.at(i)->componentKey[COMPONENT_RENDER] && entityList.at(i)->componentKey[COMPONENT_MOVEMENT])
+		if (entityList.at(i)->componentKey[components::id::COMPONENT_RENDER] && entityList.at(i)->componentKey[components::id::COMPONENT_MOVEMENT])
 		{	
-			int rotation = ((EntityPlayer*)entityList.at(i))->movement->getRotation();
-			float speed = ((EntityPlayer*)entityList.at(i))->movement->getSpeed();
-			sf::CircleShape shape = ((EntityPlayer*)entityList.at(i))->render->getShape();	
+			ComponentRender* render = NULL;
+			ComponentMovement* movement = NULL;
 
-			this->scale = countScale(rotation);
-			this->velocity = countVelocity(this->scale, speed);
+			for (int j = 0; j < entityList.at(i)->getComponents().size(); ++j)
+			{
+				if (entityList.at(i)->getComponents().at(j)->getComponentId() == components::id::COMPONENT_RENDER)
+					render = ((ComponentRender*)entityList.at(i)->getComponents().at(j));	
+				if (entityList.at(i)->getComponents().at(j)->getComponentId() == components::id::COMPONENT_MOVEMENT)
+					movement = ((ComponentMovement*)entityList.at(i)->getComponents().at(j));
+					
+				if (render != NULL && movement != NULL)
+				{	
+					int rotation = movement->getRotation();
+					float speed = movement->getSpeed();
+					sf::CircleShape shape = render->getShape();
 
-			((EntityPlayer*)entityList.at(i))->render->setPosition(newPosition(shape.getPosition(), velocity));
+					this->scale = countScale(rotation);
+					this->velocity = countVelocity(this->scale, speed);
+
+					render->setPosition(newPosition(shape.getPosition(), velocity));
+				}
+			}
 		}
 	}
 }
 
 sf::Vector2f MovementSystem::countScale(int rotation)
 {
-	float radians = (rotation - 90)* 3.14 / 180; // change angle to radians
+	float radians = (rotation - 90)* 3.14 / 180;
 
-	float scale_x = cos(radians); //scale x
-	float scale_y = sin(radians); //scale y
+	float scale_x = cos(radians);
+	float scale_y = sin(radians); 
 
 	return sf::Vector2f(scale_x, scale_y);
 }

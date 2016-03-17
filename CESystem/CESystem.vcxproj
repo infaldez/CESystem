@@ -79,6 +79,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="ActionMove.cpp" />
     <ClCompile Include="CollisionSystem.cpp" />
     <ClCompile Include="Component.cpp" />
     <ClCompile Include="ComponentCollision.cpp" />
@@ -86,12 +87,15 @@
     <ClCompile Include="ComponentPlayerInput.cpp" />
     <ClCompile Include="ComponentRender.cpp" />
     <ClCompile Include="Entity.cpp" />
+    <ClCompile Include="EntityNonPlayer.cpp" />
     <ClCompile Include="EntityPlayer.cpp" />
+    <ClCompile Include="InputSystem.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MovementSystem.cpp" />
     <ClCompile Include="RenderSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ActionMove.h" />
     <ClInclude Include="CollisionSystem.h" />
     <ClInclude Include="Component.h" />
     <ClInclude Include="ComponentCollision.h" />
@@ -99,7 +103,10 @@
     <ClInclude Include="ComponentPlayerInput.h" />
     <ClInclude Include="ComponentRender.h" />
     <ClInclude Include="Entity.h" />
+    <ClInclude Include="EntityNonPlayer.h" />
     <ClInclude Include="EntityPlayer.h" />
+    <ClInclude Include="Actions.h" />
+    <ClInclude Include="InputSystem.h" />
     <ClInclude Include="MovementSystem.h" />
     <ClInclude Include="RenderSystem.h" />
   </ItemGroup>

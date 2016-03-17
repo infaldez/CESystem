@@ -3,6 +3,10 @@
 #include <vector>
 #include "Entity.h"
 
+#include "ComponentCollision.h"
+#include "ComponentMovement.h"
+#include "ComponentRender.h"
+
 class CollisionSystem
 {
 public:

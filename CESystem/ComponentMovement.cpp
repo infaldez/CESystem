@@ -1,9 +1,10 @@
 #include "ComponentMovement.h"
 #include "Component.h"
 
-ComponentMovement::ComponentMovement(bool(&ckey)[SIZE])
+ComponentMovement::ComponentMovement(bool(&ckey)[components::SIZE])
 {
-	ckey[COMPONENT_MOVEMENT] = true;
+	cid = components::id::COMPONENT_MOVEMENT;
+	ckey[components::id::COMPONENT_MOVEMENT] = true;
 	rotation = 0;
 	speed = 0;
 }

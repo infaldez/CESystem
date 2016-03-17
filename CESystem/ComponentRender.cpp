@@ -1,9 +1,10 @@
 #include "ComponentRender.h"
 
 
-ComponentRender::ComponentRender(bool(&ckey)[SIZE])
+ComponentRender::ComponentRender(bool(&ckey)[components::SIZE])
 {
-	ckey[COMPONENT_RENDER] = true;
+	cid = components::id::COMPONENT_RENDER;
+	ckey[components::id::COMPONENT_RENDER] = true;
 	shape.setPosition(0, 0);
 	shape.setRadius(30);
 	shape.setOrigin(30,30);

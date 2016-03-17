@@ -9,7 +9,7 @@ private:
 	int rotation;
 	float speed;
 public:
-	ComponentMovement(bool(&ckey)[SIZE]);
+	ComponentMovement(bool(&ckey)[components::SIZE]);
 	~ComponentMovement();
 
 	void setRotation(int rotation);

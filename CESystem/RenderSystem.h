@@ -4,6 +4,8 @@
 #include <SFML\Graphics.hpp>
 
 #include "Entity.h"
+#include "ComponentRender.h"
+
 
 class RenderSystem
 {
@@ -15,3 +17,4 @@ public:
 	RenderSystem(sf::RenderWindow&);
 	~RenderSystem();
 };
+

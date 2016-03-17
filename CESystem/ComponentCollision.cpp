@@ -1,9 +1,10 @@
 #include "ComponentCollision.h"
 
 
-ComponentCollision::ComponentCollision(bool (&ckey)[SIZE])
+ComponentCollision::ComponentCollision(bool (&ckey)[components::SIZE])
 {
-	ckey[COMPONENT_COLLISION] = true;
+	cid = components::id::COMPONENT_COLLISION;
+	ckey[components::id::COMPONENT_COLLISION] = true;
 }
 
 

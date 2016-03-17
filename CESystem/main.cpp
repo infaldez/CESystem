@@ -2,9 +2,14 @@
 #include <iostream>
 
 #include "EntityPlayer.h"
+#include "EntityNonPlayer.h"
+
 #include "RenderSystem.h"
 #include "MovementSystem.h"
 #include "CollisionSystem.h"
+#include "InputSystem.h"
+
+#include "Actions.h"
 
 #include <math.h>
 
@@ -18,15 +23,33 @@ int main()
 	RenderSystem renderSystem(window);
 	MovementSystem movementSystem;
 	CollisionSystem collisionSystem;
+	InputSystem inputSystem;
+	
 
-	for (int i = 0; i < 800; i++)
+	
+	EntityPlayer* player = new EntityPlayer;
+	player->render->setPosition(sf::Vector2f(700, 700));
+	player->movement->setRotation(0);
+	player->movement->setSpeed(1);
+	player->playerInput->setInput(sf::Keyboard::A, actions::moveActions::MOVE_LEFT);
+	player->playerInput->setInput(sf::Keyboard::D, actions::moveActions::MOVE_RIGHT);
+	player->playerInput->setInput(sf::Keyboard::W, actions::moveActions::MOVE_UP);
+	player->playerInput->setInput(sf::Keyboard::S, actions::moveActions::MOVE_DOWN);
+	entityList.push_back(player);
+
+	EntityNonPlayer* nonPlayer = new EntityNonPlayer;
+	nonPlayer->render->setPosition(sf::Vector2f(123, 233));
+	entityList.push_back(nonPlayer);
+
+	/*for (int i = 0; i < 10; i++)
 	{
-		EntityPlayer* player = new EntityPlayer;
-		player->render->setPosition(sf::Vector2f(i, i));
-		player->movement->setRotation(i);
-		player->movement->setSpeed(1);
-		entityList.push_back(player);
-	}
+		EntityNonPlayer* nonPlayer = new EntityNonPlayer;
+		nonPlayer->render->setPosition(sf::Vector2f(i * 20, i * 20));
+		//nonPlayer->movement->setRotation(0);
+		//nonPlayer->movement->setSpeed(0);
+		entityList.push_back(nonPlayer);
+	}*/
+	
 
 	/*
 	The Loop
@@ -39,10 +62,12 @@ int main()
 			if (event.type == sf::Event::Closed)
 				window.close();
 		}
-
+		
 		window.clear();
+		
+		inputSystem.runSystem(entityList);
 		movementSystem.runSystem(entityList);
-		//collisionSystem.runSystem(entityList);
+		collisionSystem.runSystem(entityList);
 		renderSystem.runSystem(entityList);
 		window.display();
 	}

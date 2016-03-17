@@ -5,7 +5,7 @@
 class ComponentCollision : public Component
 {
 public:
-	ComponentCollision(bool(&ckey)[SIZE]);
+	ComponentCollision(bool(&ckey)[components::SIZE]);
 	~ComponentCollision();
 };
 

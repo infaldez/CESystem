@@ -12,9 +12,9 @@ class RenderSystem
 private:
 	sf::RenderWindow *window;
 public:
-	void runSystem(std::vector<Entity*> &entityList);
+	void runSystem(std::vector<Entity*> entityList);
 
-	RenderSystem(sf::RenderWindow&);
+	RenderSystem(sf::RenderWindow& window);
 	~RenderSystem();
 };
 

@@ -27,13 +27,13 @@ void ComponentMovement::setSpeed(float speed)
 }
 
 
-int ComponentMovement::getRotation()
+float ComponentMovement::getRotation()
 {
 	return rotation;
 }
 
 
-int ComponentMovement::getSpeed()
+float ComponentMovement::getSpeed()
 {
 	return speed;
 }

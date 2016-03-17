@@ -13,7 +13,7 @@ private:
 	sf::Vector2f scale;
 	sf::Vector2f velocity;
 public:
-	void runSystem(std::vector<Entity*> &entityList);
+	void runSystem(std::vector<Entity*> entityList);
 
 	sf::Vector2f countScale(int rotation);
 	sf::Vector2f countVelocity(sf::Vector2f scale, float speed);

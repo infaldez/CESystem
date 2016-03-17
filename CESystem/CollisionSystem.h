@@ -13,7 +13,7 @@ public:
 	CollisionSystem();
 	~CollisionSystem();
 
-	void runSystem(std::vector<Entity*> &entityList);
+	void runSystem(std::vector<Entity*> entityList);
 
 };
 

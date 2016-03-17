@@ -21,7 +21,7 @@ RenderSystem::~RenderSystem()
 }
 
 
-void RenderSystem::runSystem(std::vector<Entity*> &entityList)
+void RenderSystem::runSystem(std::vector<Entity*> entityList)
 {
 	for (int i = 0; i < entityList.size(); i++)
 	{

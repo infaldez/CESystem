@@ -20,7 +20,7 @@ MovementSystem::~MovementSystem()
 	TODO:
 	Split this to smaller functions
 */
-void MovementSystem::runSystem(std::vector<Entity*> &entityList)
+void MovementSystem::runSystem(std::vector<Entity*> entityList)
 {
 	for (int i = 0; i < entityList.size(); i++)
 	{
@@ -28,12 +28,13 @@ void MovementSystem::runSystem(std::vector<Entity*> &entityList)
 		{	
 			ComponentRender* render = NULL;
 			ComponentMovement* movement = NULL;
+			std::vector<Component*> comp = entityList.at(i)->getComponents();
 
-			for (int j = 0; j < entityList.at(i)->getComponents().size(); ++j)
+			for (int j = 0; j < comp.size(); ++j)
 			{
-				if (entityList.at(i)->getComponents().at(j)->getComponentId() == components::id::COMPONENT_RENDER)
+				if (comp.at(j)->getComponentId() == components::id::COMPONENT_RENDER)
 					render = ((ComponentRender*)entityList.at(i)->getComponents().at(j));	
-				if (entityList.at(i)->getComponents().at(j)->getComponentId() == components::id::COMPONENT_MOVEMENT)
+				if (comp.at(j)->getComponentId() == components::id::COMPONENT_MOVEMENT)
 					movement = ((ComponentMovement*)entityList.at(i)->getComponents().at(j));
 					
 				if (render != NULL && movement != NULL)

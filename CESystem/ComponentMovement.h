@@ -15,7 +15,7 @@ public:
 	void setRotation(int rotation);
 	void setSpeed(float speed);
 
-	int getRotation();
-	int getSpeed();
+	float getRotation();
+	float getSpeed();
 };
 

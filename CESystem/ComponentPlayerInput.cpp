@@ -4,7 +4,6 @@
 
 ComponentPlayerInput::ComponentPlayerInput(bool(&ckey)[components::SIZE])
 {
-	cid = components::id::COMPONENT_INPUT;
 	ckey[components::id::COMPONENT_INPUT] = true;
 }
 
@@ -20,12 +19,7 @@ void ComponentPlayerInput::setInput(sf::Keyboard::Key key, actions::moveActions 
 }
 
 
-actions::moveActions ComponentPlayerInput::getAction()
-{	
-	for (std::map<sf::Keyboard::Key, actions::moveActions>::iterator i = inputMap.begin(); i != inputMap.end(); ++i)
-	{
-		if (sf::Keyboard::isKeyPressed(i->first))
-			return i->second;
-	}
-	return actions::NONE;
+std::map<sf::Keyboard::Key, actions::moveActions> ComponentPlayerInput::getInputMap()
+{		
+	return inputMap;
 }

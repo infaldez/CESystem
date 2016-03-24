@@ -2,6 +2,7 @@
 
 #include "Actions.h"
 #include "Component.h"
+#include "Entity.h"
 #include <vector>
 
 class ActionMove
@@ -10,6 +11,6 @@ public:
 	ActionMove();
 	~ActionMove();
 
-	void move(std::vector<Component*> comps, actions::moveActions act);
+	void move(Entity* entity, std::map<sf::Keyboard::Key, actions::moveActions> inputs);
 };
 

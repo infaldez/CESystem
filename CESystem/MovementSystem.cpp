@@ -3,8 +3,6 @@
 #include <math.h>
 #include "EntityPlayer.h"
 
-#include "InputSystem.h"
-
 #include <iostream>
 
 MovementSystem::MovementSystem()
@@ -16,42 +14,30 @@ MovementSystem::~MovementSystem()
 {
 }
 
-/*
-	TODO:
-	Split this to smaller functions
-*/
+
 void MovementSystem::runSystem(std::vector<Entity*> entityList)
 {
 	for (int i = 0; i < entityList.size(); i++)
 	{
 		if (entityList.at(i)->componentKey[components::id::COMPONENT_RENDER] && entityList.at(i)->componentKey[components::id::COMPONENT_MOVEMENT])
 		{	
-			ComponentRender* render = NULL;
-			ComponentMovement* movement = NULL;
-			std::vector<Component*> comp = entityList.at(i)->getComponents();
+			ComponentRender render = entityList.at(i)->getComponentRender();
+			ComponentMovement movement = entityList.at(i)->getComponentMovement();
+		
 
-			for (int j = 0; j < comp.size(); ++j)
-			{
-				if (comp.at(j)->getComponentId() == components::id::COMPONENT_RENDER)
-					render = ((ComponentRender*)entityList.at(i)->getComponents().at(j));	
-				if (comp.at(j)->getComponentId() == components::id::COMPONENT_MOVEMENT)
-					movement = ((ComponentMovement*)entityList.at(i)->getComponents().at(j));
-					
-				if (render != NULL && movement != NULL)
-				{	
-					int rotation = movement->getRotation();
-					float speed = movement->getSpeed();
-					sf::CircleShape shape = render->getShape();
+			int rotation = movement.getRotation();
+			float speed = movement.getSpeed();
 
-					this->scale = countScale(rotation);
-					this->velocity = countVelocity(this->scale, speed);
+			this->scale = countScale(rotation);
+			this->velocity = countVelocity(this->scale, speed);
 
-					render->setPosition(newPosition(shape.getPosition(), velocity));
-				}
-			}
+			render.setPosition(newPosition(render.getPosition(), velocity));
+
+			entityList.at(i)->setComponentRender(render);
 		}
 	}
 }
+
 
 sf::Vector2f MovementSystem::countScale(int rotation)
 {

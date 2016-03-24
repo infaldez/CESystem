@@ -6,14 +6,18 @@
 class ComponentRender : public Component
 {
 private:
-	sf::CircleShape shape;
+	sf::Vertex vertex;
+	sf::Texture texture;
 
 public:
 	ComponentRender(bool(&ckey)[components::SIZE]);
 	~ComponentRender();
 
-	void setPosition(sf::Vector2f);
+	void setPosition(sf::Vector2f position);
 	float getPositionX();
 	float getPositionY();
-	sf::CircleShape getShape();
+	sf::Vector2f getPosition();
+	sf::Vertex getVertex();
+	void setTexCoords(sf::Vector2f coords);
+	sf::Texture getTexture();
 };

@@ -1,14 +1,17 @@
 #include "ComponentRender.h"
 
 
-ComponentRender::ComponentRender(bool(&ckey)[components::SIZE])
+ComponentRender::ComponentRender(bool(&ckey)[components::SIZE]) 
 {
-	cid = components::id::COMPONENT_RENDER;
 	ckey[components::id::COMPONENT_RENDER] = true;
-	shape.setPosition(0, 0);
-	shape.setRadius(30);
-	shape.setOrigin(30,30);
-	shape.setFillColor(sf::Color::Blue);
+
+	vertex.position = sf::Vector2f(100, 100);
+	vertex.texCoords = sf::Vector2f(50, 50);
+
+	if (!texture.loadFromFile("textures.bmp"))
+	{
+		//error
+	}
 }
 
 
@@ -19,23 +22,42 @@ ComponentRender::~ComponentRender()
 
 void ComponentRender::setPosition(sf::Vector2f position)
 {
-	shape.setPosition(position);
+	vertex.position = position;
 }
 
 
 float ComponentRender::getPositionX()
 {
-	return shape.getPosition().x;
+	return vertex.position.x;
 }
 
 
 float ComponentRender::getPositionY()
 {
-	return shape.getPosition().y;
+	return vertex.position.y;
 }
 
 
-sf::CircleShape ComponentRender::getShape()
+sf::Vector2f ComponentRender::getPosition()
 {
-	return shape;
+	return vertex.position;
 }
+
+
+sf::Vertex ComponentRender::getVertex()
+{
+	return vertex;
+}
+
+
+void ComponentRender::setTexCoords(sf::Vector2f coords)
+{
+	vertex.texCoords = coords;
+}
+
+
+sf::Texture ComponentRender::getTexture()
+{
+	return texture;
+}
+

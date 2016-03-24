@@ -5,6 +5,7 @@
 #include "Actions.h"
 #include "ActionMove.h"
 #include "EntityPlayer.h"
+#include <map>
 
 InputSystem::InputSystem()
 {
@@ -15,22 +16,22 @@ InputSystem::~InputSystem()
 {
 }
 
+/*
+	TODO:
+	Allow multiple button presses at the same time
+*/
+
 void InputSystem::runSystem(std::vector<Entity*> entityList)
 {
 	for (int i = 0; i < entityList.size(); i++)
 	{
 		if (entityList.at(i)->componentKey[components::id::COMPONENT_INPUT])
 		{	
-			for (int j = 0; j < entityList.at(i)->getComponents().size(); ++j)
-			{
-				if (entityList.at(i)->getComponents().at(j)->getComponentId() == components::id::COMPONENT_INPUT)
-				{
-					std::vector<Component*> comps = entityList.at(i)->getComponents();
-					actions::moveActions act = ((ComponentPlayerInput*)entityList.at(i)->getComponents().at(j))->getAction();
+			Entity* entity = entityList.at(i);
+			std::map<sf::Keyboard::Key, actions::moveActions> inputs = entityList.at(i)->getComponentPlayerInput().getInputMap();
 					
-					actionMove.move(comps, act);
-				}
-			}
+			actionMove.move(entity, inputs);
 		}
 	}
 }
+

@@ -2,12 +2,7 @@
 
 class Component
 {
-protected:
-	int cid;
-
 public:
-	int getComponentId();
-
 	Component();
 	~Component();
 };

@@ -17,6 +17,6 @@ public:
 	~ComponentPlayerInput();
 
 	void setInput(sf::Keyboard::Key key, actions::moveActions action);
-	actions::moveActions getAction();
+	std::map<sf::Keyboard::Key, actions::moveActions> getInputMap();
 };
 

@@ -5,14 +5,13 @@
 #include "ComponentRender.h"
 #include "EntityPlayer.h"
 
-#include "InputSystem.h"
-
 #include <iostream>
 
 
 RenderSystem::RenderSystem(sf::RenderWindow& window)
 {
 	this->window = &window;
+	verticles.setPrimitiveType(sf::Quads);
 }
 
 
@@ -26,15 +25,17 @@ void RenderSystem::runSystem(std::vector<Entity*> entityList)
 	for (int i = 0; i < entityList.size(); i++)
 	{
 		if (entityList.at(i)->componentKey[components::id::COMPONENT_RENDER])
-		{		
-			for (int j = 0; j<entityList.at(i)->getComponents().size(); ++j)
-			{
-				if (entityList.at(i)->getComponents().at(j)->getComponentId() == components::id::COMPONENT_RENDER)
-				{
-					sf::CircleShape image = ((ComponentRender*)entityList.at(i)->getComponents().at(j))->getShape();
-					window->draw(image);
-				}
-			}
+		{	
+			//sf::Texture texture = entityList.at(i)->getComponentRender().getTexture();
+			//sf::VertexArray va = entityList.at(i)->getComponentRender().getVerticles();
+			
+			sf::Vertex ver = entityList.at(i)->getComponentRender().getVertex();
+			sf::Texture tex = entityList.at(i)->getComponentRender().getTexture();
+
+			verticles.append(ver);		
+
+			window->draw(verticles, &tex);
+
 		}
 	}
 }

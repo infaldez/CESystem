@@ -18,7 +18,7 @@ int main()
 {
 	std::vector<Entity*> entityList;
 
-	sf::RenderWindow window(sf::VideoMode(800, 800), "Component Enitity System");
+	sf::RenderWindow window(sf::VideoMode(800, 800), "Component Entity System");
 	window.setFramerateLimit(60);
 
 	RenderSystem renderSystem(window);
@@ -26,24 +26,29 @@ int main()
 	CollisionSystem collisionSystem;
 	InputSystem inputSystem;
 	
-	EntityPlayer* player = new EntityPlayer;
-	player->render->setPosition(sf::Vector2f(300, 700));
-	player->movement->setRotation(0);
-	player->movement->setSpeed(1);
 
-	player->playerInput->setInput(sf::Keyboard::A, actions::moveActions::MOVE_LEFT);
-	player->playerInput->setInput(sf::Keyboard::D, actions::moveActions::MOVE_RIGHT);
-	player->playerInput->setInput(sf::Keyboard::W, actions::moveActions::MOVE_UP);
-	player->playerInput->setInput(sf::Keyboard::S, actions::moveActions::MOVE_DOWN);
+	/*for (int i = 0; i < 1; ++i)
+	{
+		EntityPlayer* player = new EntityPlayer;
+		player->render.setPosition(sf::Vector2f(i, 700));
+		player->movement.setRotation(0);
+		player->movement.setSpeed(4);
+
+		entityList.push_back(player);
+	}*/
+	
+	EntityPlayer* player = new EntityPlayer;
+	//player->render.setPosition(sf::Vector2f(400, 700));
+	//player->render.setTexCoords(sf::Vector2f(50, 50));
+	player->movement.setRotation(0);
+	player->movement.setSpeed(0);
+
+	player->playerInput.setInput(sf::Keyboard::D, actions::moveActions::MOVE_RIGHT);
+	player->playerInput.setInput(sf::Keyboard::A, actions::moveActions::MOVE_LEFT);
+	player->playerInput.setInput(sf::Keyboard::W, actions::moveActions::MOVE_UP);
+	player->playerInput.setInput(sf::Keyboard::S, actions::moveActions::MOVE_DOWN);
 
 	entityList.push_back(player);
-
-	for (int i = 0; i < 100; ++i)
-	{
-		EntityNonPlayer* nonP = new EntityNonPlayer;
-		nonP->render->setPosition(sf::Vector2f(i*5, i*3));
-		entityList.push_back(nonP);
-	}
 	
 	/*
 	The Loop
@@ -61,8 +66,9 @@ int main()
 		
 		inputSystem.runSystem(entityList);
 		movementSystem.runSystem(entityList);
-		//collisionSystem.runSystem(entityList);
+		collisionSystem.runSystem(entityList);
 		renderSystem.runSystem(entityList);
+		
 		window.display();
 	}
 

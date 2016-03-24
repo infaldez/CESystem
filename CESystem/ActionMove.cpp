@@ -1,7 +1,11 @@
 #include "ActionMove.h"
 
+#include "Entity.h"
 #include "ComponentRender.h"
 #include "ComponentMovement.h"
+#include "MovementSystem.h"
+
+#include <iostream>
 
 ActionMove::ActionMove()
 {
@@ -13,32 +17,57 @@ ActionMove::~ActionMove()
 }
 
 
-void ActionMove::move(std::vector<Component*> comps, actions::moveActions act)
+void ActionMove::move(Entity* entity, std::map<sf::Keyboard::Key, actions::moveActions> inputs)
 {	
-	for (int i = 0; i < comps.size(); ++i)
+	ComponentMovement movement = entity->getComponentMovement();
+	ComponentRender render = entity->getComponentRender();
+	sf::Vector2f newPosition = render.getPosition();
+	int rotation = 0;
+	float speed = 0;
+
+	MovementSystem movementSys;
+
+	for (std::map<sf::Keyboard::Key, actions::moveActions>::iterator i = inputs.begin(); i != inputs.end(); ++i)
 	{
-		if (comps.at(i)->getComponentId() == components::id::COMPONENT_MOVEMENT)
-		{
-			ComponentMovement* comp = ((ComponentMovement*)comps.at(i));
-			switch (act)
+		if (sf::Keyboard::isKeyPressed(i->first))
+		{		
+			switch (i->second)
 			{
-			case actions::NONE:
-				break;
-			case actions::MOVE_RIGHT:
-				comp->setRotation(90);
-				break;
-			case actions::MOVE_LEFT:
-				comp->setRotation(-90);
-				break;
-			case actions::MOVE_UP:
-				comp->setRotation(0);
-				break;
-			case actions::MOVE_DOWN:
-				comp->setRotation(180);
-				break;
 			default:
 				break;
-			}
-		}
+			case actions::MOVE_RIGHT:
+				rotation = 90;
+				speed = 4;
+				newPosition = movementSys.newPosition(render.getPosition(), movementSys.countVelocity(movementSys.countScale(rotation), speed));
+				break;
+			case actions::MOVE_UP:
+				rotation = 360;
+				speed = 4;
+				newPosition = movementSys.newPosition(render.getPosition(), movementSys.countVelocity(movementSys.countScale(rotation), speed));
+				break;
+			case actions::MOVE_LEFT:
+				rotation = 270;
+				speed = 4;
+				newPosition = movementSys.newPosition(render.getPosition(), movementSys.countVelocity(movementSys.countScale(rotation), speed));
+				break;
+			case actions::MOVE_DOWN:
+				rotation = 180;
+				speed = 4;
+				newPosition = movementSys.newPosition(render.getPosition(), movementSys.countVelocity(movementSys.countScale(rotation), speed));
+				break;
+			}	
+			render.setPosition(newPosition);
+		}	
 	}
+	
+	entity->setComponentRender(render);
 }
+
+
+
+
+
+
+
+
+

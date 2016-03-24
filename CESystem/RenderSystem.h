@@ -11,6 +11,8 @@ class RenderSystem
 {
 private:
 	sf::RenderWindow *window;
+	sf::VertexArray verticles;
+
 public:
 	void runSystem(std::vector<Entity*> entityList);
 

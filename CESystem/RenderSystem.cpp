@@ -80,7 +80,7 @@ void RenderSystem::runSystem(std::vector<Entity*> entityList)
 
 	for (int i = 0; i < entityList.size(); i++)
 	{
-		if (entityList.at(i)->componentKey[components::id::COMPONENT_RENDER])
+		if (entityList.at(i)->componentKey[components::id::COMPONENT_RENDER] == true)
 		{	
 			ComponentRender cRender = entityList.at(i)->getComponentRender();
 			

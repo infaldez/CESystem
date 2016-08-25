@@ -19,13 +19,3 @@ public:
 	InputSystem();
 	~InputSystem();
 };
-
-
-class SystemEntity
-{
-public:
-	ComponentRender* render;
-	ComponentMovement* movement;
-	ComponentCollision* collision;
-	ComponentPlayerInput* playerInput;
-};

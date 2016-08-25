@@ -94,6 +94,7 @@
     <ClCompile Include="EntityPlayer.cpp" />
     <ClCompile Include="InputSystem.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="MouseInput.cpp" />
     <ClCompile Include="MovementSystem.cpp" />
     <ClCompile Include="RenderSystem.cpp" />
   </ItemGroup>
@@ -110,6 +111,7 @@
     <ClInclude Include="EntityPlayer.h" />
     <ClInclude Include="Actions.h" />
     <ClInclude Include="InputSystem.h" />
+    <ClInclude Include="MouseInput.h" />
     <ClInclude Include="MovementSystem.h" />
     <ClInclude Include="RenderSystem.h" />
   </ItemGroup>

@@ -9,6 +9,7 @@
 #include "MovementSystem.h"
 #include "CollisionSystem.h"
 #include "InputSystem.h"
+#include "MouseInput.h"
 
 #include "Actions.h"
 
@@ -25,19 +26,20 @@ int main()
 	MovementSystem movementSystem;
 	CollisionSystem collisionSystem;
 	InputSystem inputSystem;
+	MouseInput mouseInput;
 	
 	for (int i = 0; i < 1000; ++i)
 	{
-		EntityPlayer* player = new EntityPlayer;
-		player->render.setTileset("texture1.bmp");
-		player->render.setTileSize(sf::Vector2u(64, 64));
-		player->render.setTilePosition(sf::Vector2u(0, 0));
-		player->render.setPosition(sf::Vector2f(i, 700));
+		EntityNonPlayer* player2 = new EntityNonPlayer;
+		player2->render.setTileset("texture1.bmp");
+		player2->render.setTileSize(sf::Vector2u(64, 64));
+		player2->render.setTilePosition(sf::Vector2u(64, i%64));
+		player2->render.setPosition(sf::Vector2f(i, 700));
 		
-		player->movement.setRotation(0);
-		player->movement.setSpeed(4);
+		player2->movement.setRotation(0);
+		player2->movement.setSpeed(4);
 
-		entityList.push_back(player);
+		entityList.push_back(player2);
 	}
 	
 	EntityPlayer* player = new EntityPlayer;
@@ -70,7 +72,9 @@ int main()
 		
 		window.clear();
 		
-		//inputSystem.runSystem(entityList);
+		inputSystem.runSystem(entityList);
+		sf::Vector2i mousePosition = sf::Mouse::getPosition(window);
+		mouseInput.runSystem(entityList, mousePosition);
 		movementSystem.runSystem(entityList);
 		//collisionSystem.runSystem(entityList);
 		renderSystem.runSystem(entityList);

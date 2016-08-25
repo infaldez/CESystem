@@ -6,18 +6,25 @@
 class ComponentRender : public Component
 {
 private:
-	sf::Vertex vertex;
-	sf::Texture texture;
-
+	std::string tileset;
+	sf::Vector2u tileSize;
+	sf::Vector2u tilePosition;
+	sf::Vector2f position;
+	
 public:
 	ComponentRender(bool(&ckey)[components::SIZE]);
 	~ComponentRender();
 
-	void setPosition(sf::Vector2f position);
+	std::string getTileset();
+	sf::Vector2u getTileSize();
+	sf::Vector2u getTilePosition();
+	sf::Vector2f getPosition();
 	float getPositionX();
 	float getPositionY();
-	sf::Vector2f getPosition();
-	sf::Vertex getVertex();
-	void setTexCoords(sf::Vector2f coords);
-	sf::Texture getTexture();
+
+	void setPosition(sf::Vector2f position);
+	void setTileSize(sf::Vector2u tileSize);
+	void setTileset(std::string tileset);
+	void setTilePosition(sf::Vector2u tilePosition);
+
 };

@@ -1,17 +1,14 @@
 #include "ComponentRender.h"
-
+#include <iostream>
 
 ComponentRender::ComponentRender(bool(&ckey)[components::SIZE]) 
 {
 	ckey[components::id::COMPONENT_RENDER] = true;
-
-	vertex.position = sf::Vector2f(100, 100);
-	vertex.texCoords = sf::Vector2f(50, 50);
-
-	if (!texture.loadFromFile("textures.bmp"))
-	{
-		//error
-	}
+	
+	tileset = "texture.bmp";
+	tileSize = sf::Vector2u(0, 0);
+	tilePosition = sf::Vector2u(0, 0);
+	position = sf::Vector2f(0, 0);
 }
 
 
@@ -20,44 +17,61 @@ ComponentRender::~ComponentRender()
 }
 
 
-void ComponentRender::setPosition(sf::Vector2f position)
+std::string ComponentRender::getTileset()
 {
-	vertex.position = position;
+	return tileset;
 }
 
 
-float ComponentRender::getPositionX()
+sf::Vector2u ComponentRender::getTileSize()
 {
-	return vertex.position.x;
+	return tileSize;
 }
 
 
-float ComponentRender::getPositionY()
+sf::Vector2u ComponentRender::getTilePosition()
 {
-	return vertex.position.y;
+	return tilePosition;
 }
 
 
 sf::Vector2f ComponentRender::getPosition()
 {
-	return vertex.position;
+	return position;
 }
 
 
-sf::Vertex ComponentRender::getVertex()
+float ComponentRender::getPositionX()
 {
-	return vertex;
+	return position.x;
 }
 
 
-void ComponentRender::setTexCoords(sf::Vector2f coords)
+float ComponentRender::getPositionY()
 {
-	vertex.texCoords = coords;
+	return position.y;
 }
 
 
-sf::Texture ComponentRender::getTexture()
+void ComponentRender::setPosition(sf::Vector2f position)
 {
-	return texture;
+	this->position = position;
 }
 
+
+void ComponentRender::setTileSize(sf::Vector2u tileSize)
+{
+	this->tileSize = tileSize;
+}
+
+
+void ComponentRender::setTileset(std::string tileset)
+{
+	this->tileset = tileset;
+}
+
+
+void ComponentRender::setTilePosition(sf::Vector2u tilePosition)
+{
+	this->tilePosition = tilePosition;
+}

@@ -26,20 +26,26 @@ int main()
 	CollisionSystem collisionSystem;
 	InputSystem inputSystem;
 	
-
-	/*for (int i = 0; i < 1; ++i)
+	for (int i = 0; i < 1000; ++i)
 	{
 		EntityPlayer* player = new EntityPlayer;
+		player->render.setTileset("texture1.bmp");
+		player->render.setTileSize(sf::Vector2u(64, 64));
+		player->render.setTilePosition(sf::Vector2u(0, 0));
 		player->render.setPosition(sf::Vector2f(i, 700));
+		
 		player->movement.setRotation(0);
 		player->movement.setSpeed(4);
 
 		entityList.push_back(player);
-	}*/
+	}
 	
 	EntityPlayer* player = new EntityPlayer;
-	//player->render.setPosition(sf::Vector2f(400, 700));
-	//player->render.setTexCoords(sf::Vector2f(50, 50));
+	player->render.setTileset("texture1.bmp");
+	player->render.setTileSize(sf::Vector2u(64, 64));
+	player->render.setTilePosition(sf::Vector2u(0, 64));
+	player->render.setPosition(sf::Vector2f(100, 100));
+
 	player->movement.setRotation(0);
 	player->movement.setSpeed(0);
 
@@ -64,9 +70,9 @@ int main()
 		
 		window.clear();
 		
-		inputSystem.runSystem(entityList);
+		//inputSystem.runSystem(entityList);
 		movementSystem.runSystem(entityList);
-		collisionSystem.runSystem(entityList);
+		//collisionSystem.runSystem(entityList);
 		renderSystem.runSystem(entityList);
 		
 		window.display();

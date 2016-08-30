@@ -27,7 +27,7 @@ void CollisionSystem::runSystem(std::vector<Entity*> entityList)
 			//check for collisions with other entities
 			for (int j = i + 1; j < entityList.size(); ++j)
 			{
-				if (entityList.at(j)->componentKey[components::id::COMPONENT_RENDER] && entityList.at(j)->componentKey[components::id::COMPONENT_COLLISION])
+				if (entityList.at(j)->componentKey[components::id::COMPONENT_RENDER] == true && entityList.at(j)->componentKey[components::id::COMPONENT_COLLISION] == true)
 				{
 					ComponentRender* render_j = entityList.at(j)->getComponent<ComponentRender>(components::COMPONENT_RENDER);
 					ComponentMovement* movement_j = entityList.at(j)->getComponent<ComponentMovement>(components::COMPONENT_MOVEMENT);

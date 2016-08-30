@@ -1,7 +1,7 @@
 #include "ComponentRender.h"
 #include <iostream>
 
-ComponentRender::ComponentRender(std::string tileset, sf::Vector2u tileSize, sf::Vector2u tilePosition, sf::Vector2f position)
+ComponentRender::ComponentRender(std::string tileset, sf::Vector2u tileSize, sf::Vector2u tilePosition, sf::Vector2i position)
 {
 	cId = components::COMPONENT_RENDER;
 
@@ -21,7 +21,7 @@ ComponentRender::ComponentRender(bool(&ckey)[components::SIZE])
 	tileset = "texture.bmp";
 	tileSize = sf::Vector2u(64, 64);
 	tilePosition = sf::Vector2u(0, 0);
-	position = sf::Vector2f(0, 0);
+	position = sf::Vector2i(0, 0);
 }
 
 
@@ -48,7 +48,7 @@ sf::Vector2u ComponentRender::getTilePosition()
 }
 
 
-sf::Vector2f ComponentRender::getPosition()
+sf::Vector2i ComponentRender::getPosition()
 {
 	return position;
 }
@@ -66,11 +66,10 @@ float ComponentRender::getPositionY()
 }
 
 
-void ComponentRender::setPosition(sf::Vector2f position)
+void ComponentRender::setPosition(sf::Vector2i position)
 { 
 	if (this->position.x != position.x || this->position.y != position.y)
 	{
-		std::cout << position.x << " " << position.y << std::endl;
 		oldPosition = this->position;
 		this->position = position;
 	}
@@ -98,5 +97,4 @@ void ComponentRender::setTilePosition(sf::Vector2u tilePosition)
 void ComponentRender::resetToOldPosition()
 {
 	position = oldPosition;
-	std::cout << position.x << std::endl;
 }

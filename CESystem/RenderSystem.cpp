@@ -17,7 +17,7 @@ class drawEntity : public sf::Drawable, public sf::Transformable
 	bool read = true;
 
 public:
-	bool load(std::string tileset, sf::Vector2u tileSize, sf::Vector2u tilePosition, sf::Vector2f drawPosition, int i)
+	bool load(std::string tileset, sf::Vector2u tileSize, sf::Vector2u tilePosition, sf::Vector2i drawPosition, int i)
 	{
 		//read the tileset from file
 		//TODO better handling of reading the tileset only once

@@ -29,7 +29,7 @@ int main()
 	
 	Entity* player = new Entity;
 
-	player->addComponent(new ComponentRender("texture1.bmp", sf::Vector2u(64, 64), sf::Vector2u(32, 32), sf::Vector2f(500, 500)));
+	player->addComponent(new ComponentRender("texture1.bmp", sf::Vector2u(64, 64), sf::Vector2u(32, 32), sf::Vector2i(0, 0)));
 	player->addComponent(new ComponentMovement(0, 0));
 	player->addComponent(new ComponentPlayerInput());
 	player->addComponent(new ComponentCollision());
@@ -44,7 +44,7 @@ int main()
 	/*for (int i = 0; i < 1000; i++)
 	{
 		EntityPlayer* player2 = new EntityPlayer;
-		player2->addComponent(new ComponentRender("texture1.bmp", sf::Vector2u(64, 64), sf::Vector2u(0, 0), sf::Vector2f(i, 120)));
+		player2->addComponent(new ComponentRender("texture1.bmp", sf::Vector2u(64, 64), sf::Vector2u(0, 0), sf::Vector2i(i, 120)));
 		player2->addComponent(new ComponentMovement(3, 0));
 		entityList.push_back(player2);
 	}*/

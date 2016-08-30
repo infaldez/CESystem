@@ -31,7 +31,6 @@ void MovementSystem::runSystem(std::vector<Entity*> entityList)
 			this->velocity = countVelocity(this->scale, speed);
 
 			render->setPosition(newPosition(render->getPosition(), velocity));
-
 		}
 	}
 }
@@ -57,10 +56,10 @@ sf::Vector2f MovementSystem::countVelocity(sf::Vector2f scale, float speed)
 }
 
 
-sf::Vector2f MovementSystem::newPosition(sf::Vector2f position, sf::Vector2f velocity)
+sf::Vector2i MovementSystem::newPosition(sf::Vector2i position, sf::Vector2f velocity)
 {
 	position.x += velocity.x;
 	position.y += velocity.y;
 
-	return sf::Vector2f(position.x, position.y);
+	return sf::Vector2i(position.x, position.y);
 }

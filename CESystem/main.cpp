@@ -1,4 +1,3 @@
-
 #include <SFML/Graphics.hpp>
 #include <iostream>
 
@@ -28,35 +27,27 @@ int main()
 	InputSystem inputSystem;
 	MouseInput mouseInput;
 	
-	for (int i = 0; i < 1000; ++i)
-	{
-		EntityNonPlayer* player2 = new EntityNonPlayer;
-		player2->render.setTileset("texture1.bmp");
-		player2->render.setTileSize(sf::Vector2u(64, 64));
-		player2->render.setTilePosition(sf::Vector2u(64, i%64));
-		player2->render.setPosition(sf::Vector2f(i, 700));
-		
-		player2->movement.setRotation(0);
-		player2->movement.setSpeed(4);
+	Entity* player = new Entity;
 
-		entityList.push_back(player2);
-	}
-	
-	EntityPlayer* player = new EntityPlayer;
-	player->render.setTileset("texture1.bmp");
-	player->render.setTileSize(sf::Vector2u(64, 64));
-	player->render.setTilePosition(sf::Vector2u(0, 64));
-	player->render.setPosition(sf::Vector2f(100, 100));
+	player->addComponent(new ComponentRender("texture1.bmp", sf::Vector2u(64, 64), sf::Vector2u(32, 32), sf::Vector2f(500, 500)));
+	player->addComponent(new ComponentMovement(0, 0));
+	player->addComponent(new ComponentPlayerInput());
+	player->addComponent(new ComponentCollision());
 
-	player->movement.setRotation(0);
-	player->movement.setSpeed(0);
-
-	player->playerInput.setInput(sf::Keyboard::D, actions::moveActions::MOVE_RIGHT);
-	player->playerInput.setInput(sf::Keyboard::A, actions::moveActions::MOVE_LEFT);
-	player->playerInput.setInput(sf::Keyboard::W, actions::moveActions::MOVE_UP);
-	player->playerInput.setInput(sf::Keyboard::S, actions::moveActions::MOVE_DOWN);
+	player->getComponent<ComponentPlayerInput>(components::COMPONENT_INPUT)->setInput(sf::Keyboard::A, actions::moveActions::MOVE_LEFT);
+	player->getComponent<ComponentPlayerInput>(components::COMPONENT_INPUT)->setInput(sf::Keyboard::D, actions::moveActions::MOVE_RIGHT);
+	player->getComponent<ComponentPlayerInput>(components::COMPONENT_INPUT)->setInput(sf::Keyboard::W, actions::moveActions::MOVE_UP);
+	player->getComponent<ComponentPlayerInput>(components::COMPONENT_INPUT)->setInput(sf::Keyboard::S, actions::moveActions::MOVE_DOWN);
 
 	entityList.push_back(player);
+
+	/*for (int i = 0; i < 1000; i++)
+	{
+		EntityPlayer* player2 = new EntityPlayer;
+		player2->addComponent(new ComponentRender("texture1.bmp", sf::Vector2u(64, 64), sf::Vector2u(0, 0), sf::Vector2f(i, 120)));
+		player2->addComponent(new ComponentMovement(3, 0));
+		entityList.push_back(player2);
+	}*/
 	
 	/*
 	The Loop
@@ -76,9 +67,9 @@ int main()
 		sf::Vector2i mousePosition = sf::Mouse::getPosition(window);
 		mouseInput.runSystem(entityList, mousePosition);
 		movementSystem.runSystem(entityList);
-		//collisionSystem.runSystem(entityList);
+		collisionSystem.runSystem(entityList);
 		renderSystem.runSystem(entityList);
-		
+
 		window.display();
 	}
 

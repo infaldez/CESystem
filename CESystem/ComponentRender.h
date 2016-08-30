@@ -10,8 +10,10 @@ private:
 	sf::Vector2u tileSize;
 	sf::Vector2u tilePosition;
 	sf::Vector2f position;
+	sf::Vector2f oldPosition;
 	
 public:
+	ComponentRender(std::string tileset, sf::Vector2u tileSize, sf::Vector2u tilePosition, sf::Vector2f position);
 	ComponentRender(bool(&ckey)[components::SIZE]);
 	~ComponentRender();
 
@@ -26,5 +28,6 @@ public:
 	void setTileSize(sf::Vector2u tileSize);
 	void setTileset(std::string tileset);
 	void setTilePosition(sf::Vector2u tilePosition);
+	void resetToOldPosition();
 
 };

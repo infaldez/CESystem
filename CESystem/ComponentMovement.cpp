@@ -1,8 +1,20 @@
 #include "ComponentMovement.h"
 #include "Component.h"
 
+#include <iostream>
+
+ComponentMovement::ComponentMovement(float speed, int rotation)
+{
+	cId = components::COMPONENT_MOVEMENT;
+	
+	this->speed = speed;
+	this->rotation = rotation;
+}
+
+
 ComponentMovement::ComponentMovement(bool(&ckey)[components::SIZE])
 {
+	cId = components::COMPONENT_MOVEMENT;
 	ckey[components::id::COMPONENT_MOVEMENT] = true;
 	rotation = 0;
 	speed = 0;
@@ -26,7 +38,7 @@ void ComponentMovement::setSpeed(float speed)
 }
 
 
-float ComponentMovement::getRotation()
+int ComponentMovement::getRotation()
 {
 	return rotation;
 }

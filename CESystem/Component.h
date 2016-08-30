@@ -3,6 +3,7 @@
 class Component
 {
 public:
+	int cId;
 	Component();
 	~Component();
 };

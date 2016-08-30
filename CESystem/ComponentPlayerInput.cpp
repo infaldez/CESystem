@@ -2,8 +2,15 @@
 
 #include <iostream>
 
+
+ComponentPlayerInput::ComponentPlayerInput() {
+	cId = components::COMPONENT_INPUT;
+}
+
+
 ComponentPlayerInput::ComponentPlayerInput(bool(&ckey)[components::SIZE])
 {
+	cId = components::COMPONENT_INPUT;
 	ckey[components::id::COMPONENT_INPUT] = true;
 }
 

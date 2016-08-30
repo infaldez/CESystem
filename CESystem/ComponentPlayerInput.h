@@ -13,6 +13,7 @@ private:
 	std::map <sf::Keyboard::Key, actions::moveActions> inputMap;
 
 public:
+	ComponentPlayerInput();
 	ComponentPlayerInput(bool(&ckey)[components::SIZE]);
 	~ComponentPlayerInput();
 

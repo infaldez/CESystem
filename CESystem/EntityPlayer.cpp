@@ -2,8 +2,8 @@
 
 
 EntityPlayer::EntityPlayer() 
-	: render(componentKey), movement(componentKey), 
-	collision(componentKey), playerInput(componentKey)
+//	: render(componentKey), movement(componentKey), 
+//	collision(componentKey), playerInput(componentKey)
 {
 
 }
@@ -13,7 +13,7 @@ EntityPlayer::~EntityPlayer()
 {
 }
 
-
+/*
 ComponentRender EntityPlayer::getComponentRender()
 {
 	return render;
@@ -60,3 +60,4 @@ void EntityPlayer::setComponentPlayerInput(ComponentPlayerInput input)
 {
 	this->playerInput = input;
 }
+*/

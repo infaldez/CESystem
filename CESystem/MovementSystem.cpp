@@ -21,19 +21,17 @@ void MovementSystem::runSystem(std::vector<Entity*> entityList)
 	{
 		if (entityList.at(i)->componentKey[components::id::COMPONENT_RENDER] == true && entityList.at(i)->componentKey[components::id::COMPONENT_MOVEMENT] == true)
 		{	
-			ComponentRender render = entityList.at(i)->getComponentRender();
-			ComponentMovement movement = entityList.at(i)->getComponentMovement();
+			ComponentRender* render = entityList.at(i)->getComponent<ComponentRender>(components::COMPONENT_RENDER);
+			ComponentMovement* movement = entityList.at(i)->getComponent<ComponentMovement>(components::COMPONENT_MOVEMENT);
 		
-
-			int rotation = movement.getRotation();
-			float speed = movement.getSpeed();
+			float rotation = movement->getRotation();
+			float speed = movement->getSpeed();
 
 			this->scale = countScale(rotation);
 			this->velocity = countVelocity(this->scale, speed);
 
-			render.setPosition(newPosition(render.getPosition(), velocity));
+			render->setPosition(newPosition(render->getPosition(), velocity));
 
-			entityList.at(i)->setComponentRender(render);
 		}
 	}
 }

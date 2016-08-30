@@ -2,8 +2,12 @@
 
 
 Entity::Entity()
-{
-	componentKey[components::SIZE] = { false };
+{	
+	for (int i = 0; i < components::SIZE; i++)
+	{
+		componentKey[i] = false;
+	}
+	//componentKey[components::id::SIZE] = { false };
 }
 
 

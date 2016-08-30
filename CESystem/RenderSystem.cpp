@@ -61,10 +61,10 @@ public:
 	}
 };
 
+
 RenderSystem::RenderSystem(sf::RenderWindow& window)
 {
 	this->window = &window;
-	verticles.setPrimitiveType(sf::Quads);
 }
 
 
@@ -82,10 +82,10 @@ void RenderSystem::runSystem(std::vector<Entity*> entityList)
 	{
 		if (entityList.at(i)->componentKey[components::id::COMPONENT_RENDER] == true)
 		{	
-			ComponentRender cRender = entityList.at(i)->getComponentRender();
-			
-			drawEntity.load(cRender.getTileset(), cRender.getTileSize(), cRender.getTilePosition(), cRender.getPosition(), entityAmount);	
+			ComponentRender* cRender = entityList.at(i)->getComponent<ComponentRender>(components::COMPONENT_RENDER);
 
+			drawEntity.load(cRender->getTileset(), cRender->getTileSize(), cRender->getTilePosition(), cRender->getPosition(), entityAmount);
+			
 			entityAmount++;
 		}
 	}

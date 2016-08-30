@@ -10,7 +10,7 @@
 class EntityPlayer : public Entity
 {
 public:
-	ComponentRender render;
+	/*ComponentRender render;
 	ComponentMovement movement;
 	ComponentCollision collision;
 	ComponentPlayerInput playerInput;
@@ -24,6 +24,7 @@ public:
 	void setComponentMovement(ComponentMovement movement);
 	void setComponentCollision(ComponentCollision collision);
 	void setComponentPlayerInput(ComponentPlayerInput input);
+	*/
 
 	EntityPlayer();
 	~EntityPlayer();

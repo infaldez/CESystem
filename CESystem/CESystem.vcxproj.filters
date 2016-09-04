@@ -45,9 +45,6 @@
     <ClCompile Include="Entity.cpp">
       <Filter>Source Files\Entities</Filter>
     </ClCompile>
-    <ClCompile Include="EntityPlayer.cpp">
-      <Filter>Source Files\Entities</Filter>
-    </ClCompile>
     <ClCompile Include="RenderSystem.cpp">
       <Filter>Source Files\Systems</Filter>
     </ClCompile>
@@ -69,9 +66,6 @@
     <ClCompile Include="ActionMove.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="EntityNonPlayer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="MouseInput.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -87,9 +81,6 @@
       <Filter>Header Files\Components</Filter>
     </ClInclude>
     <ClInclude Include="Entity.h">
-      <Filter>Header Files\Entities</Filter>
-    </ClInclude>
-    <ClInclude Include="EntityPlayer.h">
       <Filter>Header Files\Entities</Filter>
     </ClInclude>
     <ClInclude Include="RenderSystem.h">
@@ -114,9 +105,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Actions.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="EntityNonPlayer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="MouseInput.h">

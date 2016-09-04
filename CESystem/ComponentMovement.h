@@ -11,7 +11,6 @@ private:
 
 public:
 	ComponentMovement(float speed, float rotation);
-	ComponentMovement(bool(&ckey)[components::SIZE]);
 	~ComponentMovement();
 
 	void setRotation(float rotation);

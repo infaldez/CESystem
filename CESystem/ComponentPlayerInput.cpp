@@ -8,13 +8,6 @@ ComponentPlayerInput::ComponentPlayerInput() {
 }
 
 
-ComponentPlayerInput::ComponentPlayerInput(bool(&ckey)[components::SIZE])
-{
-	cId = components::COMPONENT_INPUT;
-	ckey[components::id::COMPONENT_INPUT] = true;
-}
-
-
 ComponentPlayerInput::~ComponentPlayerInput()
 {
 }

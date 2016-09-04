@@ -12,15 +12,6 @@ ComponentMovement::ComponentMovement(float speed, float rotation)
 }
 
 
-ComponentMovement::ComponentMovement(bool(&ckey)[components::SIZE])
-{
-	cId = components::COMPONENT_MOVEMENT;
-	ckey[components::id::COMPONENT_MOVEMENT] = true;
-	rotation = 0;
-	speed = 0;
-}
-
-
 ComponentMovement::~ComponentMovement()
 {
 }

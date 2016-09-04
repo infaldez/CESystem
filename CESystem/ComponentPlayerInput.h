@@ -14,7 +14,6 @@ private:
 
 public:
 	ComponentPlayerInput();
-	ComponentPlayerInput(bool(&ckey)[components::SIZE]);
 	~ComponentPlayerInput();
 
 	void setInput(sf::Keyboard::Key key, actions::moveActions action);

@@ -14,7 +14,6 @@ private:
 	
 public:
 	ComponentRender(std::string tileset, sf::Vector2u tileSize, sf::Vector2u tilePosition, sf::Vector2f position);
-	ComponentRender(bool(&ckey)[components::SIZE]);
 	~ComponentRender();
 
 	std::string getTileset();

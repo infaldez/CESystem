@@ -13,18 +13,6 @@ ComponentRender::ComponentRender(std::string tileset, sf::Vector2u tileSize, sf:
 }
 
 
-ComponentRender::ComponentRender(bool(&ckey)[components::SIZE]) 
-{
-	/*cId = components::COMPONENT_RENDER;
-	ckey[components::id::COMPONENT_RENDER] = true;
-	
-	tileset = "texture.bmp";
-	tileSize = sf::Vector2u(64, 64);
-	tilePosition = sf::Vector2u(0, 0);
-	position = sf::Vector2i(0, 0);*/
-}
-
-
 ComponentRender::~ComponentRender()
 {
 }

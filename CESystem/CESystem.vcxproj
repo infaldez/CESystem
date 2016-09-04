@@ -90,8 +90,6 @@
     <ClCompile Include="ComponentPlayerInput.cpp" />
     <ClCompile Include="ComponentRender.cpp" />
     <ClCompile Include="Entity.cpp" />
-    <ClCompile Include="EntityNonPlayer.cpp" />
-    <ClCompile Include="EntityPlayer.cpp" />
     <ClCompile Include="InputSystem.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MouseInput.cpp" />
@@ -107,8 +105,6 @@
     <ClInclude Include="ComponentPlayerInput.h" />
     <ClInclude Include="ComponentRender.h" />
     <ClInclude Include="Entity.h" />
-    <ClInclude Include="EntityNonPlayer.h" />
-    <ClInclude Include="EntityPlayer.h" />
     <ClInclude Include="Actions.h" />
     <ClInclude Include="InputSystem.h" />
     <ClInclude Include="MouseInput.h" />

@@ -17,44 +17,55 @@ ActionMove::~ActionMove()
 }
 
 
-void ActionMove::move(Entity* entity, std::map<sf::Keyboard::Key, actions::moveActions> inputs)
+void ActionMove::move(Entity* entity, std::map<sf::Keyboard::Key, actions::moveActions> inputs, bool keys[])
 {	
 	ComponentMovement* movement = entity->getComponent<ComponentMovement>(components::COMPONENT_MOVEMENT);
-	ComponentRender* render = entity->getComponent<ComponentRender>(components::COMPONENT_RENDER);
-	sf::Vector2i newPosition = render->getPosition();
 	int rotation = 0;
-	int speed = 4;
-
-	MovementSystem movementSys;
+	float speed = 0;
+	bool actions[actions::COUNT] = { false };
 
 	for (std::map<sf::Keyboard::Key, actions::moveActions>::iterator i = inputs.begin(); i != inputs.end(); ++i)
 	{
-		if (sf::Keyboard::isKeyPressed(i->first))
-		{
-			switch (i->second)
-			{
-			default:
-				break;
-			case actions::MOVE_RIGHT:
-				rotation = 90;
-				newPosition = movementSys.newPosition(newPosition, movementSys.countVelocity(movementSys.countScale(rotation), speed));
-				break;
-			case actions::MOVE_UP:
-				rotation = 0;
-				newPosition = movementSys.newPosition(newPosition, movementSys.countVelocity(movementSys.countScale(rotation), speed));
-				break;
-			case actions::MOVE_LEFT:
-				rotation = 270;
-				newPosition = movementSys.newPosition(newPosition, movementSys.countVelocity(movementSys.countScale(rotation), speed));
-				break;
-			case actions::MOVE_DOWN:
-				rotation = 180;
-				newPosition = movementSys.newPosition(newPosition, movementSys.countVelocity(movementSys.countScale(rotation), speed));
-				break;
-			}	
-		}	
+		if (keys[i->first] == true)
+			actions[i->second] = true;
 	}
-	render->setPosition(newPosition);
+	
+	if (actions[actions::MOVE_RIGHT]){
+		rotation = 90;
+		speed = 4;
+	}
+	if (actions[actions::MOVE_LEFT]){
+		rotation = 270;
+		speed = 4;
+	}
+	if (actions[actions::MOVE_DOWN]){
+		rotation = 180;
+		speed = 4;
+	}
+	if (actions[actions::MOVE_UP]){
+		rotation = 0;
+		speed = 4;
+	}
+	if (actions[actions::MOVE_UP] && actions[actions::MOVE_RIGHT]){
+		rotation = 50;
+		speed = 4;
+	}
+	if (actions[actions::MOVE_RIGHT] && actions[actions::MOVE_DOWN]){
+		rotation = 135;
+		speed = 4;
+	}
+	if (actions[actions::MOVE_DOWN] && actions[actions::MOVE_LEFT]){
+		rotation = 220;
+		speed = 4;
+	}
+	if (actions[actions::MOVE_LEFT] && actions[actions::MOVE_UP]){
+		rotation = 315;
+		speed = 4;
+	}
+		
+	movement->setRotation(rotation);
+	movement->setSpeed(speed);
+
 }
 
 

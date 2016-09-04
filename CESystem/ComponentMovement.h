@@ -7,10 +7,10 @@ class ComponentMovement : public Component
 {
 private:
 	int rotation;
-	float speed;
+	int speed;
 
 public:
-	ComponentMovement(float speed, int rotation);
+	ComponentMovement(int speed, int rotation);
 	ComponentMovement(bool(&ckey)[components::SIZE]);
 	~ComponentMovement();
 
@@ -18,6 +18,6 @@ public:
 	void setSpeed(float speed);
 
 	int getRotation();
-	float getSpeed();
+	int getSpeed();
 };
 

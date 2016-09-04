@@ -21,8 +21,8 @@ public:
 	sf::Vector2u getTileSize();
 	sf::Vector2u getTilePosition();
 	sf::Vector2i getPosition();
-	float getPositionX();
-	float getPositionY();
+	int getPositionX();
+	int getPositionY();
 
 	void setPosition(sf::Vector2i position);
 	void setTileSize(sf::Vector2u tileSize);

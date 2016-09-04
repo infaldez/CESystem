@@ -14,7 +14,7 @@ class InputSystem
 private:
 	ActionMove actionMove;
 public:
-	void runSystem(std::vector<Entity*> entityList);
+	void runSystem(std::vector<Entity*> entityList, bool keys[]);
 
 	InputSystem();
 	~InputSystem();

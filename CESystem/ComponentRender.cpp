@@ -54,13 +54,13 @@ sf::Vector2i ComponentRender::getPosition()
 }
 
 
-float ComponentRender::getPositionX()
+int ComponentRender::getPositionX()
 {
 	return position.x;
 }
 
 
-float ComponentRender::getPositionY()
+int ComponentRender::getPositionY()
 {
 	return position.y;
 }

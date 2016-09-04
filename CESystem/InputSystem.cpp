@@ -17,7 +17,7 @@ InputSystem::~InputSystem()
 }
 
 
-void InputSystem::runSystem(std::vector<Entity*> entityList)
+void InputSystem::runSystem(std::vector<Entity*> entityList, bool keys[])
 {
 	for (int i = 0; i < entityList.size(); i++)
 	{
@@ -26,7 +26,7 @@ void InputSystem::runSystem(std::vector<Entity*> entityList)
 			Entity* entity = entityList.at(i);
 			std::map<sf::Keyboard::Key, actions::moveActions> inputs = entityList.at(i)->getComponent<ComponentPlayerInput>(components::COMPONENT_INPUT)->getInputMap();
 					
-			actionMove.move(entity, inputs);
+			actionMove.move(entity, inputs, keys);
 		}
 	}
 }

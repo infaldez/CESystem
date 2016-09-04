@@ -54,7 +54,6 @@ public:
 	void draw(sf::RenderTarget &target, sf::RenderStates states) const
 	{
 		states.transform *= getTransform();
-
 		states.texture = &m_tileset;
 
 		target.draw(m_vertices, states);
@@ -76,7 +75,7 @@ RenderSystem::~RenderSystem()
 void RenderSystem::runSystem(std::vector<Entity*> entityList)
 {
 	drawEntity drawEntity;
-	int entityAmount = 0;
+	int entityCount = 0;
 
 	for (int i = 0; i < entityList.size(); i++)
 	{
@@ -84,9 +83,9 @@ void RenderSystem::runSystem(std::vector<Entity*> entityList)
 		{	
 			ComponentRender* cRender = entityList.at(i)->getComponent<ComponentRender>(components::COMPONENT_RENDER);
 
-			drawEntity.load(cRender->getTileset(), cRender->getTileSize(), cRender->getTilePosition(), cRender->getPosition(), entityAmount);
+			drawEntity.load(cRender->getTileset(), cRender->getTileSize(), cRender->getTilePosition(), cRender->getPosition(), entityCount);
 			
-			entityAmount++;
+			entityCount++;
 		}
 	}
 

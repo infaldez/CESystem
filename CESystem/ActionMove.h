@@ -11,6 +11,6 @@ public:
 	ActionMove();
 	~ActionMove();
 
-	void move(Entity* entity, std::map<sf::Keyboard::Key, actions::moveActions> inputs);
+	void move(Entity* entity, std::map<sf::Keyboard::Key, actions::moveActions> inputs, bool keys[]);
 };
 

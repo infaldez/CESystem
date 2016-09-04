@@ -3,7 +3,7 @@
 
 #include <iostream>
 
-ComponentMovement::ComponentMovement(float speed, int rotation)
+ComponentMovement::ComponentMovement(int speed, int rotation)
 {
 	cId = components::COMPONENT_MOVEMENT;
 	
@@ -44,7 +44,7 @@ int ComponentMovement::getRotation()
 }
 
 
-float ComponentMovement::getSpeed()
+int ComponentMovement::getSpeed()
 {
 	return speed;
 }

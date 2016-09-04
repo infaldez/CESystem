@@ -13,13 +13,14 @@
 #include "Actions.h"
 
 #include <math.h>
+#include <time.h>
 
 int main()
 {
 	std::vector<Entity*> entityList;
 
 	sf::RenderWindow window(sf::VideoMode(800, 800), "Component Entity System");
-	window.setFramerateLimit(60);
+	//window.setFramerateLimit(60);
 
 	RenderSystem renderSystem(window);
 	MovementSystem movementSystem;
@@ -41,6 +42,16 @@ int main()
 
 	entityList.push_back(player);
 
+	EntityPlayer* player2 = new EntityPlayer;
+	player2->addComponent(new ComponentRender("texture1.bmp", sf::Vector2u(64, 64), sf::Vector2u(0, 0), sf::Vector2i(368, 368)));
+	player2->addComponent(new ComponentMovement(2, 100));
+	entityList.push_back(player2);
+
+	EntityPlayer* player3 = new EntityPlayer;
+	player3->addComponent(new ComponentRender("texture1.bmp", sf::Vector2u(64, 64), sf::Vector2u(0, 0), sf::Vector2i(368, 368)));
+	player3->addComponent(new ComponentMovement(2, 45));
+	entityList.push_back(player3);
+
 	/*for (int i = 0; i < 1000; i++)
 	{
 		EntityPlayer* player2 = new EntityPlayer;
@@ -50,27 +61,75 @@ int main()
 	}*/
 	
 	/*
-	The Loop
+	Loop
 	*/
-	while (window.isOpen())
+	bool running = true;
+	bool pause = false;
+	double lastFrameTime = clock();
+	double deltaTime = 0.0;
+	
+	double fpsClockStart = clock();
+	int fps = 0;
+
+	//loop start
+	while (running)
 	{
 		sf::Event event;
 		while (window.pollEvent(event))
 		{
-			if (event.type == sf::Event::Closed)
+			if (event.type == sf::Event::Closed){
 				window.close();
+				running = false;
+			}	
+			if (event.type == sf::Event::LostFocus)
+				pause = true;
+			if (event.type == sf::Event::GainedFocus)
+				pause = false;
 		}
-		
-		window.clear();
-		
-		inputSystem.runSystem(entityList);
-		sf::Vector2i mousePosition = sf::Mouse::getPosition(window);
-		mouseInput.runSystem(entityList, mousePosition);
-		movementSystem.runSystem(entityList);
-		collisionSystem.runSystem(entityList);
-		renderSystem.runSystem(entityList);
 
-		window.display();
+		if (!pause)
+		{
+			double currentFrameTime = clock();
+			double elapsed = currentFrameTime - lastFrameTime;
+			lastFrameTime = currentFrameTime;
+			deltaTime += elapsed;
+
+			//read inputs and register pressed keys in keys[]
+			bool keys[sf::Keyboard::KeyCount] = { false };
+			for (int keyI = sf::Keyboard::Unknown; keyI != sf::Keyboard::KeyCount; keyI++)
+			{
+				sf::Keyboard::Key key = static_cast<sf::Keyboard::Key>(keyI);
+
+				if (sf::Keyboard::isKeyPressed(key)){
+					keys[key] = true;
+				}
+			}
+
+			while (deltaTime >= 16)
+			{
+				inputSystem.runSystem(entityList, keys);
+				sf::Vector2i mousePosition = sf::Mouse::getPosition(window);
+				mouseInput.runSystem(entityList, mousePosition, currentFrameTime);
+				movementSystem.runSystem(entityList);
+				collisionSystem.runSystem(entityList);
+				
+				deltaTime -= 16;
+			}
+
+			window.clear();
+			renderSystem.runSystem(entityList);
+			window.display();
+
+			double fpsClock = clock();
+			fps++;
+			if (fpsClock - fpsClockStart >= 1000)
+			{
+				fpsClockStart = clock();
+				//std::cout << fps << std::endl;
+				fps = 0;
+			}
+		}
+
 	}
 
 	return 0;

@@ -6,18 +6,18 @@
 class ComponentMovement : public Component
 {
 private:
-	int rotation;
-	int speed;
+	float rotation;
+	float speed;
 
 public:
-	ComponentMovement(int speed, int rotation);
+	ComponentMovement(float speed, float rotation);
 	ComponentMovement(bool(&ckey)[components::SIZE]);
 	~ComponentMovement();
 
-	void setRotation(int rotation);
+	void setRotation(float rotation);
 	void setSpeed(float speed);
 
-	int getRotation();
-	int getSpeed();
+	float getRotation();
+	float getSpeed();
 };
 

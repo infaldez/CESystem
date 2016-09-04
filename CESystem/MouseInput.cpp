@@ -16,7 +16,7 @@ MouseInput::~MouseInput()
 
 void MouseInput::runSystem(std::vector<Entity*>& entityList, sf::Vector2i mousePosition, double time)
 {
-	sf::Vector2i mPos = sf::Vector2i(mousePosition.x, mousePosition.y);
+	sf::Vector2f mPos = sf::Vector2f(mousePosition.x, mousePosition.y);
 	
 	if (time - this->time >= 100)
 	{

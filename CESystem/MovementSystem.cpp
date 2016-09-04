@@ -24,8 +24,8 @@ void MovementSystem::runSystem(std::vector<Entity*> entityList)
 			ComponentRender* render = entityList.at(i)->getComponent<ComponentRender>(components::COMPONENT_RENDER);
 			ComponentMovement* movement = entityList.at(i)->getComponent<ComponentMovement>(components::COMPONENT_MOVEMENT);
 		
-			int rotation = movement->getRotation();
-			int speed = movement->getSpeed();
+			float rotation = movement->getRotation();
+			float speed = movement->getSpeed();
 
 			this->scale = countScale(rotation);
 			this->velocity = countVelocity(this->scale, speed);
@@ -38,7 +38,7 @@ void MovementSystem::runSystem(std::vector<Entity*> entityList)
 
 sf::Vector2f MovementSystem::countScale(int rotation)
 {
-	float radians = (rotation) * 3.14159265359 / 180;
+	float radians = (rotation - 90) * 3.14159265359 / 180;
 
 	float scale_x = cos(radians);
 	float scale_y = sin(radians); 
@@ -56,10 +56,10 @@ sf::Vector2f MovementSystem::countVelocity(sf::Vector2f scale, int speed)
 }
 
 
-sf::Vector2i MovementSystem::newPosition(sf::Vector2i position, sf::Vector2f velocity)
+sf::Vector2f MovementSystem::newPosition(sf::Vector2f position, sf::Vector2f velocity)
 {
 	position.x += velocity.x;
 	position.y += velocity.y;
 
-	return sf::Vector2i(position.x, position.y);
+	return sf::Vector2f(position.x, position.y);
 }

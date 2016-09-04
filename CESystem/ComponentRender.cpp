@@ -1,7 +1,7 @@
 #include "ComponentRender.h"
 #include <iostream>
 
-ComponentRender::ComponentRender(std::string tileset, sf::Vector2u tileSize, sf::Vector2u tilePosition, sf::Vector2i position)
+ComponentRender::ComponentRender(std::string tileset, sf::Vector2u tileSize, sf::Vector2u tilePosition, sf::Vector2f position)
 {
 	cId = components::COMPONENT_RENDER;
 
@@ -15,13 +15,13 @@ ComponentRender::ComponentRender(std::string tileset, sf::Vector2u tileSize, sf:
 
 ComponentRender::ComponentRender(bool(&ckey)[components::SIZE]) 
 {
-	cId = components::COMPONENT_RENDER;
+	/*cId = components::COMPONENT_RENDER;
 	ckey[components::id::COMPONENT_RENDER] = true;
 	
 	tileset = "texture.bmp";
 	tileSize = sf::Vector2u(64, 64);
 	tilePosition = sf::Vector2u(0, 0);
-	position = sf::Vector2i(0, 0);
+	position = sf::Vector2i(0, 0);*/
 }
 
 
@@ -48,25 +48,25 @@ sf::Vector2u ComponentRender::getTilePosition()
 }
 
 
-sf::Vector2i ComponentRender::getPosition()
+sf::Vector2f ComponentRender::getPosition()
 {
 	return position;
 }
 
 
-int ComponentRender::getPositionX()
+float ComponentRender::getPositionX()
 {
 	return position.x;
 }
 
 
-int ComponentRender::getPositionY()
+float ComponentRender::getPositionY()
 {
 	return position.y;
 }
 
 
-void ComponentRender::setPosition(sf::Vector2i position)
+void ComponentRender::setPosition(sf::Vector2f position)
 { 
 	if (this->position.x != position.x || this->position.y != position.y)
 	{

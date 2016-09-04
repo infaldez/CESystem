@@ -47,7 +47,7 @@ void ActionMove::move(Entity* entity, std::map<sf::Keyboard::Key, actions::moveA
 		speed = 4;
 	}
 	if (actions[actions::MOVE_UP] && actions[actions::MOVE_RIGHT]){
-		rotation = 50;
+		rotation = 45;
 		speed = 4;
 	}
 	if (actions[actions::MOVE_RIGHT] && actions[actions::MOVE_DOWN]){
@@ -55,7 +55,7 @@ void ActionMove::move(Entity* entity, std::map<sf::Keyboard::Key, actions::moveA
 		speed = 4;
 	}
 	if (actions[actions::MOVE_DOWN] && actions[actions::MOVE_LEFT]){
-		rotation = 220;
+		rotation = 225;
 		speed = 4;
 	}
 	if (actions[actions::MOVE_LEFT] && actions[actions::MOVE_UP]){

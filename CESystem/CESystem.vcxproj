@@ -86,6 +86,9 @@
     <ClCompile Include="CollisionSystem.cpp" />
     <ClCompile Include="Component.cpp" />
     <ClCompile Include="ComponentCollision.cpp" />
+    <ClCompile Include="componentDamage.cpp" />
+    <ClCompile Include="ComponentHealth.cpp" />
+    <ClCompile Include="componentMouseInput.cpp" />
     <ClCompile Include="ComponentMovement.cpp" />
     <ClCompile Include="ComponentPlayerInput.cpp" />
     <ClCompile Include="ComponentRender.cpp" />
@@ -101,6 +104,9 @@
     <ClInclude Include="CollisionSystem.h" />
     <ClInclude Include="Component.h" />
     <ClInclude Include="ComponentCollision.h" />
+    <ClInclude Include="componentDamage.h" />
+    <ClInclude Include="ComponentHealth.h" />
+    <ClInclude Include="componentMouseInput.h" />
     <ClInclude Include="ComponentMovement.h" />
     <ClInclude Include="ComponentPlayerInput.h" />
     <ClInclude Include="ComponentRender.h" />

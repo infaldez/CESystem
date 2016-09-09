@@ -1,14 +1,14 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 
-#include "EntityPlayer.h"
-#include "EntityNonPlayer.h"
-
 #include "RenderSystem.h"
 #include "MovementSystem.h"
 #include "CollisionSystem.h"
 #include "InputSystem.h"
 #include "MouseInput.h"
+
+#include "componentMouseInput.h"
+#include "ComponentHealth.h"
 
 #include "Actions.h"
 
@@ -29,36 +29,52 @@ int main()
 	MouseInput mouseInput;
 	
 	Entity* player = new Entity;
+	Entity* block = new Entity;
 
 	player->addComponent(new ComponentRender("texture1.bmp", sf::Vector2u(64, 64), sf::Vector2u(32, 32), sf::Vector2f(0, 0)));
 	player->addComponent(new ComponentMovement(0, 0));
 	player->addComponent(new ComponentPlayerInput());
 	player->addComponent(new ComponentCollision());
+	player->getComponent<ComponentCollision>(components::COMPONENT_COLLISION)->setFlag(collisionType::SOLID, true);
+	player->addComponent(new componentMouseInput());
 
 	player->getComponent<ComponentPlayerInput>(components::COMPONENT_INPUT)->setInput(sf::Keyboard::A, actions::moveActions::MOVE_LEFT);
 	player->getComponent<ComponentPlayerInput>(components::COMPONENT_INPUT)->setInput(sf::Keyboard::D, actions::moveActions::MOVE_RIGHT);
 	player->getComponent<ComponentPlayerInput>(components::COMPONENT_INPUT)->setInput(sf::Keyboard::W, actions::moveActions::MOVE_UP);
 	player->getComponent<ComponentPlayerInput>(components::COMPONENT_INPUT)->setInput(sf::Keyboard::S, actions::moveActions::MOVE_DOWN);
 
+	block->addComponent(new ComponentRender("texture1.bmp", sf::Vector2u(64, 64), sf::Vector2u(32, 32), sf::Vector2f(100, 100)));
+	//block->addComponent(new ComponentMovement(0, 0));
+	block->addComponent(new ComponentCollision());
+	block->addComponent(new ComponentHealth(10));
+	block->getComponent<ComponentCollision>(components::COMPONENT_COLLISION)->setFlag(collisionType::SOLID, true);
+
+	entityList.push_back(block);
 	entityList.push_back(player);
 
-	/*for (int i = 0; i < 1000; i++)
+	/*for (int i = 0; i < 100; i++)
 	{
-		EntityPlayer* player2 = new EntityPlayer;
-		player2->addComponent(new ComponentRender("texture1.bmp", sf::Vector2u(64, 64), sf::Vector2u(0, 0), sf::Vector2i(i, 120)));
-		player2->addComponent(new ComponentMovement(3, 0));
+		Entity* player2 = new Entity;
+		player2->addComponent(new ComponentRender("texture1.bmp", sf::Vector2u(64, 64), sf::Vector2u(0, 0), sf::Vector2f(i*2, 600)));
+		player2->addComponent(new ComponentMovement(4, 0));
+		player2->addComponent(new ComponentCollision);
+		player2->addComponent(new ComponentHealth(10));
+		player2->getComponent<ComponentCollision>(components::COMPONENT_COLLISION)->setFlag(collisionType::SOLID, true);
+
 		entityList.push_back(player2);
 	}*/
-	
+
+	collisionSystem.createCollisionMap(entityList);
+
 	/*
 	Loop
 	*/
 	bool running = true;
 	bool pause = false;
-	double lastFrameTime = clock();
-	double deltaTime = 0.0;
+	float lastFrameTime = clock();
+	float deltaTime = 0.0;
 	
-	double fpsClockStart = clock();
+	float fpsClockStart = clock();
 	int fps = 0;
 
 	//loop start
@@ -70,7 +86,7 @@ int main()
 			if (event.type == sf::Event::Closed){
 				window.close();
 				running = false;
-			}	
+			}
 			if (event.type == sf::Event::LostFocus)
 				pause = true;
 			if (event.type == sf::Event::GainedFocus)
@@ -79,8 +95,8 @@ int main()
 
 		if (!pause)
 		{
-			double currentFrameTime = clock();
-			double elapsed = currentFrameTime - lastFrameTime;
+			float currentFrameTime = clock();
+			float elapsed = currentFrameTime - lastFrameTime;
 			lastFrameTime = currentFrameTime;
 			deltaTime += elapsed;
 
@@ -110,17 +126,27 @@ int main()
 			renderSystem.runSystem(entityList);
 			window.display();
 
-			double fpsClock = clock();
+			
+			for (std::vector<Entity*>::iterator it = entityList.begin(); it != entityList.end(); ++it)
+			{
+				if ((*it)->componentKey[components::DELETE] == true) {
+					it = entityList.erase(it);
+				}
+			}
+
+			float fpsClock = clock();
 			fps++;
 			if (fpsClock - fpsClockStart >= 1000)
 			{
 				fpsClockStart = clock();
-				//std::cout << fps << std::endl;
+				std::cout << fps << std::endl;
+				//std::cout << entityList.size() << std::endl;
 				fps = 0;
 			}
 		}
 
 	}
+	entityList.clear();
 
 	return 0;
 }

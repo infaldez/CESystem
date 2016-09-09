@@ -56,11 +56,8 @@ float ComponentRender::getPositionY()
 
 void ComponentRender::setPosition(sf::Vector2f position)
 { 
-	if (this->position.x != position.x || this->position.y != position.y)
-	{
-		oldPosition = this->position;
-		this->position = position;
-	}
+	oldPosition = this->position;
+	this->position = position;
 }
 
 

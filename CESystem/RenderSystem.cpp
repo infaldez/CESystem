@@ -8,7 +8,6 @@
 #include <iostream>
 #include <string>
 
-#define VERTICEARRAYSIZE 10000
 
 class drawEntity : public sf::Drawable, public sf::Transformable
 {
@@ -28,9 +27,8 @@ public:
 		}
 
 		//resize the vertexarray
-		//TODO dynamic resizing based on the amount of render entities
 		m_vertices.setPrimitiveType(sf::Quads);
-		m_vertices.resize(VERTICEARRAYSIZE * 4);
+		m_vertices.resize((i + 1) * 4);
 
 		//assign a pointer to current tile's quad
 		sf::Vertex *quad = &m_vertices[i * 4];
@@ -79,7 +77,8 @@ void RenderSystem::runSystem(std::vector<Entity*> entityList)
 
 	for (int i = 0; i < entityList.size(); i++)
 	{
-		if (entityList.at(i)->componentKey[components::id::COMPONENT_RENDER] == true)
+		std::array<bool, components::SIZE> cKey = entityList.at(i)->componentKey;
+		if (cKey[components::id::COMPONENT_RENDER] == true)
 		{	
 			ComponentRender* cRender = entityList.at(i)->getComponent<ComponentRender>(components::COMPONENT_RENDER);
 

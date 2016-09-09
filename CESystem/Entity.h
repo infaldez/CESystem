@@ -9,31 +9,22 @@
 #include <vector>
 #include <iostream>
 
+#include<array>
 
 class Entity
 {
 private:
-	ComponentRender* nullRender = NULL;
-	ComponentMovement* nullMovement = NULL;
-	ComponentCollision* nullCollision = NULL;
-	ComponentPlayerInput* nullInput = NULL;
-
 	std::vector<Component*> _components;
 
 public:
-	bool componentKey[components::SIZE];
+	std::array<bool, components::SIZE> componentKey;
 	
-	virtual ComponentRender getComponentRender() { return *nullRender; };
-	virtual ComponentMovement getComponentMovement() { return *nullMovement; };
-	virtual ComponentCollision getComponentCollision() { return *nullCollision; };
-	virtual ComponentPlayerInput getComponentPlayerInput() { return *nullInput; };
+	Entity();
+	~Entity();
 
-	virtual void setComponentRender(ComponentRender render) {};
-	virtual void setComponentMovement(ComponentMovement movement) {};
-	virtual void setComponentCollision(ComponentCollision collision) {};
-	virtual void setComponentPlayerInput(ComponentPlayerInput input) {};
+	void addComponent(Component* component);
 
-	template <class cType> 
+	template <class cType>
 	cType* getComponent(components::id cId)
 	{
 		if (componentKey[cId] == true)
@@ -41,22 +32,9 @@ public:
 			for (int i = 0; i < _components.size(); i++)
 			{
 				if (_components.at(i)->cId == cId)
-				{
 					return (cType*)_components.at(i);
-				}
 			}
 		}
 	}
 
-	void addComponent(Component* component)
-	{	
-		if (componentKey[component->cId] == false)
-		{
-			componentKey[component->cId] = true;
-			_components.push_back(component);	
-		}		
-	}
-
-	Entity();
-	~Entity();
 };

@@ -19,18 +19,21 @@ void MovementSystem::runSystem(std::vector<Entity*> entityList)
 {
 	for (int i = 0; i < entityList.size(); i++)
 	{
-		if (entityList.at(i)->componentKey[components::id::COMPONENT_RENDER] == true && entityList.at(i)->componentKey[components::id::COMPONENT_MOVEMENT] == true)
+		std::array<bool, components::SIZE> cKey = entityList.at(i)->componentKey;
+		if (cKey[components::COMPONENT_RENDER] == true && 
+			cKey[components::COMPONENT_MOVEMENT] == true)
 		{	
 			ComponentRender* render = entityList.at(i)->getComponent<ComponentRender>(components::COMPONENT_RENDER);
 			ComponentMovement* movement = entityList.at(i)->getComponent<ComponentMovement>(components::COMPONENT_MOVEMENT);
 		
+			sf::Vector2f pos = render->getPosition();
 			float rotation = movement->getRotation();
 			float speed = movement->getSpeed();
-
+			
 			this->scale = countScale(rotation);
 			this->velocity = countVelocity(this->scale, speed);
 
-			render->setPosition(newPosition(render->getPosition(), velocity));
+			render->setPosition(newPosition(pos, velocity));
 		}
 	}
 }

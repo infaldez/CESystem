@@ -1,5 +1,5 @@
 #include "MouseInput.h"
-#include "EntityNonPlayer.h"
+#include "componentDamage.h"
 
 #include <iostream>
 
@@ -14,19 +14,35 @@ MouseInput::~MouseInput()
 }
 
 
-void MouseInput::runSystem(std::vector<Entity*>& entityList, sf::Vector2i mousePosition, double time)
+void MouseInput::runSystem(std::vector<Entity*>& entityList, sf::Vector2i mousePosition, float time)
 {
-	sf::Vector2f mPos = sf::Vector2f(mousePosition.x, mousePosition.y);
-	
-	if (time - this->time >= 100)
+	for (int i = 0; i < entityList.size(); i++)
 	{
-		if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+		std::array<bool, components::SIZE> cKey = entityList.at(i)->componentKey;
+		if (cKey[components::COMPONENT_MOUSEINPUT] == true &&
+			cKey[components::COMPONENT_RENDER] == true)
 		{
-			Entity* click = new Entity;
-			click->addComponent(new ComponentRender("texture1.bmp", sf::Vector2u(64, 64), sf::Vector2u(64, 64), mPos));
-			click->addComponent(new ComponentCollision());
-			entityList.push_back(click);		
-			this->time = time;
+			sf::Vector2f mPos = sf::Vector2f(mousePosition.x, mousePosition.y);
+			
+			if (time - this->time >= 200)
+			{
+				if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+				{
+					ComponentRender* render = entityList.at(i)->getComponent<ComponentRender>(components::COMPONENT_RENDER);
+					sf::Vector2f rPos = render->getPosition();
+					float rotation = atan2f(rPos.y - mPos.y, rPos.x - mPos.x) * 180 / 3.14;
+
+					Entity* click = new Entity;
+					click->addComponent(new ComponentRender("texture1.bmp", sf::Vector2u(32, 32), sf::Vector2u(64, 64), sf::Vector2f(rPos.x + 16, rPos.y + 16)));
+					click->addComponent(new ComponentCollision());
+					click->addComponent(new ComponentMovement(30, rotation - 90));
+					click->addComponent(new componentDamage(1));
+
+					click->getComponent<ComponentCollision>(components::COMPONENT_COLLISION)->setFlag(collisionType::SOLID, false);
+					entityList.push_back(click);
+					this->time = time;
+				}
+			}
 		}
 	}
 }

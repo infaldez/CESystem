@@ -21,7 +21,8 @@ void InputSystem::runSystem(std::vector<Entity*> entityList, bool keys[])
 {
 	for (int i = 0; i < entityList.size(); i++)
 	{
-		if (entityList.at(i)->componentKey[components::id::COMPONENT_INPUT] == true)
+		std::array<bool, components::SIZE> cKey = entityList.at(i)->componentKey;
+		if (cKey[components::id::COMPONENT_INPUT] == true)
 		{	
 			Entity* entity = entityList.at(i);
 			std::map<sf::Keyboard::Key, actions::moveActions> inputs = entityList.at(i)->getComponent<ComponentPlayerInput>(components::COMPONENT_INPUT)->getInputMap();

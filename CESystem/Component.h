@@ -8,6 +8,7 @@ public:
 	~Component();
 };
 
+
 namespace components
 {
 	enum id{
@@ -17,7 +18,10 @@ namespace components
 		COMPONENT_COLLISION,
 		COMPONENT_INPUT,
 		COMPONENT_MOUSEINPUT,
+		COMPONENT_HEALTH,
+		COMPONENT_DAMAGE,
 
+		DELETE,
 		SIZE
 	};
 }

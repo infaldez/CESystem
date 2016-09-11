@@ -20,7 +20,8 @@ public:
 
 	void runSystem(std::vector<Entity*> entityList);
 	int getGridPosition(ComponentRender* render);
-	void createCollisionMap(std::vector<Entity*> entityList);
+	bool createCollisionMap(std::vector<Entity*> entityList);
 	void updateCollisionMap();
+	void clearCollisionMap();
 };
 

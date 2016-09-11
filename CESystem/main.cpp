@@ -43,7 +43,7 @@ int main()
 	player->getComponent<ComponentPlayerInput>(components::COMPONENT_INPUT)->setInput(sf::Keyboard::W, actions::moveActions::MOVE_UP);
 	player->getComponent<ComponentPlayerInput>(components::COMPONENT_INPUT)->setInput(sf::Keyboard::S, actions::moveActions::MOVE_DOWN);
 
-	block->addComponent(new ComponentRender("texture1.bmp", sf::Vector2u(64, 64), sf::Vector2u(32, 32), sf::Vector2f(100, 100)));
+	block->addComponent(new ComponentRender("texture1.bmp", sf::Vector2u(64, 64), sf::Vector2u(32, 32), sf::Vector2f(80, 100)));
 	//block->addComponent(new ComponentMovement(0, 0));
 	block->addComponent(new ComponentCollision());
 	block->addComponent(new ComponentHealth(10));
@@ -52,17 +52,17 @@ int main()
 	entityList.push_back(block);
 	entityList.push_back(player);
 
-	/*for (int i = 0; i < 100; i++)
+	for (int i = 0; i < 400; i++)
 	{
 		Entity* player2 = new Entity;
-		player2->addComponent(new ComponentRender("texture1.bmp", sf::Vector2u(64, 64), sf::Vector2u(0, 0), sf::Vector2f(i*2, 600)));
-		player2->addComponent(new ComponentMovement(4, 0));
+		player2->addComponent(new ComponentRender("texture1.bmp", sf::Vector2u(64, 64), sf::Vector2u(0, 0), sf::Vector2f(rand() % 800, rand() % 800 + 100)));
+		//player2->addComponent(new ComponentMovement(4, 0));
 		player2->addComponent(new ComponentCollision);
 		player2->addComponent(new ComponentHealth(10));
 		player2->getComponent<ComponentCollision>(components::COMPONENT_COLLISION)->setFlag(collisionType::SOLID, true);
 
 		entityList.push_back(player2);
-	}*/
+	}
 
 	collisionSystem.createCollisionMap(entityList);
 
@@ -127,11 +127,12 @@ int main()
 			window.display();
 
 			
-			for (std::vector<Entity*>::iterator it = entityList.begin(); it != entityList.end(); ++it)
+			for (std::vector<Entity*>::iterator it = entityList.begin(); it != entityList.end();)
 			{
 				if ((*it)->componentKey[components::DELETE] == true) {
 					it = entityList.erase(it);
 				}
+				else { ++it; }
 			}
 
 			float fpsClock = clock();

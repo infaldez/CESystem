@@ -21,7 +21,7 @@
 CollisionSystem::CollisionSystem()
 {
 	//initialize gridmap
-	for (int i = 0; i < GRID_COUNT; ++i)
+	for (int i = 0; i < GRID_COUNT * GRID_COUNT; ++i)
 	{
 		this->gridMap.insert(std::pair<int, std::vector<Entity*>>(i, std::vector<Entity*>()));
 	}
@@ -37,12 +37,11 @@ void HealthCollision(Entity* ent1, Entity* ent2)
 {
 	if (ent2->componentKey[components::COMPONENT_DAMAGE] == true)
 	{
-		std::cout << "PAM" << std::endl;
 		ComponentHealth* health = ent1->getComponent<ComponentHealth>(components::COMPONENT_HEALTH);
 		componentDamage* dmg = ent2->getComponent<componentDamage>(components::COMPONENT_DAMAGE);
 
-		std::cout << health->getHealth() << std::endl;
 		health->setHealth(health->getHealth() - dmg->getDamage());
+		ent2->componentKey[components::DELETE] = true;
 		if (health->getHealth() <= 0)
 		{
 			ent1->componentKey[components::DELETE] = true;
@@ -53,17 +52,17 @@ void HealthCollision(Entity* ent1, Entity* ent2)
 
 int CollisionSystem::getGridPosition(ComponentRender* render)
 {
-	return render->getPosition().x / ( SCREENSIZE / GRID_COUNT );
+	return (render->getPosition().x / (SCREENSIZE / GRID_COUNT)) + (render->getPosition().y / (SCREENSIZE / GRID_COUNT)) * GRID_COUNT;
 }
 
 
 int getGridPositionEnd(ComponentRender* render)
 {
-	return (render->getPosition().x + render->getTileSize().x) / (SCREENSIZE / GRID_COUNT);
+	return ((render->getPosition().x + render->getTileSize().x) / (SCREENSIZE / GRID_COUNT)) + ((render->getPosition().y + render->getTileSize().y) / (SCREENSIZE / GRID_COUNT)) * GRID_COUNT;
 }
 
 
-void CollisionSystem::createCollisionMap(std::vector<Entity*> entityList) 
+bool CollisionSystem::createCollisionMap(std::vector<Entity*> entityList) 
 {
 	for (int i = 0; i < entityList.size(); ++i)
 	{
@@ -73,15 +72,28 @@ void CollisionSystem::createCollisionMap(std::vector<Entity*> entityList)
 			ComponentRender* cRender = entityList.at(i)->getComponent<ComponentRender>(components::COMPONENT_RENDER);
 			Entity* ent = entityList.at(i);
 
-			std::unordered_map<int, std::vector<Entity*>>::iterator it = gridMap.find(getGridPosition(cRender));
-			it->second.push_back(ent);
-			
-			if (getGridPosition(cRender) != getGridPositionEnd(cRender))
+			if (getGridPosition(cRender) < GRID_COUNT * GRID_COUNT  && getGridPosition(cRender) >= 0 && getGridPositionEnd(cRender) >= 0)
 			{
-				it = gridMap.find(getGridPositionEnd(cRender));
+				std::unordered_map<int, std::vector<Entity*>>::iterator it = gridMap.find(getGridPosition(cRender));
 				it->second.push_back(ent);
+
+				if (getGridPosition(cRender) != getGridPositionEnd(cRender) && getGridPositionEnd(cRender) < GRID_COUNT * GRID_COUNT)
+				{
+					it = gridMap.find(getGridPositionEnd(cRender));
+					it->second.push_back(ent);
+				}
 			}
 		}
+	}
+	return true;
+}
+
+
+void CollisionSystem::clearCollisionMap()
+{
+	for (auto it = gridMap.begin(); it != gridMap.end(); ++it)
+	{
+		it->second.clear();
 	}
 }
 
@@ -93,25 +105,16 @@ void CollisionSystem::updateCollisionMap()
 		std::vector<Entity*>::iterator eit = it->second.begin();
 		while (eit != it->second.end())
 		{
-			if ((*eit)->componentKey[components::COMPONENT_MOVEMENT] == true)
-			{
-				ComponentRender* cRender = (*eit)->getComponent<ComponentRender>(components::COMPONENT_RENDER);
+			ComponentRender* cRender = (*eit)->getComponent<ComponentRender>(components::COMPONENT_RENDER);
 				
-				/*if (getGridPositionEnd(cRender) != it->first)
-				{
-					Entity* ent = *eit;
-					gridMap.find(getGridPositionEnd(cRender))->second.push_back(ent);
-				}*/
+			if (getGridPosition(cRender) != it->first)
+			{
+				Entity* ent = *eit;
+				gridMap.find(getGridPosition(cRender))->second.push_back(ent);
 
-				if (getGridPosition(cRender) != it->first)
-				{
-					Entity* ent = *eit;
-					gridMap.find(getGridPosition(cRender))->second.push_back(ent);
-
-					eit = it->second.erase(eit);
-				}
-				else { ++eit; }
+				eit = it->second.erase(eit);
 			}
+			else { ++eit; }
 		}
 	}
 }
@@ -119,7 +122,8 @@ void CollisionSystem::updateCollisionMap()
 
 void CollisionSystem::runSystem(std::vector<Entity*> entityList)
 {
-	updateCollisionMap();
+	clearCollisionMap();
+	createCollisionMap(entityList);
 	for (auto it = gridMap.begin(); it != gridMap.end(); ++it)
 	{
 		for (int i = 0; i < it->second.size(); ++i)

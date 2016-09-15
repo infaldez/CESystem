@@ -11,17 +11,22 @@
 #include <iostream>
 
 /*
- TODO refactor everything
- - update grid when entities are added/deleted
- - update grid if entities move
+ TODO 
+ - entities can occupy more than 4 grids
+ - refactor everything
+ ISSUES
+ - different sized grid_rows and grid_colums cause issues
+ - if two or moving objects collide the later in the entitylist "pushes" the other
  */
 
 #define SCREENSIZE 800
-#define GRID_COUNT 8
+#define GRID_ROWS 8
+#define GRID_COLUMNS 8
+#define GRID_COUNT GRID_ROWS * GRID_COLUMNS
 CollisionSystem::CollisionSystem()
 {
 	//initialize gridmap
-	for (int i = 0; i < GRID_COUNT * GRID_COUNT; ++i)
+	for (int i = 0; i < GRID_COUNT; ++i)
 	{
 		this->gridMap.insert(std::pair<int, std::vector<Entity*>>(i, std::vector<Entity*>()));
 	}
@@ -35,7 +40,7 @@ CollisionSystem::~CollisionSystem()
 //TODO move this to somewhere else
 void HealthCollision(Entity* ent1, Entity* ent2)
 {
-	if (ent2->componentKey[components::COMPONENT_DAMAGE] == true)
+	if (ent1->componentKey[components::COMPONENT_DAMAGE] == true)
 	{
 		ComponentHealth* health = ent1->getComponent<ComponentHealth>(components::COMPONENT_HEALTH);
 		componentDamage* dmg = ent2->getComponent<componentDamage>(components::COMPONENT_DAMAGE);
@@ -49,74 +54,126 @@ void HealthCollision(Entity* ent1, Entity* ent2)
 	}	
 }
 
-
-int CollisionSystem::getGridPosition(ComponentRender* render)
+// returns position 1
+int getGridPos1(sf::Vector2i pos)
 {
-	return (render->getPosition().x / (SCREENSIZE / GRID_COUNT)) + (render->getPosition().y / (SCREENSIZE / GRID_COUNT)) * GRID_COUNT;
+	pos.x = pos.x / (SCREENSIZE / GRID_COLUMNS);
+	pos.y = pos.y / (SCREENSIZE / GRID_ROWS);
+	return pos.x + pos.y * GRID_ROWS;
+}
+
+// returns position 2
+int getGridPos2(sf::Vector2i pos, sf::Vector2i size)
+{
+	int x = (pos.x + size.x) / (SCREENSIZE / GRID_COLUMNS);
+	int y = pos.y / (SCREENSIZE / GRID_ROWS);
+	return x + y * GRID_ROWS;
+}
+
+// returns position 3
+int getGridPos3(sf::Vector2i pos, sf::Vector2i size)
+{
+	int x = (pos.x + size.x) / (SCREENSIZE / GRID_COLUMNS);
+	int y = (pos.y + size.y) / (SCREENSIZE / GRID_ROWS);
+	return x + y * GRID_ROWS;
+}
+
+// returns position 4
+int getGridPos4(sf::Vector2i pos, sf::Vector2i size)
+{
+	int x = pos.x / (SCREENSIZE / GRID_COLUMNS);
+	int y = (pos.y + size.y) / (SCREENSIZE / GRID_ROWS);
+	return x + y * GRID_ROWS;
 }
 
 
-int getGridPositionEnd(ComponentRender* render)
+std::vector<int> CollisionSystem::getGridPositions(sf::Vector2i position, sf::Vector2i size)
 {
-	return ((render->getPosition().x + render->getTileSize().x) / (SCREENSIZE / GRID_COUNT)) + ((render->getPosition().y + render->getTileSize().y) / (SCREENSIZE / GRID_COUNT)) * GRID_COUNT;
+	std::vector<int> positions;
+
+	positions.push_back(getGridPos1(position));
+	positions.push_back(getGridPos2(position, size));
+	positions.push_back(getGridPos3(position, size));
+	positions.push_back(getGridPos4(position, size));
+
+	return positions;
 }
 
 
-bool CollisionSystem::createCollisionMap(std::vector<Entity*> entityList) 
+void CollisionSystem::createCollisionMap(std::vector<Entity*> entityList) 
 {
 	for (int i = 0; i < entityList.size(); ++i)
 	{
 		if (entityList.at(i)->componentKey[components::COMPONENT_COLLISION] == true &&
 			entityList.at(i)->componentKey[components::COMPONENT_RENDER] == true)
 		{
-			ComponentRender* cRender = entityList.at(i)->getComponent<ComponentRender>(components::COMPONENT_RENDER);
 			Entity* ent = entityList.at(i);
+			ComponentRender* cRender = entityList.at(i)->getComponent<ComponentRender>(components::COMPONENT_RENDER);
+			sf::Vector2i pos = (sf::Vector2i)cRender->getPosition();
+			sf::Vector2i size = (sf::Vector2i)cRender->getTileSize();
+			std::vector<int> positions = getGridPositions(pos, size);
+			
+			if (positions[0] < GRID_COUNT && 
+				positions[0] >= 0)
+					gridMap.find(positions[0])->second.push_back(ent);
 
-			if (getGridPosition(cRender) < GRID_COUNT * GRID_COUNT  && getGridPosition(cRender) >= 0 && getGridPositionEnd(cRender) >= 0)
-			{
-				std::unordered_map<int, std::vector<Entity*>>::iterator it = gridMap.find(getGridPosition(cRender));
-				it->second.push_back(ent);
+			if (positions[1] != positions[0] && 
+				positions[1] < GRID_COUNT &&
+				positions[1] >= 0)
+					gridMap.find(positions[1])->second.push_back(ent);
 
-				if (getGridPosition(cRender) != getGridPositionEnd(cRender) && getGridPositionEnd(cRender) < GRID_COUNT * GRID_COUNT)
-				{
-					it = gridMap.find(getGridPositionEnd(cRender));
-					it->second.push_back(ent);
-				}
-			}
+			if (positions[2] != positions[1] && 
+				positions[2] != positions[3] &&
+				positions[2] < GRID_COUNT &&
+				positions[2] >= 0) 
+					gridMap.find(positions[2])->second.push_back(ent);
+
+			if (positions[3] != positions[0] && 
+				positions[3] < GRID_COUNT && 
+				positions[3] >= 0)
+					gridMap.find(positions[3])->second.push_back(ent);
 		}
 	}
-	return true;
 }
 
 
 void CollisionSystem::clearCollisionMap()
 {
 	for (auto it = gridMap.begin(); it != gridMap.end(); ++it)
-	{
 		it->second.clear();
-	}
 }
 
 
-void CollisionSystem::updateCollisionMap()
+sf::Vector2f getNearestDisplacement(sf::Vector2f pos1, sf::Vector2f pos2, sf::Vector2u size1, sf::Vector2u size2)
 {
-	for (auto it = gridMap.begin(); it != gridMap.end(); ++it)
-	{
-		std::vector<Entity*>::iterator eit = it->second.begin();
-		while (eit != it->second.end())
-		{
-			ComponentRender* cRender = (*eit)->getComponent<ComponentRender>(components::COMPONENT_RENDER);
-				
-			if (getGridPosition(cRender) != it->first)
-			{
-				Entity* ent = *eit;
-				gridMap.find(getGridPosition(cRender))->second.push_back(ent);
+	sf::Vector2f nearestPoint = pos1;
+	
+	sf::Vector2f center1(pos1.x + (size1.x / 2), pos1.y + (size1.y / 2));
+	sf::Vector2f center2(pos2.x + (size2.x / 2), pos2.y + (size2.y / 2));
 
-				eit = it->second.erase(eit);
-			}
-			else { ++eit; }
-		}
+	//center distance x, y
+	float cdx = fabs(center1.x - center2.x);
+	float cdy = fabs(center1.y - center2.y);
+
+	float overlapx = ((size1.x + size2.x) / 2) - cdx;
+	float overlapy = ((size1.y + size2.y) / 2) - cdy;
+	
+	if (overlapx * overlapx < overlapy * overlapy)
+	{
+		if (center1.x > center2.x)
+			nearestPoint.x = pos1.x + overlapx;
+		else
+			nearestPoint.x = pos1.x - overlapx;
 	}
+	else
+	{	
+		if (center1.y > center2.y)
+			nearestPoint.y = pos1.y + overlapy;
+		else
+			nearestPoint.y = pos1.y - overlapy;
+	}
+
+	return nearestPoint;
 }
 
 
@@ -135,86 +192,35 @@ void CollisionSystem::runSystem(std::vector<Entity*> entityList)
 			sf::Vector2f pos1 = render1->getPosition();
 			sf::Vector2u size1 = render1->getTileSize();
 			
-			for (int j = i + 1; j < it->second.size(); ++j)
+			if (ent1->componentKey[components::COMPONENT_MOVEMENT] == true)
 			{
-				Entity* ent2 = it->second.at(j);
-				ComponentRender* render2 = ent2->getComponent<ComponentRender>(components::COMPONENT_RENDER);
-				ComponentCollision* col2 = ent2->getComponent<ComponentCollision>(components::COMPONENT_COLLISION);
-			
-				sf::Vector2f pos2 = render2->getPosition();
-				sf::Vector2u size2 = render2->getTileSize();
-				
-				if (pos1.x < pos2.x + size2.x &&
-					pos1.x + size1.x > pos2.x &&
-					pos1.y < pos2.y + size2.y &&
-					pos1.y + size1.y > pos2.y)
+				for (int j = 0; j < it->second.size(); ++j)
 				{
-					if (col1->getFlag(collisionType::SOLID) &&
-						col2->getFlag(collisionType::SOLID))
+					if (j != i)
 					{
-						render1->resetToOldPosition();
-						render2->resetToOldPosition();
-					}
+						Entity* ent2 = it->second.at(j);
+						ComponentRender* render2 = ent2->getComponent<ComponentRender>(components::COMPONENT_RENDER);
+						ComponentCollision* col2 = ent2->getComponent<ComponentCollision>(components::COMPONENT_COLLISION);
 
-					if (ent1->componentKey[components::COMPONENT_HEALTH] == true)
-						HealthCollision(ent1, ent2);
+						sf::Vector2f pos2 = render2->getPosition();
+						sf::Vector2u size2 = render2->getTileSize();
+
+						if (pos1.x < pos2.x + size2.x &&
+							pos1.x + size1.x > pos2.x &&
+							pos1.y < pos2.y + size2.y &&
+							pos1.y + size1.y > pos2.y)
+						{
+							
+							if (col1->getFlag(collisionType::SOLID) && col2->getFlag(collisionType::SOLID))	
+								render1->setPosition(getNearestDisplacement(pos1, pos2, size1, size2));
+
+
+							if (ent2->componentKey[components::COMPONENT_HEALTH] == true)
+								HealthCollision(ent1, ent2);
+						}
+					}
 				}
 			}
 		}
 	}
 }
-
-/*void CollisionSystem::runSystem(std::vector<Entity*> entityList)
-{		
-	for (int i = 0; i < entityList.size(); ++i)
-	{	
-		std::array<bool, components::SIZE> cKeyi = entityList.at(i)->componentKey;
-		
-		if (cKeyi[components::COMPONENT_RENDER] == true &&
-			cKeyi[components::COMPONENT_COLLISION] == true)
-		{	
-			Entity* ent_i = entityList.at(i);
-			ComponentRender* render_i = ent_i->getComponent<ComponentRender>(components::COMPONENT_RENDER);
-			ComponentCollision* col_i = ent_i->getComponent<ComponentCollision>(components::COMPONENT_COLLISION);
-
-			sf::Vector2f pos_i = render_i->getPosition();
-			sf::Vector2u size_i = render_i->getTileSize();
-
-			//check for collisions with other entities
-			for (int j = i + 1; j < entityList.size(); ++j)
-			{
-				std::array<bool, components::SIZE> cKeyj = entityList.at(i)->componentKey;
-
-				if (cKeyj[components::COMPONENT_RENDER] == true &&
-					cKeyj[components::COMPONENT_COLLISION] == true &&
-					j != i)
-				{
-					Entity* ent_j = entityList.at(j);
-					ComponentRender* render_j = ent_j->getComponent<ComponentRender>(components::COMPONENT_RENDER);
-					ComponentCollision* col_j = ent_j->getComponent<ComponentCollision>(components::COMPONENT_COLLISION);
-					
-					sf::Vector2f pos_j = render_j->getPosition();
-					sf::Vector2u size_j = render_j->getTileSize();
-
-					//AABB
-					if (pos_i.x < pos_j.x + size_j.x &&
-						pos_i.x + size_i.x > pos_j.x &&
-						pos_i.y < pos_j.y + size_j.y &&
-						pos_i.y + size_i.y > pos_j.y)
-					{
-						//Collision action
-						if (col_i->getFlag(collisionType::SOLID) &&
-							col_j->getFlag(collisionType::SOLID))
-						{
-							render_i->resetToOldPosition();
-							render_j->resetToOldPosition();
-						}
-
-						if (cKeyi[components::COMPONENT_HEALTH] == true)
-							HealthCollision(ent_i, ent_j);
-					}
-				}
-			}
-		}
-	}
-}*/

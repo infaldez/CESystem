@@ -19,7 +19,6 @@ public:
 	bool load(std::string tileset, sf::Vector2u tileSize, sf::Vector2u tilePosition, sf::Vector2f drawPosition, int i)
 	{
 		//read the tileset from file
-		//TODO better handling of reading the tileset only once
 		if (read) {
 			if (!m_tileset.loadFromFile(tileset))
 				return false;
@@ -90,5 +89,3 @@ void RenderSystem::runSystem(std::vector<Entity*> entityList)
 
 	window->draw(drawEntity);
 }
-
-

@@ -31,4 +31,3 @@ void InputSystem::runSystem(std::vector<Entity*> entityList, bool keys[])
 		}
 	}
 }
-

@@ -8,4 +8,3 @@ public:
 	componentMouseInput();
 	~componentMouseInput();
 };
-

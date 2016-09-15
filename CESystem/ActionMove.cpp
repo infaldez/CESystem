@@ -67,12 +67,3 @@ void ActionMove::move(Entity* entity, std::map<sf::Keyboard::Key, actions::moveA
 	movement->setSpeed(speed);
 
 }
-
-
-
-
-
-
-
-
-

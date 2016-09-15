@@ -14,4 +14,3 @@ public:
 	void setHealth(int health);
 	int getHealth();
 };
-

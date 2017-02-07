@@ -1,8 +1,9 @@
 #include "Component.h"
 
 
-Component::Component()
+Component::Component(enum components::id cId)
 {
+	this->cId = cId;
 }
 
 

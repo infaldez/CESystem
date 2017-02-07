@@ -1,9 +1,9 @@
 #include "componentMouseInput.h"
 
 
-componentMouseInput::componentMouseInput()
+componentMouseInput::componentMouseInput() : Component(components::COMPONENT_MOUSEINPUT)
 {
-	cId = components::COMPONENT_MOUSEINPUT;
+	//cId = components::COMPONENT_MOUSEINPUT;
 }
 
 

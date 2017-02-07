@@ -4,8 +4,6 @@
 #include <SFML\Graphics.hpp>
 
 #include "Entity.h"
-#include "ComponentMovement.h"
-#include "ComponentRender.h"
 
 class MovementSystem
 {
@@ -15,8 +13,8 @@ private:
 public:
 	void runSystem(std::vector<Entity*> entityList);
 
-	sf::Vector2f countScale(int rotation);
-	sf::Vector2f countVelocity(sf::Vector2f scale, int speed);
+	sf::Vector2f countScale(float rotation);
+	sf::Vector2f countVelocity(sf::Vector2f scale, float speed);
 	sf::Vector2f newPosition(sf::Vector2f position, sf::Vector2f velocity);
 
 	MovementSystem();

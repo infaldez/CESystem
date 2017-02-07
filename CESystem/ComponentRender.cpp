@@ -1,15 +1,14 @@
 #include "ComponentRender.h"
 #include <iostream>
 
-ComponentRender::ComponentRender(std::string tileset, sf::Vector2u tileSize, sf::Vector2u tilePosition, sf::Vector2f position)
+ComponentRender::ComponentRender(std::string tileset, sf::Vector2u tileSize, sf::Vector2u tilePosition)
+	: Component(components::COMPONENT_RENDER)
 {
-	cId = components::COMPONENT_RENDER;
-
 	this->tileset = tileset;
 	this->tileSize = tileSize;
 	this->tilePosition = tilePosition;
-	this->position = position;
-	this->oldPosition = position;
+	//this->position = position;
+	//this->oldPosition = position;
 }
 
 
@@ -36,11 +35,15 @@ sf::Vector2u ComponentRender::getTilePosition()
 }
 
 
-sf::Vector2f ComponentRender::getPosition()
+/*sf::Vector2f ComponentRender::getPosition()
 {
 	return position;
 }
 
+sf::Vector2f ComponentRender::getOldPosition()
+{
+	return oldPosition;
+}
 
 float ComponentRender::getPositionX()
 {
@@ -58,7 +61,7 @@ void ComponentRender::setPosition(sf::Vector2f position)
 { 
 	oldPosition = this->position;
 	this->position = position;
-}
+}*/
 
 
 void ComponentRender::setTileSize(sf::Vector2u tileSize)
@@ -79,7 +82,7 @@ void ComponentRender::setTilePosition(sf::Vector2u tilePosition)
 }
 
 
-void ComponentRender::resetToOldPosition()
+/*void ComponentRender::resetToOldPosition()
 {
 	position = oldPosition;
-}
+}*/

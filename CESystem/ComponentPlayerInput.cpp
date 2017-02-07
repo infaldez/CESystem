@@ -3,8 +3,9 @@
 #include <iostream>
 
 
-ComponentPlayerInput::ComponentPlayerInput() {
-	cId = components::COMPONENT_INPUT;
+ComponentPlayerInput::ComponentPlayerInput()
+	: Component(components::COMPONENT_INPUT)
+{
 }
 
 

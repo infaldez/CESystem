@@ -5,6 +5,8 @@
 #include "ComponentMovement.h"
 #include "ComponentCollision.h"
 #include "ComponentPlayerInput.h"
+#include "ComponentAABB.h"
+#include "ComponentPosition.h"
 
 #include <vector>
 #include <iostream>

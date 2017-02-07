@@ -9,6 +9,7 @@
 
 #include "componentMouseInput.h"
 #include "ComponentHealth.h"
+#include "ComponentPosition.h"
 
 #include "Actions.h"
 
@@ -31,7 +32,9 @@ int main()
 	Entity* player = new Entity;
 	Entity* block = new Entity;
 
-	player->addComponent(new ComponentRender("texture1.bmp", sf::Vector2u(32.0, 32.0), sf::Vector2u(32.0, 32.0), sf::Vector2f(1.0, 1.0)));
+	player->addComponent(new ComponentRender("texture1.bmp", sf::Vector2u(32.0, 32.0), sf::Vector2u(32.0, 32.0)));
+	player->addComponent(new ComponentPosition(sf::Vector2f(1.0, 1.0)));
+	player->addComponent(new ComponentAABB(sf::Vector2f(0.0, 0.0), sf::Vector2f(32.0, 32.0)));
 	player->addComponent(new ComponentMovement(0, 0));
 	player->addComponent(new ComponentPlayerInput());
 	player->addComponent(new ComponentCollision());
@@ -43,8 +46,10 @@ int main()
 	player->getComponent<ComponentPlayerInput>(components::COMPONENT_INPUT)->setInput(sf::Keyboard::W, actions::moveActions::MOVE_UP);
 	player->getComponent<ComponentPlayerInput>(components::COMPONENT_INPUT)->setInput(sf::Keyboard::S, actions::moveActions::MOVE_DOWN);
 	
-	block->addComponent(new ComponentRender("texture1.bmp", sf::Vector2u(32.0, 32.0), sf::Vector2u(32, 32), sf::Vector2f(80, 80)));
+	block->addComponent(new ComponentRender("texture1.bmp", sf::Vector2u(32.0, 32.0), sf::Vector2u(32, 32)));
 	//block->addComponent(new ComponentMovement(0, 0));
+	block->addComponent(new ComponentPosition(sf::Vector2f(64.0, 64.0)));
+	block->addComponent(new ComponentAABB(sf::Vector2f(0.0, 0.0), sf::Vector2f(32.0, 32.0)));
 	block->addComponent(new ComponentCollision());
 	block->addComponent(new ComponentHealth(10));
 	block->getComponent<ComponentCollision>(components::COMPONENT_COLLISION)->setFlag(collisionType::SOLID, true);
@@ -52,11 +57,12 @@ int main()
 	entityList.push_back(block);
 	entityList.push_back(player);
 
-	for (int i = 0; i < 400; ++i)
+	// rand() % 800, rand() % 800 + 100
+	for (int i = 0; i < 3; ++i)
 	{
 		Entity* player2 = new Entity;
-		player2->addComponent(new ComponentRender("texture1.bmp", sf::Vector2u(32, 32), sf::Vector2u(0, 0), sf::Vector2f(rand() % 800, rand() % 800 + 100)));
-		player2->addComponent(new ComponentMovement(4, 0));
+		player2->addComponent(new ComponentRender("texture1.bmp", sf::Vector2u(32, 32), sf::Vector2u(0, 0)));
+		//player2->addComponent(new ComponentMovement(1, 0));
 		player2->addComponent(new ComponentCollision);
 		player2->addComponent(new ComponentHealth(10));
 		player2->getComponent<ComponentCollision>(components::COMPONENT_COLLISION)->setFlag(collisionType::SOLID, true);

@@ -3,6 +3,7 @@
 #include "Entity.h"
 #include "Component.h"
 #include "ComponentRender.h"
+#include "ComponentPosition.h"
 #include "EntityPlayer.h"
 
 #include <iostream>
@@ -77,11 +78,13 @@ void RenderSystem::runSystem(std::vector<Entity*> entityList)
 	for (int i = 0; i < entityList.size(); i++)
 	{
 		std::array<bool, components::SIZE> cKey = entityList.at(i)->componentKey;
-		if (cKey[components::id::COMPONENT_RENDER] == true)
+		if (cKey[components::id::COMPONENT_RENDER] == true &&
+			cKey[components::id::COMPONENT_POSITION] == true)
 		{	
 			ComponentRender* cRender = entityList.at(i)->getComponent<ComponentRender>(components::COMPONENT_RENDER);
+			ComponentPosition* cPos = entityList.at(i)->getComponent<ComponentPosition>(components::COMPONENT_POSITION);
 
-			drawEntity.load(cRender->getTileset(), cRender->getTileSize(), cRender->getTilePosition(), cRender->getPosition(), entityCount);
+			drawEntity.load(cRender->getTileset(), cRender->getTileSize(), cRender->getTilePosition(), cPos->getPosition(), entityCount);
 			
 			entityCount++;
 		}

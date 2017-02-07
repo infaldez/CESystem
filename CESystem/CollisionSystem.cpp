@@ -5,13 +5,15 @@
 #include "Entity.h"
 #include "componentDamage.h"
 #include "ComponentHealth.h"
+#include "ComponentPosition.h"
+#include "ComponentAABB.h"
 
 #include <unordered_map>
 
 #include <iostream>
 
 /*
- TODO 
+ TODO
  - entities can occupy more than 4 grids
  - refactor everything
  ISSUES
@@ -23,6 +25,8 @@
 #define GRID_ROWS 8
 #define GRID_COLUMNS 8
 #define GRID_COUNT GRID_ROWS * GRID_COLUMNS
+
+
 CollisionSystem::CollisionSystem()
 {
 	//initialize gridmap
@@ -51,7 +55,7 @@ void HealthCollision(Entity* ent1, Entity* ent2)
 		{
 			ent1->componentKey[components::DELETE] = true;
 		}
-	}	
+	}
 }
 
 // returns position 1
@@ -100,38 +104,40 @@ std::vector<int> CollisionSystem::getGridPositions(sf::Vector2i position, sf::Ve
 }
 
 
-void CollisionSystem::createCollisionMap(std::vector<Entity*> entityList) 
+void CollisionSystem::createCollisionMap(std::vector<Entity*> entityList)
 {
 	for (int i = 0; i < entityList.size(); ++i)
 	{
 		if (entityList.at(i)->componentKey[components::COMPONENT_COLLISION] == true &&
-			entityList.at(i)->componentKey[components::COMPONENT_RENDER] == true)
+			entityList.at(i)->componentKey[components::COMPONENT_AABB] == true &&
+			entityList.at(i)->componentKey[components::COMPONENT_POSITION] == true)
 		{
 			Entity* ent = entityList.at(i);
-			ComponentRender* cRender = entityList.at(i)->getComponent<ComponentRender>(components::COMPONENT_RENDER);
-			sf::Vector2i pos = (sf::Vector2i)cRender->getPosition();
-			sf::Vector2i size = (sf::Vector2i)cRender->getTileSize();
+			ComponentPosition* cPosition = ent->getComponent<ComponentPosition>(components::COMPONENT_POSITION);
+			ComponentAABB* cAABB = ent->getComponent<ComponentAABB>(components::COMPONENT_AABB);
+			sf::Vector2i pos = (sf::Vector2i)cPosition->getPosition();
+			sf::Vector2i size = (sf::Vector2i)cAABB->getExtents();
 			std::vector<int> positions = getGridPositions(pos, size);
-			
-			if (positions[0] < GRID_COUNT && 
-				positions[0] >= 0)
-					gridMap.find(positions[0])->second.push_back(ent);
 
-			if (positions[1] != positions[0] && 
+			if (positions[0] < GRID_COUNT &&
+				positions[0] >= 0)
+				gridMap.find(positions[0])->second.push_back(ent);
+
+			if (positions[1] != positions[0] &&
 				positions[1] < GRID_COUNT &&
 				positions[1] >= 0)
-					gridMap.find(positions[1])->second.push_back(ent);
+				gridMap.find(positions[1])->second.push_back(ent);
 
-			if (positions[2] != positions[1] && 
+			if (positions[2] != positions[1] &&
 				positions[2] != positions[3] &&
 				positions[2] < GRID_COUNT &&
-				positions[2] >= 0) 
-					gridMap.find(positions[2])->second.push_back(ent);
+				positions[2] >= 0)
+				gridMap.find(positions[2])->second.push_back(ent);
 
-			if (positions[3] != positions[0] && 
-				positions[3] < GRID_COUNT && 
+			if (positions[3] != positions[0] &&
+				positions[3] < GRID_COUNT &&
 				positions[3] >= 0)
-					gridMap.find(positions[3])->second.push_back(ent);
+				gridMap.find(positions[3])->second.push_back(ent);
 		}
 	}
 }
@@ -144,10 +150,10 @@ void CollisionSystem::clearCollisionMap()
 }
 
 
-sf::Vector2f getNearestDisplacement(sf::Vector2f pos1, sf::Vector2f pos2, sf::Vector2u size1, sf::Vector2u size2)
+sf::Vector2f getNearestDisplacement(sf::Vector2f pos1, sf::Vector2f pos2, sf::Vector2f size1, sf::Vector2f size2)
 {
 	sf::Vector2f nearestPoint = pos1;
-	
+
 	sf::Vector2f center1(pos1.x + (size1.x / 2), pos1.y + (size1.y / 2));
 	sf::Vector2f center2(pos2.x + (size2.x / 2), pos2.y + (size2.y / 2));
 
@@ -157,7 +163,7 @@ sf::Vector2f getNearestDisplacement(sf::Vector2f pos1, sf::Vector2f pos2, sf::Ve
 
 	float overlapx = ((size1.x + size2.x) / 2) - cdx;
 	float overlapy = ((size1.y + size2.y) / 2) - cdy;
-	
+
 	if (overlapx * overlapx < overlapy * overlapy)
 	{
 		if (center1.x > center2.x)
@@ -166,7 +172,7 @@ sf::Vector2f getNearestDisplacement(sf::Vector2f pos1, sf::Vector2f pos2, sf::Ve
 			nearestPoint.x = pos1.x - overlapx;
 	}
 	else
-	{	
+	{
 		if (center1.y > center2.y)
 			nearestPoint.y = pos1.y + overlapy;
 		else
@@ -177,50 +183,63 @@ sf::Vector2f getNearestDisplacement(sf::Vector2f pos1, sf::Vector2f pos2, sf::Ve
 }
 
 
+void checkCollision(std::unordered_map<int, std::vector<Entity*>>::iterator it, bool first)
+{
+	for (int i = 0; i < it->second.size(); i++)
+	{
+		Entity* ent1 = it->second.at(i);
+
+		ComponentPosition* posA = ent1->getComponent<ComponentPosition>(components::COMPONENT_POSITION);
+		ComponentAABB* aabbA = ent1->getComponent<ComponentAABB>(components::COMPONENT_AABB);
+		ComponentCollision* colA = ent1->getComponent<ComponentCollision>(components::COMPONENT_COLLISION);
+
+		sf::Vector2f pos1 = posA->getPosition();
+		sf::Vector2f oldpos1 = posA->getPreviousPosition();
+		sf::Vector2f size1 = aabbA->getExtents();
+
+		if (ent1->componentKey[components::COMPONENT_MOVEMENT] == true)
+		{
+			for (int j = 0; j < it->second.size(); ++j)
+			{
+				if (j != i)
+				{
+					Entity* ent2 = it->second.at(j);
+
+					ComponentPosition* posB = ent2->getComponent<ComponentPosition>(components::COMPONENT_POSITION);
+					ComponentAABB* aabbB = ent2->getComponent<ComponentAABB>(components::COMPONENT_AABB);
+					ComponentCollision* colB = ent2->getComponent<ComponentCollision>(components::COMPONENT_COLLISION);
+
+					sf::Vector2f pos2 = posB->getPosition();
+					sf::Vector2f oldpos2 = posB->getPreviousPosition();
+					sf::Vector2f size2 = aabbB->getExtents();
+
+					if (pos1.x < pos2.x + size2.x &&
+						pos1.x + size1.x > pos2.x &&
+						pos1.y < pos2.y + size2.y &&
+						pos1.y + size1.y > pos2.y)
+					{
+						if (colA->getFlag(collisionType::SOLID) && colB->getFlag(collisionType::SOLID))
+							posA->setPosition(getNearestDisplacement(pos1, pos2, size1, size2));
+						
+						if (first == true)
+							checkCollision(it, false);
+	
+						if (ent2->componentKey[components::COMPONENT_HEALTH] == true)
+							HealthCollision(ent1, ent2);
+					}
+				}
+			}
+		}
+	}
+}
+
+
 void CollisionSystem::runSystem(std::vector<Entity*> entityList)
 {
 	clearCollisionMap();
 	createCollisionMap(entityList);
 	for (auto it = gridMap.begin(); it != gridMap.end(); ++it)
 	{
-		for (int i = 0; i < it->second.size(); ++i)
-		{	
-			Entity* ent1 = it->second.at(i);
-			ComponentRender* render1 = ent1->getComponent<ComponentRender>(components::COMPONENT_RENDER);
-			ComponentCollision* col1 = ent1->getComponent<ComponentCollision>(components::COMPONENT_COLLISION);
-			
-			sf::Vector2f pos1 = render1->getPosition();
-			sf::Vector2u size1 = render1->getTileSize();
-			
-			if (ent1->componentKey[components::COMPONENT_MOVEMENT] == true)
-			{
-				for (int j = 0; j < it->second.size(); ++j)
-				{
-					if (j != i)
-					{
-						Entity* ent2 = it->second.at(j);
-						ComponentRender* render2 = ent2->getComponent<ComponentRender>(components::COMPONENT_RENDER);
-						ComponentCollision* col2 = ent2->getComponent<ComponentCollision>(components::COMPONENT_COLLISION);
-
-						sf::Vector2f pos2 = render2->getPosition();
-						sf::Vector2u size2 = render2->getTileSize();
-
-						if (pos1.x < pos2.x + size2.x &&
-							pos1.x + size1.x > pos2.x &&
-							pos1.y < pos2.y + size2.y &&
-							pos1.y + size1.y > pos2.y)
-						{
-							
-							if (col1->getFlag(collisionType::SOLID) && col2->getFlag(collisionType::SOLID))	
-								render1->setPosition(getNearestDisplacement(pos1, pos2, size1, size2));
-
-
-							if (ent2->componentKey[components::COMPONENT_HEALTH] == true)
-								HealthCollision(ent1, ent2);
-						}
-					}
-				}
-			}
-		}
+		checkCollision(it, true);
 	}
 }

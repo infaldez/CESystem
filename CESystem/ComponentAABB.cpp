@@ -37,10 +37,12 @@ sf::Vector2f ComponentAABB::getExtents() const
 	return extents;
 }
 
-
+/*
+	position has values of min x and y
+*/
 sf::Vector2f ComponentAABB::min() const
 {
-	return position - extents;
+	return position;
 }
 
 

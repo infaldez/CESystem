@@ -1,10 +1,10 @@
 #include "ComponentAABB.h"
 
 
-ComponentAABB::ComponentAABB(sf::Vector2f position, sf::Vector2f extents)
+ComponentAABB::ComponentAABB(sf::Vector2f extents, sf::Vector2f offset)
 	: Component(components::COMPONENT_AABB)
 {
-	this->position = position;
+	this->offsetPosition = offset;
 	this->extents = extents;
 }
 
@@ -14,9 +14,9 @@ ComponentAABB::~ComponentAABB()
 }
 
 
-void ComponentAABB::setPosition(sf::Vector2f position)
+void ComponentAABB::setOffsetPosition(sf::Vector2f offset)
 {
-	this->position = position;
+	this->offsetPosition = offset;
 }
 
 
@@ -26,9 +26,9 @@ void ComponentAABB::setExtents(sf::Vector2f extents)
 }
 
 
-sf::Vector2f ComponentAABB::getPosition() const
+sf::Vector2f ComponentAABB::getOffsetPosition() const
 {
-	return position;
+	return offsetPosition;
 }
 
 
@@ -37,16 +37,20 @@ sf::Vector2f ComponentAABB::getExtents() const
 	return extents;
 }
 
-/*
-	position has values of min x and y
-*/
-sf::Vector2f ComponentAABB::min() const
+
+sf::Vector2f ComponentAABB::getPosition(sf::Vector2f position)
 {
-	return position;
+	return position + offsetPosition;
 }
 
 
-sf::Vector2f ComponentAABB::max() const
+sf::Vector2f ComponentAABB::min(sf::Vector2f position)
 {
-	return position + extents;
+	return position + offsetPosition;
+}
+
+
+sf::Vector2f ComponentAABB::max(sf::Vector2f position)
+{
+	return position + offsetPosition + extents;
 }

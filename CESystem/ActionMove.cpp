@@ -7,6 +7,8 @@
 
 #include <iostream>
 
+#define SPEED 5.0f
+
 ActionMove::ActionMove()
 {
 }
@@ -20,8 +22,8 @@ ActionMove::~ActionMove()
 void ActionMove::move(Entity* entity, std::map<sf::Keyboard::Key, actions::moveActions> inputs, bool keys[])
 {	
 	ComponentMovement* movement = entity->getComponent<ComponentMovement>(components::COMPONENT_MOVEMENT);
-	int rotation = 0;
-	float speed = 0;
+	float rotation = 0.0f;
+	float speed = 0.0f;
 	bool actions[actions::COUNT] = { false };
 
 	for (std::map<sf::Keyboard::Key, actions::moveActions>::iterator i = inputs.begin(); i != inputs.end(); ++i)
@@ -31,36 +33,36 @@ void ActionMove::move(Entity* entity, std::map<sf::Keyboard::Key, actions::moveA
 	}
 	
 	if (actions[actions::MOVE_RIGHT]){
-		rotation = 90;
-		speed = 4;
+		rotation = 90.0f;
+		speed = SPEED;
 	}
 	if (actions[actions::MOVE_LEFT]){
-		rotation = 270;
-		speed = 4;
+		rotation = 270.0f;
+		speed = SPEED;
 	}
 	if (actions[actions::MOVE_DOWN]){
-		rotation = 180;
-		speed = 4;
+		rotation = 180.0f;
+		speed = SPEED;
 	}
 	if (actions[actions::MOVE_UP]){
-		rotation = 0;
-		speed = 4;
+		rotation = 0.0f;
+		speed = SPEED;
 	}
 	if (actions[actions::MOVE_UP] && actions[actions::MOVE_RIGHT]){
-		rotation = 45;
-		speed = 4;
+		rotation = 45.0f;
+		speed = SPEED;
 	}
 	if (actions[actions::MOVE_RIGHT] && actions[actions::MOVE_DOWN]){
-		rotation = 135;
-		speed = 4;
+		rotation = 135.0f;
+		speed = SPEED;
 	}
 	if (actions[actions::MOVE_DOWN] && actions[actions::MOVE_LEFT]){
-		rotation = 225;
-		speed = 4;
+		rotation = 225.0f;
+		speed = SPEED;
 	}
 	if (actions[actions::MOVE_LEFT] && actions[actions::MOVE_UP]){
-		rotation = 315;
-		speed = 4;
+		rotation = 315.0f;
+		speed = SPEED;
 	}
 		
 	movement->setRotation(rotation);

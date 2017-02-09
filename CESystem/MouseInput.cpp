@@ -36,9 +36,10 @@ void MouseInput::runSystem(std::vector<Entity*>& entityList, sf::Vector2i mouseP
 					Entity* click = new Entity;
 					click->addComponent(new ComponentRender("texture1.bmp", sf::Vector2u(32, 32), sf::Vector2u(64, 64)));
 					click->addComponent(new ComponentPosition(sf::Vector2f(rPos.x + 16, rPos.y + 16)));
+					click->addComponent(new ComponentAABB(sf::Vector2f(32.0, 32.0), sf::Vector2f(0.0, 0.0)));
 					click->addComponent(new ComponentCollision());
-					click->addComponent(new ComponentMovement(20, rotation - 90));
-					click->addComponent(new componentDamage(4));
+					click->addComponent(new ComponentMovement(10, rotation - 90));
+					click->addComponent(new componentDamage(10));
 
 					click->getComponent<ComponentCollision>(components::COMPONENT_COLLISION)->setFlag(collisionType::SOLID, false);
 					entityList.push_back(click);

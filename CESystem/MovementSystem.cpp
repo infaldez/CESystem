@@ -29,13 +29,13 @@ void MovementSystem::runSystem(std::vector<Entity*> entityList)
 			ComponentMovement* cMovement = entityList.at(i)->getComponent<ComponentMovement>(components::COMPONENT_MOVEMENT);
 			ComponentPosition* cPosition = entityList.at(i)->getComponent<ComponentPosition>(components::COMPONENT_POSITION);
 		
-			cPosition->setPosition(newPosition(cPosition->getPosition(), cMovement->getVelocity()));
+			cPosition->setPosition(getNewPosition(cPosition->getPosition(), cMovement->getVelocity()));
 		}
 	}
 }
 
 
-sf::Vector2f MovementSystem::newPosition(sf::Vector2f position, sf::Vector2f velocity)
+sf::Vector2f MovementSystem::getNewPosition(sf::Vector2f position, sf::Vector2f velocity)
 {
 	position.x += velocity.x;
 	position.y += velocity.y;

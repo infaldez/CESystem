@@ -22,3 +22,4 @@ void Entity::addComponent(Component* component)
 		_components.push_back(component);
 	}
 }
+

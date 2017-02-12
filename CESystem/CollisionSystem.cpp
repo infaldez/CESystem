@@ -217,7 +217,7 @@ std::vector<int> CollisionSystem::getGridPositions(sf::Vector2i position, sf::Ve
 }
 
 
-void CollisionSystem::createCollisionMap(std::vector<Entity*> entityList)
+void CollisionSystem::createCollisionMap(std::vector<std::unique_ptr<Entity>>& entityList)
 {
 	for (int i = 0; i < entityList.size(); ++i)
 	{
@@ -225,7 +225,7 @@ void CollisionSystem::createCollisionMap(std::vector<Entity*> entityList)
 			entityList.at(i)->componentKey[components::COMPONENT_AABB] == true &&
 			entityList.at(i)->componentKey[components::COMPONENT_POSITION] == true)
 		{
-			Entity* ent = entityList.at(i);
+			Entity* ent = entityList.at(i).get();
 			ComponentPosition* cPosition = ent->getComponent<ComponentPosition>(components::COMPONENT_POSITION);
 			ComponentAABB* cAABB = ent->getComponent<ComponentAABB>(components::COMPONENT_AABB);
 			sf::Vector2i pos = (sf::Vector2i)cPosition->getPosition();
@@ -432,7 +432,7 @@ void checkCollision(std::unordered_map<int, std::vector<Entity*>>::iterator it, 
 }
 
 
-void CollisionSystem::runSystem(std::vector<Entity*> entityList)
+void CollisionSystem::runSystem(std::vector<std::unique_ptr<Entity>>& entityList)
 {
 	clearCollisionMap();
 	createCollisionMap(entityList);

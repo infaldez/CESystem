@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include <memory>
 #include <SFML\Graphics.hpp>
 
 #include "Entity.h"
@@ -13,7 +14,7 @@ private:
 	sf::RenderWindow *window;
 
 public:
-	void runSystem(std::vector<Entity*> entityList);
+	void runSystem(std::vector<std::unique_ptr<Entity>>& entityList);
 
 	RenderSystem(sf::RenderWindow& window);
 	~RenderSystem();

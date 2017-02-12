@@ -15,13 +15,13 @@ private:
 	std::unordered_map<int, std::vector<Entity*>> gridMap;
 	
 	std::vector<int> getGridPositions(sf::Vector2i position, sf::Vector2i size);
-	void createCollisionMap(std::vector<Entity*> entityList);
+	void createCollisionMap(std::vector<std::unique_ptr<Entity>>& entityList);
 	void clearCollisionMap();
 
 public:
 	CollisionSystem();
 	~CollisionSystem();
 
-	void runSystem(std::vector<Entity*> entityList);
+	void runSystem(std::vector<std::unique_ptr<Entity>>& entityList);
 };
 

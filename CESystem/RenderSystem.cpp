@@ -70,7 +70,7 @@ RenderSystem::~RenderSystem()
 }
 
 
-void RenderSystem::runSystem(std::vector<Entity*> entityList)
+void RenderSystem::runSystem(std::vector<std::unique_ptr<Entity>>& entityList)
 {
 	drawEntity drawEntity;
 	int entityCount = 0;

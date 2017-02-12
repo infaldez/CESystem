@@ -17,14 +17,14 @@ InputSystem::~InputSystem()
 }
 
 
-void InputSystem::runSystem(std::vector<Entity*> entityList, bool keys[])
+void InputSystem::runSystem(std::vector<std::unique_ptr<Entity>>& entityList, bool keys[])
 {
 	for (int i = 0; i < entityList.size(); i++)
 	{
 		std::array<bool, components::SIZE> cKey = entityList.at(i)->componentKey;
 		if (cKey[components::id::COMPONENT_INPUT] == true)
 		{	
-			Entity* entity = entityList.at(i);
+			Entity* entity = entityList.at(i).get();
 			std::map<sf::Keyboard::Key, actions::moveActions> inputs = entityList.at(i)->getComponent<ComponentPlayerInput>(components::COMPONENT_INPUT)->getInputMap();
 					
 			actionMove.move(entity, inputs, keys);

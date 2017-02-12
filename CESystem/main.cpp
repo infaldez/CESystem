@@ -1,5 +1,6 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
+#include <memory>
 
 #include "RenderSystem.h"
 #include "MovementSystem.h"
@@ -18,7 +19,7 @@
 
 int main()
 {
-	std::vector<Entity*> entityList;
+	std::vector<std::unique_ptr<Entity>> entityList;
 
 	sf::RenderWindow window(sf::VideoMode(800, 800), "Component Entity System");
 	//window.setFramerateLimit(60);
@@ -29,9 +30,9 @@ int main()
 	InputSystem inputSystem;
 	MouseInput mouseInput;
 	
-	Entity* player = new Entity;
-	Entity* block = new Entity;
-	Entity* block2 = new Entity;
+	auto player = std::make_unique<Entity>();
+	auto block = std::make_unique<Entity>();
+	auto block2 = std::make_unique<Entity>();
 
 	player->addComponent(new ComponentRender("texture1.bmp", sf::Vector2u(32.0, 32.0), sf::Vector2u(32.0, 32.0)));
 	player->addComponent(new ComponentPosition(sf::Vector2f(0.0, 0.0)));
@@ -63,24 +64,24 @@ int main()
 	block2->addComponent(new ComponentHealth(10));
 	block2->getComponent<ComponentCollision>(components::COMPONENT_COLLISION)->setFlag(collisionType::SOLID, true);
 
-	entityList.push_back(block2);
-	entityList.push_back(block);
-	entityList.push_back(player);
+	entityList.push_back(std::move(block2));
+	entityList.push_back(std::move(block));
+	entityList.push_back(std::move(player));
 	
 	// RANDOM BLOCKS FOR TESTING COLLISION
 	
-	for (int i = 0; i < 1000; ++i)
+	for (int i = 0; i < 400; ++i)
 	{
-		Entity* player2 = new Entity;
-		player2->addComponent(new ComponentRender("texture1.bmp", sf::Vector2u(32, 32), sf::Vector2u(0, 0)));
+		auto random = std::make_unique<Entity>();
+		random->addComponent(new ComponentRender("texture1.bmp", sf::Vector2u(32, 32), sf::Vector2u(0, 0)));
 		//player2->addComponent(new ComponentMovement(1, 0));
-		player2->addComponent(new ComponentPosition(sf::Vector2f(rand() % 800, rand() % 800 + 100)));
-		player2->addComponent(new ComponentAABB(sf::Vector2f(32.0, 32.0), sf::Vector2f(0.0, 0.0)));
-		player2->addComponent(new ComponentCollision);
-		player2->addComponent(new ComponentHealth(10));
-		player2->getComponent<ComponentCollision>(components::COMPONENT_COLLISION)->setFlag(collisionType::SOLID, true);
+		random->addComponent(new ComponentPosition(sf::Vector2f(rand() % 800, rand() % 800 + 100)));
+		random->addComponent(new ComponentAABB(sf::Vector2f(32.0, 32.0), sf::Vector2f(0.0, 0.0)));
+		random->addComponent(new ComponentCollision);
+		random->addComponent(new ComponentHealth(10));
+		random->getComponent<ComponentCollision>(components::COMPONENT_COLLISION)->setFlag(collisionType::SOLID, true);
 
-		entityList.push_back(player2);
+		entityList.push_back(std::move(random));
 	}
 	
 
@@ -143,9 +144,8 @@ int main()
 			window.clear();
 			renderSystem.runSystem(entityList);
 			window.display();
-
 			
-			for (std::vector<Entity*>::iterator it = entityList.begin(); it != entityList.end();)
+			for (std::vector<std::unique_ptr<Entity>>::iterator it = entityList.begin(); it != entityList.end();)
 			{
 				if ((*it)->componentKey[components::DELETE] == true) {
 					it = entityList.erase(it);

@@ -18,7 +18,7 @@ MovementSystem::~MovementSystem()
 }
 
 
-void MovementSystem::runSystem(std::vector<Entity*> entityList)
+void MovementSystem::runSystem(std::vector<std::unique_ptr<Entity>>& entityList)
 {
 	for (int i = 0; i < entityList.size(); i++)
 	{

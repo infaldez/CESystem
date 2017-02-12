@@ -14,7 +14,7 @@ MouseInput::~MouseInput()
 }
 
 
-void MouseInput::runSystem(std::vector<Entity*>& entityList, sf::Vector2i mousePosition, float time)
+void MouseInput::runSystem(std::vector<std::unique_ptr<Entity>>& entityList, sf::Vector2i mousePosition, float time)
 {
 	for ( int i = 0; i < entityList.size(); i++)
 	{
@@ -33,7 +33,7 @@ void MouseInput::runSystem(std::vector<Entity*>& entityList, sf::Vector2i mouseP
 					sf::Vector2f rPos = position->getPosition();
 					float rotation = atan2f(rPos.y - mPos.y, rPos.x - mPos.x) * 180 / 3.14;
 
-					Entity* click = new Entity;
+					auto click = std::make_unique<Entity>();
 					click->addComponent(new ComponentRender("texture1.bmp", sf::Vector2u(32, 32), sf::Vector2u(64, 64)));
 					click->addComponent(new ComponentPosition(sf::Vector2f(rPos.x + 16, rPos.y + 16)));
 					click->addComponent(new ComponentAABB(sf::Vector2f(32.0, 32.0), sf::Vector2f(0.0, 0.0)));
@@ -42,7 +42,7 @@ void MouseInput::runSystem(std::vector<Entity*>& entityList, sf::Vector2i mouseP
 					click->addComponent(new componentDamage(10));
 
 					click->getComponent<ComponentCollision>(components::COMPONENT_COLLISION)->setFlag(collisionType::SOLID, false);
-					entityList.push_back(click);
+					entityList.push_back(std::move(click));
 					this->time = time;
 				}
 			}

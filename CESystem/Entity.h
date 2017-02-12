@@ -16,7 +16,7 @@
 class Entity
 {
 private:
-	std::vector<Component*> _components;
+	std::vector<std::unique_ptr<Component>> _components;
 
 public:
 	std::array<bool, components::SIZE> componentKey;
@@ -24,7 +24,7 @@ public:
 	Entity();
 	~Entity();
 
-	void addComponent(Component* component);
+	void addComponent(std::unique_ptr<Component> component);
 
 	template <class cType>
 	cType* getComponent(components::id cId)
@@ -34,7 +34,7 @@ public:
 			for (int i = 0; i < _components.size(); i++)
 			{
 				if (_components.at(i)->cId == cId)
-					return (cType*)_components.at(i);
+					return (cType*)_components.at(i).get();
 			}
 		}
 	}

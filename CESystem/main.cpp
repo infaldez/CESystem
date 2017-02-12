@@ -34,36 +34,36 @@ int main()
 	auto block = std::make_unique<Entity>();
 	auto block2 = std::make_unique<Entity>();
 
-	player->addComponent(new ComponentRender("texture1.bmp", sf::Vector2u(32.0, 32.0), sf::Vector2u(32.0, 32.0)));
-	player->addComponent(new ComponentPosition(sf::Vector2f(0.0, 0.0)));
-	player->addComponent(new ComponentAABB(sf::Vector2f(32.0, 32.0), sf::Vector2f(0.0, 0.0)));
-	player->addComponent(new ComponentMovement(0, 0));
-	player->addComponent(new ComponentPlayerInput());
-	player->addComponent(new ComponentCollision());
+	player->addComponent(std::make_unique<ComponentRender>("texture1.bmp", sf::Vector2u(32.0, 32.0), sf::Vector2u(32.0, 32.0)));
+	player->addComponent(std::make_unique<ComponentPosition>(sf::Vector2f(0.0, 0.0)));
+	player->addComponent(std::make_unique<ComponentAABB>(sf::Vector2f(32.0, 32.0), sf::Vector2f(0.0, 0.0)));
+	player->addComponent(std::make_unique<ComponentMovement>(0, 0));
+	player->addComponent(std::make_unique<ComponentPlayerInput>());
+	player->addComponent(std::make_unique<ComponentCollision>());
 	player->getComponent<ComponentCollision>(components::COMPONENT_COLLISION)->setFlag(collisionType::SOLID, true);
-	player->addComponent(new componentMouseInput());
+	player->addComponent(std::make_unique<componentMouseInput>());
 
 	player->getComponent<ComponentPlayerInput>(components::COMPONENT_INPUT)->setInput(sf::Keyboard::A, actions::moveActions::MOVE_LEFT);
 	player->getComponent<ComponentPlayerInput>(components::COMPONENT_INPUT)->setInput(sf::Keyboard::D, actions::moveActions::MOVE_RIGHT);
 	player->getComponent<ComponentPlayerInput>(components::COMPONENT_INPUT)->setInput(sf::Keyboard::W, actions::moveActions::MOVE_UP);
 	player->getComponent<ComponentPlayerInput>(components::COMPONENT_INPUT)->setInput(sf::Keyboard::S, actions::moveActions::MOVE_DOWN);
 	
-	block->addComponent(new ComponentRender("texture1.bmp", sf::Vector2u(32.0, 32.0f), sf::Vector2u(32, 32)));
+	block->addComponent(std::make_unique<ComponentRender>("texture1.bmp", sf::Vector2u(32.0, 32.0f), sf::Vector2u(32, 32)));
 	//block->addComponent(new ComponentMovement(0, 0));
-	block->addComponent(new ComponentPosition(sf::Vector2f(32.0f, 64.0f)));
-	block->addComponent(new ComponentAABB(sf::Vector2f(32.0, 32.0), sf::Vector2f(0.0, 0.0)));
-	block->addComponent(new ComponentCollision());
-	block->addComponent(new ComponentHealth(10));
+	block->addComponent(std::make_unique<ComponentPosition>(sf::Vector2f(32.0f, 64.0f)));
+	block->addComponent(std::make_unique<ComponentAABB>(sf::Vector2f(32.0, 32.0), sf::Vector2f(0.0, 0.0)));
+	block->addComponent(std::make_unique<ComponentCollision>());
+	block->addComponent(std::make_unique<ComponentHealth>(10));
 	block->getComponent<ComponentCollision>(components::COMPONENT_COLLISION)->setFlag(collisionType::SOLID, true);
 
-	block2->addComponent(new ComponentRender("texture1.bmp", sf::Vector2u(32.0, 32.0f), sf::Vector2u(32, 32)));
+	block2->addComponent(std::make_unique<ComponentRender>("texture1.bmp", sf::Vector2u(32.0, 32.0f), sf::Vector2u(32, 32)));
 	//block->addComponent(new ComponentMovement(0, 0));
-	block2->addComponent(new ComponentPosition(sf::Vector2f(64, 64)));
-	block2->addComponent(new ComponentAABB(sf::Vector2f(32.0, 32), sf::Vector2f(0.0, 0.0)));
-	block2->addComponent(new ComponentCollision());
-	block2->addComponent(new ComponentHealth(10));
+	block2->addComponent(std::make_unique<ComponentPosition>(sf::Vector2f(64, 64)));
+	block2->addComponent(std::make_unique<ComponentAABB>(sf::Vector2f(32.0, 32), sf::Vector2f(0.0, 0.0)));
+	block2->addComponent(std::make_unique<ComponentCollision>());
+	block2->addComponent(std::make_unique<ComponentHealth>(10));
 	block2->getComponent<ComponentCollision>(components::COMPONENT_COLLISION)->setFlag(collisionType::SOLID, true);
-
+	
 	entityList.push_back(std::move(block2));
 	entityList.push_back(std::move(block));
 	entityList.push_back(std::move(player));
@@ -73,12 +73,12 @@ int main()
 	for (int i = 0; i < 400; ++i)
 	{
 		auto random = std::make_unique<Entity>();
-		random->addComponent(new ComponentRender("texture1.bmp", sf::Vector2u(32, 32), sf::Vector2u(0, 0)));
+		random->addComponent(std::make_unique<ComponentRender>("texture1.bmp", sf::Vector2u(32, 32), sf::Vector2u(0, 0)));
 		//player2->addComponent(new ComponentMovement(1, 0));
-		random->addComponent(new ComponentPosition(sf::Vector2f(rand() % 800, rand() % 800 + 100)));
-		random->addComponent(new ComponentAABB(sf::Vector2f(32.0, 32.0), sf::Vector2f(0.0, 0.0)));
-		random->addComponent(new ComponentCollision);
-		random->addComponent(new ComponentHealth(10));
+		random->addComponent(std::make_unique<ComponentPosition>(sf::Vector2f(rand() % 800, rand() % 800 + 100)));
+		random->addComponent(std::make_unique<ComponentAABB>(sf::Vector2f(32.0, 32.0), sf::Vector2f(0.0, 0.0)));
+		random->addComponent(std::make_unique<ComponentCollision>());
+		random->addComponent(std::make_unique<ComponentHealth>(10));
 		random->getComponent<ComponentCollision>(components::COMPONENT_COLLISION)->setFlag(collisionType::SOLID, true);
 
 		entityList.push_back(std::move(random));

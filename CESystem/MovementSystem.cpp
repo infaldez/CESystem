@@ -20,14 +20,14 @@ MovementSystem::~MovementSystem()
 
 void MovementSystem::runSystem(std::vector<std::unique_ptr<Entity>>& entityList)
 {
-	for (int i = 0; i < entityList.size(); i++)
+	for (auto& ent : entityList)
 	{
-		std::array<bool, components::SIZE> cKey = entityList.at(i)->componentKey;
+		std::array<bool, components::SIZE> cKey = ent->componentKey;
 		if (cKey[components::COMPONENT_POSITION] == true && 
 			cKey[components::COMPONENT_MOVEMENT] == true)
 		{	
-			ComponentMovement* cMovement = entityList.at(i)->getComponent<ComponentMovement>(components::COMPONENT_MOVEMENT);
-			ComponentPosition* cPosition = entityList.at(i)->getComponent<ComponentPosition>(components::COMPONENT_POSITION);
+			ComponentMovement* cMovement = ent->getComponent<ComponentMovement>(components::COMPONENT_MOVEMENT);
+			ComponentPosition* cPosition = ent->getComponent<ComponentPosition>(components::COMPONENT_POSITION);
 		
 			cPosition->setPosition(getNewPosition(cPosition->getPosition(), cMovement->getVelocity()));
 		}

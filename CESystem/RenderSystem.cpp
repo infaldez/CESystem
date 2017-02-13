@@ -75,14 +75,14 @@ void RenderSystem::runSystem(std::vector<std::unique_ptr<Entity>>& entityList)
 	drawEntity drawEntity;
 	int entityCount = 0;
 
-	for (int i = 0; i < entityList.size(); i++)
+	for (auto& ent : entityList)
 	{
-		std::array<bool, components::SIZE> cKey = entityList.at(i)->componentKey;
+		std::array<bool, components::SIZE> cKey = ent->componentKey;
 		if (cKey[components::id::COMPONENT_RENDER] == true &&
 			cKey[components::id::COMPONENT_POSITION] == true)
 		{	
-			ComponentRender* cRender = entityList.at(i)->getComponent<ComponentRender>(components::COMPONENT_RENDER);
-			ComponentPosition* cPos = entityList.at(i)->getComponent<ComponentPosition>(components::COMPONENT_POSITION);
+			ComponentRender* cRender = ent->getComponent<ComponentRender>(components::COMPONENT_RENDER);
+			ComponentPosition* cPos = ent->getComponent<ComponentPosition>(components::COMPONENT_POSITION);
 
 			drawEntity.load(cRender->getTileset(), cRender->getTileSize(), cRender->getTilePosition(), cPos->getPosition(), entityCount);
 			

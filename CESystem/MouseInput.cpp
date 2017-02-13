@@ -16,7 +16,7 @@ MouseInput::~MouseInput()
 
 void MouseInput::runSystem(std::vector<std::unique_ptr<Entity>>& entityList, sf::Vector2i mousePosition, float time)
 {
-	for ( int i = 0; i < entityList.size(); i++)
+	for (std::size_t i = 0; i != entityList.size(); ++i)
 	{
 		std::array<bool, components::SIZE> cKey = entityList.at(i)->componentKey;
 		if (cKey[components::COMPONENT_MOUSEINPUT] == true &&

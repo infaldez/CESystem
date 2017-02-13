@@ -446,7 +446,7 @@ void checkCollision(std::unordered_map<int, std::vector<Entity*>>::iterator it, 
 							if (timeOfImpact.size() > 1)
 								movA->setVelocity(sf::Vector2f(xv, yv));
 						}
-						else
+						else // Both A and B are moving
 						{
 							posA->setPosition(getNearestDisplacement(ent1, ent2));
 						}

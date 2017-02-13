@@ -10,7 +10,7 @@
 #include <string>
 
 
-class drawEntity : public sf::Drawable, public sf::Transformable
+class DrawEntity : public sf::Drawable, public sf::Transformable
 {
 	sf::Texture m_tileset;
 	sf::VertexArray m_vertices;
@@ -26,7 +26,7 @@ public:
 			read = false;
 		}
 
-		//resize the vertexarray
+		//resize the vertexArray
 		m_vertices.setPrimitiveType(sf::Quads);
 		m_vertices.resize((i + 1) * 4);
 
@@ -70,25 +70,31 @@ RenderSystem::~RenderSystem()
 }
 
 
-void RenderSystem::runSystem(std::vector<std::unique_ptr<Entity>>& entityList)
+void RenderSystem::runSystem(std::vector<std::unique_ptr<Entity>>& entityList, std::vector<std::string> tilesets)
 {
-	drawEntity drawEntity;
-	int entityCount = 0;
-
-	for (auto& ent : entityList)
+	for (auto ts : tilesets)
 	{
-		std::array<bool, components::SIZE> cKey = ent->componentKey;
-		if (cKey[components::id::COMPONENT_RENDER] == true &&
-			cKey[components::id::COMPONENT_POSITION] == true)
-		{	
-			ComponentRender* cRender = ent->getComponent<ComponentRender>(components::COMPONENT_RENDER);
-			ComponentPosition* cPos = ent->getComponent<ComponentPosition>(components::COMPONENT_POSITION);
+		DrawEntity drawEntity;
+		int entityCount = 0;
+		for (auto& ent : entityList)
+		{
+			std::array<bool, components::SIZE> cKey = ent->componentKey;
+			if (cKey[components::id::COMPONENT_RENDER] == true &&
+				cKey[components::id::COMPONENT_POSITION] == true)
+			{
+				ComponentRender* cRender = ent->getComponent<ComponentRender>(components::COMPONENT_RENDER);
+				ComponentPosition* cPos = ent->getComponent<ComponentPosition>(components::COMPONENT_POSITION);
+				std::string tileset = cRender->getTileset();
+				if (ts == tileset)
+				{
+					drawEntity.load(tileset, cRender->getTileSize(), cRender->getTilePosition(), cPos->getPosition(), entityCount);
 
-			drawEntity.load(cRender->getTileset(), cRender->getTileSize(), cRender->getTilePosition(), cPos->getPosition(), entityCount);
-			
-			entityCount++;
+					entityCount++;
+				}
+			}
 		}
+		sf::Transform t;
+		window->draw(drawEntity, t);
 	}
-
-	window->draw(drawEntity);
+	
 }

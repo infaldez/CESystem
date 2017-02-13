@@ -35,35 +35,6 @@ sf::Vector2u ComponentRender::getTilePosition()
 }
 
 
-/*sf::Vector2f ComponentRender::getPosition()
-{
-	return position;
-}
-
-sf::Vector2f ComponentRender::getOldPosition()
-{
-	return oldPosition;
-}
-
-float ComponentRender::getPositionX()
-{
-	return position.x;
-}
-
-
-float ComponentRender::getPositionY()
-{
-	return position.y;
-}
-
-
-void ComponentRender::setPosition(sf::Vector2f position)
-{ 
-	oldPosition = this->position;
-	this->position = position;
-}*/
-
-
 void ComponentRender::setTileSize(sf::Vector2u tileSize)
 {
 	this->tileSize = tileSize;
@@ -80,9 +51,3 @@ void ComponentRender::setTilePosition(sf::Vector2u tilePosition)
 {
 	this->tilePosition = tilePosition;
 }
-
-
-/*void ComponentRender::resetToOldPosition()
-{
-	position = oldPosition;
-}*/

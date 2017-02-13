@@ -14,7 +14,7 @@ private:
 	sf::RenderWindow *window;
 
 public:
-	void runSystem(std::vector<std::unique_ptr<Entity>>& entityList);
+	void runSystem(std::vector<std::unique_ptr<Entity>>& entityList, std::vector<std::string> tilesets);
 
 	RenderSystem(sf::RenderWindow& window);
 	~RenderSystem();

@@ -275,8 +275,13 @@ void CollisionSystem::clearCollisionMap()
 }
 
 
-sf::Vector2f getNearestDisplacement(sf::Vector2f pos1, sf::Vector2f pos2, sf::Vector2f size1, sf::Vector2f size2)
+sf::Vector2f getNearestDisplacement(Entity* ent1, Entity* ent2)
 {
+	sf::Vector2f pos1 = ent1->getComponent<ComponentPosition>(components::COMPONENT_POSITION)->getPosition();
+	sf::Vector2f pos2 = ent2->getComponent<ComponentPosition>(components::COMPONENT_POSITION)->getPosition();
+	sf::Vector2f size1 = ent1->getComponent<ComponentAABB>(components::COMPONENT_AABB)->getExtents();
+	sf::Vector2f size2 = ent2->getComponent<ComponentAABB>(components::COMPONENT_AABB)->getExtents();
+
 	sf::Vector2f nearestPoint = pos1;
 
 	sf::Vector2f center1(pos1.x + (size1.x / 2), pos1.y + (size1.y / 2));
@@ -393,45 +398,59 @@ void checkCollision(std::unordered_map<int, std::vector<Entity*>>::iterator it, 
 				// ent2
 				Entity* ent2 = it->second.at(toi_it.arrayPos);
 				ComponentCollision* colB = ent2->getComponent<ComponentCollision>(components::COMPONENT_COLLISION);
-				
+				//ComponentMovement* movB = ent2->getComponent<ComponentMovement>(components::COMPONENT_MOVEMENT);
+				//sf::Vector2f v2 = movB->getVelocity();
+
 				if (aabbCheck(ent1, ent2))
 				{
+					// Do the health/damage thing
 					if (ent2->componentKey[components::COMPONENT_HEALTH] == true)
 						HealthCollision(ent1, ent2);
 
+					// if both A and B are solid do collision things
 					if (colA->getFlag(collisionType::SOLID) && colB->getFlag(collisionType::SOLID))
 					{
-						float normalx;
-						float normaly;
-
-						float entryTime = sweepTestAABB(ent1, ent2, normalx, normaly);
-
-						oldpos1.x += v.x * entryTime;
-						oldpos1.y += v.y * entryTime;
-
-						float dotproduct = (v.x * normaly + v.y * normalx) + (1.0f - entryTime);
-						if (dotproduct != 1)
+						// if only A is moving
+						if (ent2->componentKey[components::COMPONENT_MOVEMENT] == false)
 						{
-							if (fabs(v.x) >= 0.0001f)
-								oldpos1.x = oldpos1.x + (dotproduct * normaly);
-							if (fabs(v.y) >= 0.0001f)
-								oldpos1.y = oldpos1.y + (dotproduct * normalx);
+							float normalx;
+							float normaly;
 
-							// set position twice so that suggested(current) and previous position are same.
-							posA->setPosition(oldpos1);
-							posA->setPosition(oldpos1);
+							float entryTime = sweepTestAABB(ent1, ent2, normalx, normaly);
+
+							oldpos1.x += v.x * entryTime;
+							oldpos1.y += v.y * entryTime;
+
+							float dotproduct = (v.x * normaly + v.y * normalx) + (1.0f - entryTime);
+							if (dotproduct != 1)
+							{
+								if (fabs(v.x) >= 0.0001f)
+									oldpos1.x = oldpos1.x + (dotproduct * normaly);
+								if (fabs(v.y) >= 0.0001f)
+									oldpos1.y = oldpos1.y + (dotproduct * normalx);
+
+								// set position twice so that suggested(current) and previous position are same.
+								posA->setPosition(oldpos1);
+								posA->setPosition(oldpos1);
+							}
+							else
+							{
+								// set position twice
+								posA->setPosition(oldpos1);
+								posA->setPosition(oldpos1);
+							}
+
+							float xv = dotproduct * normaly;
+							float yv = dotproduct * normalx;
+
+							if (timeOfImpact.size() > 1)
+								movA->setVelocity(sf::Vector2f(xv, yv));
 						}
 						else
 						{
-							// set position twice
-							posA->setPosition(oldpos1);
-							posA->setPosition(oldpos1);
+							posA->setPosition(getNearestDisplacement(ent1, ent2));
 						}
 
-						float xv = dotproduct * normaly;
-						float yv = dotproduct * normalx;
-
-						movA->setVelocity(sf::Vector2f(xv, yv));
 					}
 				}		
 			}

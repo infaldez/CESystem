@@ -55,9 +55,9 @@ int main()
 	block->addComponent(std::make_unique<ComponentHealth>(10));
 	block->getComponent<ComponentCollision>(components::COMPONENT_COLLISION)->setFlag(collisionType::SOLID, true);
 
-	block2->addComponent(std::make_unique<ComponentRender>("texture1.bmp", sf::Vector2u(64, 64), sf::Vector2u(32, 32)));
+	block2->addComponent(std::make_unique<ComponentRender>("texture1.bmp", sf::Vector2u(32, 32), sf::Vector2u(32, 32)));
 	block2->addComponent(std::make_unique<ComponentPosition>(sf::Vector2f(64, 64)));
-	block2->addComponent(std::make_unique<ComponentAABB>(sf::Vector2f(64.0, 64.0), sf::Vector2f(0.0, 0.0)));
+	block2->addComponent(std::make_unique<ComponentAABB>(sf::Vector2f(32, 32), sf::Vector2f(0.0, 0.0)));
 	block2->addComponent(std::make_unique<ComponentCollision>());
 	block2->addComponent(std::make_unique<ComponentHealth>(10));
 	block2->getComponent<ComponentCollision>(components::COMPONENT_COLLISION)->setFlag(collisionType::SOLID, true);
@@ -68,7 +68,7 @@ int main()
 	
 	// RANDOM BLOCKS FOR TESTING COLLISION AND PERFORMANCE
 	
-	for (int i = 0; i < 50; ++i)
+	for (int i = 0; i < 100; ++i)
 	{
 		auto random = std::make_unique<Entity>();
 		random->addComponent(std::make_unique<ComponentRender>("texture1.bmp", sf::Vector2u(32, 32), sf::Vector2u(0, 0)));

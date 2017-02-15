@@ -7,6 +7,7 @@
 #include "ComponentHealth.h"
 #include "ComponentPosition.h"
 #include "ComponentAABB.h"
+#include "ComponentEvent.h"
 
 #include <unordered_map>
 #include <algorithm>
@@ -23,9 +24,9 @@ ISSUES
 - sliding is slower when going right or down
 */
 
-#define SCREENSIZE 800
-#define GRID_ROWS 4
-#define GRID_COLUMNS 4
+#define SCREENSIZE 5000
+#define GRID_ROWS 10
+#define GRID_COLUMNS 10
 #define GRID_COUNT GRID_ROWS * GRID_COLUMNS
 
 
@@ -46,18 +47,7 @@ CollisionSystem::~CollisionSystem()
 //TODO move this to somewhere else
 void HealthCollision(Entity* ent1, Entity* ent2)
 {
-	if (ent1->componentKey[components::COMPONENT_DAMAGE] == true)
-	{
-		ComponentHealth* health = ent2->getComponent<ComponentHealth>(components::COMPONENT_HEALTH);
-		componentDamage* dmg = ent1->getComponent<componentDamage>(components::COMPONENT_DAMAGE);
-				
-		health->setHealth(health->getHealth() - dmg->getDamage());
-		ent1->componentKey[components::DELETE] = true;
-		if (health->getHealth() <= 0)
-		{
-			ent2->componentKey[components::DELETE] = true;
-		}
-	}
+
 }
 
 
@@ -231,7 +221,7 @@ std::vector<int> CollisionSystem::getGridPositions(sf::Vector2i position, sf::Ve
 
 void CollisionSystem::createCollisionMap(std::vector<std::unique_ptr<Entity>>& entityList)
 {
-	for (int i = 0; i < entityList.size(); ++i)
+	for (std::size_t i = 0; i != entityList.size(); ++i)
 	{
 		if (entityList.at(i)->componentKey[components::COMPONENT_COLLISION] == true &&
 			entityList.at(i)->componentKey[components::COMPONENT_AABB] == true &&
@@ -340,122 +330,7 @@ bool aabbCheck(Entity* ent1, Entity* ent2)
 
 void checkCollision(std::unordered_map<int, std::vector<Entity*>>::iterator it, bool first)
 {
-	struct impactData
-	{
-		impactData(int aPos, float eTime) : arrayPos(aPos), entryTime(eTime){}
 
-		int arrayPos;
-		float entryTime;
-	};
-
-
-	for (std::size_t i = 0; i != it->second.size(); ++i)
-	{
-		std::vector<impactData> timeOfImpact; // first = j, second = entryTime, normalx, normaly
-
-		Entity* ent1 = it->second.at(i);
-
-		ComponentCollision* colA = ent1->getComponent<ComponentCollision>(components::COMPONENT_COLLISION);
-
-		if (ent1->componentKey[components::COMPONENT_MOVEMENT] == true)
-		{
-			for (std::size_t j = 0; j != it->second.size(); ++j)
-			{
-				if (j != i)
-				{
-					Entity* ent2 = it->second.at(j);
-			
-					ComponentCollision* colB = ent2->getComponent<ComponentCollision>(components::COMPONENT_COLLISION);
-
-					if (aabbCheck(ent1, ent2))
-					{
-						// Do a sweep test and push the results into timeOfImpact		
-						float entryTime, normalx, normaly;
-						entryTime = sweepTestAABB(ent1, ent2, normalx, normaly);
-						timeOfImpact.push_back(impactData(j, entryTime));
-					}
-				}
-			}
-			/*
-				Sort the impacts by entryTime, smallest first
-			*/
-			if (timeOfImpact.size() > 1)
-			{
-				std::sort(timeOfImpact.begin(), timeOfImpact.end(), [](const impactData &a, const impactData &b) {
-					return a.entryTime < b.entryTime;
-				});
-			}
-			
-			for (auto toi_it : timeOfImpact)
-			{
-				// ent1
-				ComponentPosition* posA = ent1->getComponent<ComponentPosition>(components::COMPONENT_POSITION);
-				ComponentMovement* movA = ent1->getComponent<ComponentMovement>(components::COMPONENT_MOVEMENT);
-
-				sf::Vector2f oldpos1 = posA->getPreviousPosition();
-				sf::Vector2f v = movA->getVelocity();
-
-				// ent2
-				Entity* ent2 = it->second.at(toi_it.arrayPos);
-				ComponentCollision* colB = ent2->getComponent<ComponentCollision>(components::COMPONENT_COLLISION);
-				//ComponentMovement* movB = ent2->getComponent<ComponentMovement>(components::COMPONENT_MOVEMENT);
-				//sf::Vector2f v2 = movB->getVelocity();
-
-				if (aabbCheck(ent1, ent2))
-				{
-					// Do the health/damage thing
-					if (ent2->componentKey[components::COMPONENT_HEALTH] == true)
-						HealthCollision(ent1, ent2);
-
-					// if both A and B are solid do collision things
-					if (colA->getFlag(collisionType::SOLID) && colB->getFlag(collisionType::SOLID))
-					{
-						// if only A is moving
-						if (ent2->componentKey[components::COMPONENT_MOVEMENT] == false)
-						{
-							float normalx;
-							float normaly;
-
-							float entryTime = sweepTestAABB(ent1, ent2, normalx, normaly);
-
-							oldpos1.x += v.x * entryTime;
-							oldpos1.y += v.y * entryTime;
-
-							float dotproduct = (v.x * normaly + v.y * normalx) + (1.0f - entryTime);
-							if (dotproduct != 1)
-							{
-								if (fabs(v.x) >= 0.0001f)
-									oldpos1.x = oldpos1.x + (dotproduct * normaly);
-								if (fabs(v.y) >= 0.0001f)
-									oldpos1.y = oldpos1.y + (dotproduct * normalx);
-
-								// set position twice so that suggested(current) and previous position are same.
-								posA->setPosition(oldpos1);
-								posA->setPosition(oldpos1);
-							}
-							else
-							{
-								// set position twice
-								posA->setPosition(oldpos1);
-								posA->setPosition(oldpos1);
-							}
-
-							float xv = dotproduct * normaly;
-							float yv = dotproduct * normalx;
-
-							if (timeOfImpact.size() > 1)
-								movA->setVelocity(sf::Vector2f(xv, yv));
-						}
-						else // Both A and B are moving
-						{
-							posA->setPosition(getNearestDisplacement(ent1, ent2));
-						}
-
-					}
-				}		
-			}
-		}
-	}
 }
 
 
@@ -465,6 +340,127 @@ void CollisionSystem::runSystem(std::vector<std::unique_ptr<Entity>>& entityList
 	createCollisionMap(entityList);
 	for (auto it = gridMap.begin(); it != gridMap.end(); ++it)
 	{
-		checkCollision(it, true);
+		//checkCollision(it, true);
+
+		struct impactData
+		{
+			impactData(int aPos, float eTime) : arrayPos(aPos), entryTime(eTime){}
+
+			int arrayPos;
+			float entryTime;
+		};
+
+
+		for (std::size_t i = 0; i != it->second.size(); ++i)
+		{
+			std::vector<impactData> timeOfImpact; // first = j, second = entryTime, normalx, normaly
+
+			Entity* ent1 = it->second.at(i);
+
+			if (ent1->componentKey[components::COMPONENT_MOVEMENT] == true)
+			{
+				for (std::size_t j = 0; j != it->second.size(); ++j)
+				{
+					if (j != i)
+					{
+						Entity* ent2 = it->second.at(j);
+
+						if (aabbCheck(ent1, ent2))
+						{
+							// Do a sweep test and push the results into timeOfImpact		
+							float entryTime, normalx, normaly;
+							entryTime = sweepTestAABB(ent1, ent2, normalx, normaly);
+							timeOfImpact.push_back(impactData(j, entryTime));
+						}
+					}
+				}
+				/*
+				Sort the impacts by entryTime, smallest first
+				*/
+				if (timeOfImpact.size() > 1)
+				{
+					std::sort(timeOfImpact.begin(), timeOfImpact.end(), [](const impactData &a, const impactData &b) {
+						return a.entryTime < b.entryTime;
+					});
+				}
+
+				for (auto toi_it : timeOfImpact)
+				{
+					// ent1
+					ComponentPosition* posA = ent1->getComponent<ComponentPosition>(components::COMPONENT_POSITION);
+					ComponentMovement* movA = ent1->getComponent<ComponentMovement>(components::COMPONENT_MOVEMENT);
+					ComponentCollision* colA = ent1->getComponent<ComponentCollision>(components::COMPONENT_COLLISION);
+
+					sf::Vector2f oldpos1 = posA->getPreviousPosition();
+					sf::Vector2f v = movA->getVelocity();
+
+					// ent2
+					Entity* ent2 = it->second.at(toi_it.arrayPos);
+					ComponentCollision* colB = ent2->getComponent<ComponentCollision>(components::COMPONENT_COLLISION);
+					//ComponentPosition* posB = ent1->getComponent<ComponentPosition>(components::COMPONENT_POSITION);
+					//ComponentMovement* movB = ent2->getComponent<ComponentMovement>(components::COMPONENT_MOVEMENT);
+					//sf::Vector2f v2 = movB->getVelocity();
+
+					if (aabbCheck(ent1, ent2))
+					{
+						if (ent1->componentKey[components::COMPONENT_EVENT] == true){
+							ent1->getComponent<ComponentEvent>(components::COMPONENT_EVENT)->runLocalCollisionEvents(ent1, ent2);
+							ent1->getComponent<ComponentEvent>(components::COMPONENT_EVENT)->runGlobalCollisionEvents(entityList);
+						}
+						if (ent2->componentKey[components::COMPONENT_EVENT] == true){
+							ent2->getComponent<ComponentEvent>(components::COMPONENT_EVENT)->runLocalCollisionEvents(ent1, ent2);
+							ent2->getComponent<ComponentEvent>(components::COMPONENT_EVENT)->runGlobalCollisionEvents(entityList);
+						}
+
+
+						// if both A and B are solid do collision things
+						if (colA->getFlag(collisionType::SOLID) && colB->getFlag(collisionType::SOLID))
+						{
+							// if only A is moving
+							if (ent2->componentKey[components::COMPONENT_MOVEMENT] == false)
+							{
+								float normalx;
+								float normaly;
+
+								float entryTime = sweepTestAABB(ent1, ent2, normalx, normaly);
+
+								oldpos1.x += v.x * entryTime;
+								oldpos1.y += v.y * entryTime;
+
+								float dotproduct = (v.x * normaly + v.y * normalx) + (1.0f - entryTime);
+								if (dotproduct != 1)
+								{
+									if (fabs(v.x) >= 0.0001f)
+										oldpos1.x = oldpos1.x + (dotproduct * normaly);
+									if (fabs(v.y) >= 0.0001f)
+										oldpos1.y = oldpos1.y + (dotproduct * normalx);
+
+									// set position twice so that suggested(current) and previous position are same.
+									posA->setPosition(oldpos1);
+									posA->setPosition(oldpos1);
+								}
+								else
+								{
+									// set position twice
+									posA->setPosition(oldpos1);
+									posA->setPosition(oldpos1);
+								}
+
+								float xv = dotproduct * normaly;
+								float yv = dotproduct * normalx;
+
+								if (timeOfImpact.size() > 1)
+									movA->setVelocity(sf::Vector2f(xv, yv));
+							}
+							else // Both A and B are moving
+							{
+								posA->setPosition(getNearestDisplacement(ent1, ent2));
+							}
+
+						}
+					}
+				}
+			}
+		}
 	}
 }

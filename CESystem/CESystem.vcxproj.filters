@@ -87,6 +87,12 @@
     <ClCompile Include="ComponentAABB.cpp">
       <Filter>Source Files\Components</Filter>
     </ClCompile>
+    <ClCompile Include="Events.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ComponentEvent.cpp">
+      <Filter>Source Files\Components</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component.h">
@@ -141,6 +147,12 @@
       <Filter>Header Files\Components</Filter>
     </ClInclude>
     <ClInclude Include="ComponentPosition.h">
+      <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Events.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ComponentEvent.h">
       <Filter>Header Files\Components</Filter>
     </ClInclude>
   </ItemGroup>

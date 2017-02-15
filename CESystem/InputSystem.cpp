@@ -19,7 +19,7 @@ InputSystem::~InputSystem()
 
 void InputSystem::runSystem(std::vector<std::unique_ptr<Entity>>& entityList, bool keys[])
 {
-	for (int i = 0; i < entityList.size(); i++)
+	for (std::size_t i = 0; i != entityList.size(); i++)
 	{
 		std::array<bool, components::SIZE> cKey = entityList.at(i)->componentKey;
 		if (cKey[components::id::COMPONENT_INPUT] == true)

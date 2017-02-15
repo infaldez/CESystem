@@ -11,7 +11,10 @@
 #include "componentMouseInput.h"
 #include "ComponentHealth.h"
 #include "ComponentPosition.h"
+#include "ComponentEvent.h"
 
+#include <functional>
+#include "Events.h"
 #include "Actions.h"
 
 #include <math.h>
@@ -27,6 +30,9 @@ int main()
 	};
 
 	sf::RenderWindow window(sf::VideoMode(800, 800), "Component Entity System");
+	sf::View view(sf::FloatRect(0, 0, 800, 800));
+	//view.setViewport(sf::FloatRect(0, 0, 1, 1));
+	
 	//window.setFramerateLimit(60);
 
 	RenderSystem renderSystem(window);
@@ -35,7 +41,7 @@ int main()
 	InputSystem inputSystem;
 	MouseInput mouseInput;
 	
-	auto player = std::make_unique<Entity>();
+	auto &player = std::make_unique<Entity>();
 	auto block = std::make_unique<Entity>();
 	auto block2 = std::make_unique<Entity>();
 
@@ -59,6 +65,7 @@ int main()
 	block->addComponent(std::make_unique<ComponentCollision>());
 	block->addComponent(std::make_unique<ComponentHealth>(10));
 	block->getComponent<ComponentCollision>(components::COMPONENT_COLLISION)->setFlag(collisionType::SOLID, true);
+	block->addTag("block");
 
 	block2->addComponent(std::make_unique<ComponentRender>("texture1.bmp", sf::Vector2u(32, 32), sf::Vector2u(32, 32)));
 	block2->addComponent(std::make_unique<ComponentPosition>(sf::Vector2f(64, 64)));
@@ -66,39 +73,41 @@ int main()
 	block2->addComponent(std::make_unique<ComponentCollision>());
 	block2->addComponent(std::make_unique<ComponentHealth>(10));
 	block2->getComponent<ComponentCollision>(components::COMPONENT_COLLISION)->setFlag(collisionType::SOLID, true);
+	block2->addComponent(std::make_unique<ComponentEvent>());
+	block2->getComponent<ComponentEvent>(components::COMPONENT_EVENT)->addGlobalCollisionEvent(tagTest);
 	
 	entityList.push_back(std::move(block2));
 	entityList.push_back(std::move(block));
 	entityList.push_back(std::move(player));
-	
+	// Danger?, only for testing
+	Entity* p = entityList.at(2).get();
+
 	// RANDOM BLOCKS FOR TESTING COLLISION AND PERFORMANCE
-	
-	for (int i = 0; i < 100; ++i)
+	/*for (int i = 0; i < 1000; ++i)
 	{
 		auto random = std::make_unique<Entity>();
 		random->addComponent(std::make_unique<ComponentRender>("texture1.bmp", sf::Vector2u(32, 32), sf::Vector2u(0, 0)));
-		random->addComponent(std::make_unique<ComponentMovement>(1, 0));
-		random->addComponent(std::make_unique<ComponentPosition>(sf::Vector2f(rand() % 800, rand() % 800 + 100)));
+		//random->addComponent(std::make_unique<ComponentMovement>(1, 0));
+		random->addComponent(std::make_unique<ComponentPosition>(sf::Vector2f(rand() % 5000, rand() % 5000 + 100)));
 		random->addComponent(std::make_unique<ComponentAABB>(sf::Vector2f(32.0, 32.0), sf::Vector2f(0.0, 0.0)));
 		random->addComponent(std::make_unique<ComponentCollision>());
 		random->addComponent(std::make_unique<ComponentHealth>(10));
 		random->getComponent<ComponentCollision>(components::COMPONENT_COLLISION)->setFlag(collisionType::SOLID, true);
 
 		entityList.push_back(std::move(random));
-	}
-	
+	}*/
 
 	/*
 	Loop
 	*/
 	bool running = true;
 	bool pause = false;
-	float lastFrameTime = clock();
+	std::clock_t lastFrameTime = clock();
 	float deltaTime = 0.0;
 	
-	float fpsClockStart = clock();
+	std::clock_t fpsClockStart = clock();
 	int fps = 0;
-
+	
 	//loop start
 	while (running)
 	{
@@ -117,8 +126,8 @@ int main()
 
 		if (!pause)
 		{
-			float currentFrameTime = clock();
-			float elapsed = currentFrameTime - lastFrameTime;
+			std::clock_t currentFrameTime = clock();
+			std::clock_t elapsed = currentFrameTime - lastFrameTime;
 			lastFrameTime = currentFrameTime;
 			deltaTime += elapsed;
 
@@ -143,6 +152,9 @@ int main()
 				
 				deltaTime -= 16;
 			}
+			// Danger?, only for testing
+			view.setCenter(p->getComponent<ComponentPosition>(components::COMPONENT_POSITION)->getPosition());
+			window.setView(view);
 
 			window.clear();
 			renderSystem.runSystem(entityList, tilesets);
@@ -156,13 +168,12 @@ int main()
 				else { ++it; }
 			}
 
-			float fpsClock = clock();
+			std::clock_t fpsClock = clock();
 			fps++;
 			if (fpsClock - fpsClockStart >= 1000)
 			{
 				fpsClockStart = clock();
 				std::cout << fps << std::endl;
-				//std::cout << entityList.size() << std::endl;
 				fps = 0;
 			}
 		}
@@ -171,4 +182,5 @@ int main()
 	entityList.clear();
 
 	return 0;
+	
 }

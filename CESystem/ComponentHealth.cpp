@@ -5,7 +5,6 @@ ComponentHealth::ComponentHealth(int health)
 	: Component(components::COMPONENT_HEALTH)
 {
 	this->health = health;
-	//cId = components::COMPONENT_HEALTH;
 }
 
 

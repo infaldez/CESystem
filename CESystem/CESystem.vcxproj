@@ -88,6 +88,7 @@
     <ClCompile Include="ComponentAABB.cpp" />
     <ClCompile Include="ComponentCollision.cpp" />
     <ClCompile Include="componentDamage.cpp" />
+    <ClCompile Include="ComponentEvent.cpp" />
     <ClCompile Include="ComponentHealth.cpp" />
     <ClCompile Include="componentMouseInput.cpp" />
     <ClCompile Include="ComponentMovement.cpp" />
@@ -95,6 +96,7 @@
     <ClCompile Include="ComponentPosition.cpp" />
     <ClCompile Include="ComponentRender.cpp" />
     <ClCompile Include="Entity.cpp" />
+    <ClCompile Include="Events.cpp" />
     <ClCompile Include="InputSystem.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MouseInput.cpp" />
@@ -108,6 +110,7 @@
     <ClInclude Include="ComponentAABB.h" />
     <ClInclude Include="ComponentCollision.h" />
     <ClInclude Include="componentDamage.h" />
+    <ClInclude Include="ComponentEvent.h" />
     <ClInclude Include="ComponentHealth.h" />
     <ClInclude Include="componentMouseInput.h" />
     <ClInclude Include="ComponentMovement.h" />
@@ -116,6 +119,7 @@
     <ClInclude Include="ComponentRender.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="Actions.h" />
+    <ClInclude Include="Events.h" />
     <ClInclude Include="InputSystem.h" />
     <ClInclude Include="MouseInput.h" />
     <ClInclude Include="MovementSystem.h" />

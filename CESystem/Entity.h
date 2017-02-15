@@ -17,6 +17,7 @@ class Entity
 {
 private:
 	std::vector<std::unique_ptr<Component>> _components;
+	std::vector<std::string> _tags;
 
 public:
 	std::array<bool, components::SIZE> componentKey;
@@ -25,18 +26,21 @@ public:
 	~Entity();
 
 	void addComponent(std::unique_ptr<Component> component);
+	void addTag(std::string tag);
+	bool findTag(std::string tag);
 
 	template <class cType>
 	cType* getComponent(components::id cId)
 	{
 		if (componentKey[cId] == true)
 		{
-			for (int i = 0; i < _components.size(); i++)
+			for (std::size_t i = 0; i != _components.size(); ++i)
 			{
 				if (_components.at(i)->cId == cId)
 					return (cType*)_components.at(i).get();
 			}
 		}
+		return nullptr;
 	}
 
 };

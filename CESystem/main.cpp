@@ -26,7 +26,8 @@ int main()
 	std::vector<std::string> tilesets =
 	{
 		"textures.bmp",
-		"texture1.bmp"
+		"texture1.bmp",
+		"BGuy.png"
 	};
 
 	sf::RenderWindow window(sf::VideoMode(800, 800), "Component Entity System");
@@ -45,9 +46,9 @@ int main()
 	auto block = std::make_unique<Entity>();
 	auto block2 = std::make_unique<Entity>();
 
-	player->addComponent(std::make_unique<ComponentRender>("textures.bmp", sf::Vector2u(32, 32), sf::Vector2u(10, 10)));
+	player->addComponent(std::make_unique<ComponentRender>("BGuy.png", sf::Vector2u(32, 32), sf::Vector2u(0, 0)));
 	player->addComponent(std::make_unique<ComponentPosition>(sf::Vector2f(0.0, 0.0)));
-	player->addComponent(std::make_unique<ComponentAABB>(sf::Vector2f(32.0, 32.0), sf::Vector2f(0.0, 0.0)));
+	player->addComponent(std::make_unique<ComponentAABB>(sf::Vector2f(24.0, 24.0), sf::Vector2f(4.0, 4.0)));
 	player->addComponent(std::make_unique<ComponentMovement>(0, 0));
 	player->addComponent(std::make_unique<ComponentPlayerInput>());
 	player->addComponent(std::make_unique<ComponentCollision>());
@@ -82,7 +83,7 @@ int main()
 	entityList.push_back(std::move(player));
 
 	// RANDOM BLOCKS FOR TESTING COLLISION AND PERFORMANCE
-	/*for (int i = 0; i < 1000; ++i)
+	for (int i = 0; i < 4000; ++i)
 	{
 		auto random = std::make_unique<Entity>();
 		random->addComponent(std::make_unique<ComponentRender>("texture1.bmp", sf::Vector2u(32, 32), sf::Vector2u(0, 0)));
@@ -94,7 +95,7 @@ int main()
 		random->getComponent<ComponentCollision>(components::COMPONENT_COLLISION)->setFlag(collisionType::SOLID, true);
 
 		entityList.push_back(std::move(random));
-	}*/
+	}
 
 	/*
 	Loop

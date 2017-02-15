@@ -22,6 +22,7 @@ ActionMove::~ActionMove()
 void ActionMove::move(Entity* entity, std::map<sf::Keyboard::Key, actions::moveActions> inputs, bool keys[])
 {	
 	ComponentMovement* movement = entity->getComponent<ComponentMovement>(components::COMPONENT_MOVEMENT);
+	ComponentRender* render = entity->getComponent<ComponentRender>(components::COMPONENT_RENDER);
 	float rotation = 0.0f;
 	float speed = 0.0f;
 	bool actions[actions::COUNT] = { false };
@@ -35,18 +36,22 @@ void ActionMove::move(Entity* entity, std::map<sf::Keyboard::Key, actions::moveA
 	if (actions[actions::MOVE_RIGHT]){
 		rotation = 90.0f;
 		speed = SPEED;
+		render->setTilePosition(sf::Vector2u(0, 32 * 3));
 	}
 	if (actions[actions::MOVE_LEFT]){
 		rotation = 270.0f;
 		speed = SPEED;
+		render->setTilePosition(sf::Vector2u(0, 32 * 4));
 	}
 	if (actions[actions::MOVE_DOWN]){
 		rotation = 180.0f;
 		speed = SPEED;
+		render->setTilePosition(sf::Vector2u(0, 32 * 1));
 	}
 	if (actions[actions::MOVE_UP]){
 		rotation = 0.0f;
 		speed = SPEED;
+		render->setTilePosition(sf::Vector2u(0, 32 * 2));
 	}
 	if (actions[actions::MOVE_UP] && actions[actions::MOVE_RIGHT]){
 		rotation = 45.0f;

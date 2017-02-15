@@ -24,12 +24,14 @@ void Entity::addComponent(std::unique_ptr<Component> component)
 	}
 }
 
+
 void Entity::addTag(std::string tag)
 {
 	_tags.push_back(tag);
 }
 
-bool Entity::findTag(std::string tag)
+
+bool Entity::hasTag(std::string tag)
 {
 	return std::find(_tags.begin(), _tags.end(), tag) != _tags.end();
 }

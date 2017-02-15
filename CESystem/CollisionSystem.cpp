@@ -44,12 +44,6 @@ CollisionSystem::~CollisionSystem()
 {
 }
 
-//TODO move this to somewhere else
-void HealthCollision(Entity* ent1, Entity* ent2)
-{
-
-}
-
 
 float sweepTestAABB(Entity* ent1, Entity* ent2, float& normalx, float& normaly)
 {
@@ -328,11 +322,13 @@ bool aabbCheck(Entity* ent1, Entity* ent2)
 	return false;
 }
 
-void checkCollision(std::unordered_map<int, std::vector<Entity*>>::iterator it, bool first)
+struct impactData
 {
+	impactData(int aPos, float eTime) : arrayPos(aPos), entryTime(eTime){}
 
-}
-
+	int arrayPos;
+	float entryTime;
+};
 
 void CollisionSystem::runSystem(std::vector<std::unique_ptr<Entity>>& entityList)
 {
@@ -340,17 +336,6 @@ void CollisionSystem::runSystem(std::vector<std::unique_ptr<Entity>>& entityList
 	createCollisionMap(entityList);
 	for (auto it = gridMap.begin(); it != gridMap.end(); ++it)
 	{
-		//checkCollision(it, true);
-
-		struct impactData
-		{
-			impactData(int aPos, float eTime) : arrayPos(aPos), entryTime(eTime){}
-
-			int arrayPos;
-			float entryTime;
-		};
-
-
 		for (std::size_t i = 0; i != it->second.size(); ++i)
 		{
 			std::vector<impactData> timeOfImpact; // first = j, second = entryTime, normalx, normaly
@@ -397,9 +382,6 @@ void CollisionSystem::runSystem(std::vector<std::unique_ptr<Entity>>& entityList
 					// ent2
 					Entity* ent2 = it->second.at(toi_it.arrayPos);
 					ComponentCollision* colB = ent2->getComponent<ComponentCollision>(components::COMPONENT_COLLISION);
-					//ComponentPosition* posB = ent1->getComponent<ComponentPosition>(components::COMPONENT_POSITION);
-					//ComponentMovement* movB = ent2->getComponent<ComponentMovement>(components::COMPONENT_MOVEMENT);
-					//sf::Vector2f v2 = movB->getVelocity();
 
 					if (aabbCheck(ent1, ent2))
 					{

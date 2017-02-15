@@ -53,6 +53,7 @@ int main()
 	player->addComponent(std::make_unique<ComponentCollision>());
 	player->getComponent<ComponentCollision>(components::COMPONENT_COLLISION)->setFlag(collisionType::SOLID, true);
 	player->addComponent(std::make_unique<componentMouseInput>());
+	player->addTag("player");
 
 	player->getComponent<ComponentPlayerInput>(components::COMPONENT_INPUT)->setInput(sf::Keyboard::A, actions::moveActions::MOVE_LEFT);
 	player->getComponent<ComponentPlayerInput>(components::COMPONENT_INPUT)->setInput(sf::Keyboard::D, actions::moveActions::MOVE_RIGHT);
@@ -68,19 +69,17 @@ int main()
 	block->addTag("block");
 
 	block2->addComponent(std::make_unique<ComponentRender>("texture1.bmp", sf::Vector2u(32, 32), sf::Vector2u(32, 32)));
-	block2->addComponent(std::make_unique<ComponentPosition>(sf::Vector2f(64, 64)));
+	block2->addComponent(std::make_unique<ComponentPosition>(sf::Vector2f(64, 32)));
 	block2->addComponent(std::make_unique<ComponentAABB>(sf::Vector2f(32, 32), sf::Vector2f(0.0, 0.0)));
 	block2->addComponent(std::make_unique<ComponentCollision>());
 	block2->addComponent(std::make_unique<ComponentHealth>(10));
 	block2->getComponent<ComponentCollision>(components::COMPONENT_COLLISION)->setFlag(collisionType::SOLID, true);
 	block2->addComponent(std::make_unique<ComponentEvent>());
-	block2->getComponent<ComponentEvent>(components::COMPONENT_EVENT)->addGlobalCollisionEvent(tagTest);
+	block2->getComponent<ComponentEvent>(components::COMPONENT_EVENT)->addGlobalCollisionEvent(std::make_unique<MoveBlock>("block", sf::Vector2f(20,20)));
 	
 	entityList.push_back(std::move(block2));
 	entityList.push_back(std::move(block));
 	entityList.push_back(std::move(player));
-	// Danger?, only for testing
-	Entity* p = entityList.at(2).get();
 
 	// RANDOM BLOCKS FOR TESTING COLLISION AND PERFORMANCE
 	/*for (int i = 0; i < 1000; ++i)
@@ -152,9 +151,15 @@ int main()
 				
 				deltaTime -= 16;
 			}
-			// Danger?, only for testing
-			view.setCenter(p->getComponent<ComponentPosition>(components::COMPONENT_POSITION)->getPosition());
-			window.setView(view);
+			// Make make scene follow the player
+			for (auto& ent : entityList)
+			{
+				if (ent->hasTag("player"))
+				{
+					view.setCenter(ent->getComponent<ComponentPosition>(components::COMPONENT_POSITION)->getPosition());
+					window.setView(view);
+				}
+			}
 
 			window.clear();
 			renderSystem.runSystem(entityList, tilesets);

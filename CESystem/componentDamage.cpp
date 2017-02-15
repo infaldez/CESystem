@@ -3,8 +3,6 @@
 
 componentDamage::componentDamage(int dmg) : Component(components::COMPONENT_DAMAGE)
 {
-	//cId = components::COMPONENT_DAMAGE;
-
 	this->dmg = dmg;
 }
 

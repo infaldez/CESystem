@@ -27,7 +27,7 @@ public:
 
 	void addComponent(std::unique_ptr<Component> component);
 	void addTag(std::string tag);
-	bool findTag(std::string tag);
+	bool hasTag(std::string tag);
 
 	template <class cType>
 	cType* getComponent(components::id cId)

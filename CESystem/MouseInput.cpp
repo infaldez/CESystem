@@ -43,7 +43,7 @@ void MouseInput::runSystem(std::vector<std::unique_ptr<Entity>>& entityList, sf:
 					click->addComponent(std::make_unique<ComponentMovement>(10, rotation - 90));
 					click->addComponent(std::make_unique<componentDamage>(10));
 					click->addComponent(std::make_unique<ComponentEvent>());
-					click->getComponent<ComponentEvent>(components::COMPONENT_EVENT)->addLocalCollisionEvent(causeDamage);
+					click->getComponent<ComponentEvent>(components::COMPONENT_EVENT)->addLocalCollisionEvent(doDamage);
 
 					click->getComponent<ComponentCollision>(components::COMPONENT_COLLISION)->setFlag(collisionType::SOLID, false);
 					entityList.push_back(std::move(click));

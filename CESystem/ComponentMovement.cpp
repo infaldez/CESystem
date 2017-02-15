@@ -48,7 +48,6 @@ void ComponentMovement::_setVelocity(float rotation, float speed)
 }
 
 
-
 float ComponentMovement::getRotation()
 {
 	return rotation;

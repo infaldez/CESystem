@@ -7,8 +7,6 @@ ComponentRender::ComponentRender(std::string tileset, sf::Vector2u tileSize, sf:
 	this->tileset = tileset;
 	this->tileSize = tileSize;
 	this->tilePosition = tilePosition;
-	//this->position = position;
-	//this->oldPosition = position;
 }
 
 

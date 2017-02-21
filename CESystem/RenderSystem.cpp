@@ -9,7 +9,6 @@
 #include <iostream>
 #include <string>
 
-
 class DrawEntity : public sf::Drawable, public sf::Transformable
 {
 	sf::Texture m_tileset;
@@ -17,7 +16,7 @@ class DrawEntity : public sf::Drawable, public sf::Transformable
 	bool read = true;
 
 public:
-	bool load(std::string tileset, sf::Vector2u tileSize, sf::Vector2u tilePosition, sf::Vector2f drawPosition, int i)
+	bool load(std::string tileset, sf::Vector2u tileSize, sf::Vector2u texSize, sf::Vector2u tilePosition, sf::Vector2f drawPosition, int curQuad, bool repeated)
 	{
 		//read the tileset from file
 		if (read) {
@@ -26,24 +25,54 @@ public:
 			read = false;
 		}
 
+		m_tileset.setRepeated(true);
+
 		//resize the vertexArray
 		m_vertices.setPrimitiveType(sf::Quads);
-		m_vertices.resize((i + 1) * 4);
+		int repeatx = tileSize.x / texSize.x;
+		int repeaty = tileSize.y / texSize.y;
+		m_vertices.resize(m_vertices.getVertexCount() + (4 * repeatx * repeaty));
 
-		//assign a pointer to current tile's quad
-		sf::Vertex *quad = &m_vertices[i * 4];
+		if (repeated)
+		{
+			for (int i = 0, q = 0; i < repeatx; ++i)
+			{
+				for (int j = 0; j < repeaty; ++j)
+				{
+					//assign a pointer to current tile's first quad
+					sf::Vertex *quad = &m_vertices[m_vertices.getVertexCount() - (4 * repeatx * repeaty) + q];
 
-		//define the corners
-		quad[0].position = sf::Vector2f(drawPosition.x, drawPosition.y);
-		quad[1].position = sf::Vector2f(drawPosition.x + tileSize.x, drawPosition.y);
-		quad[2].position = sf::Vector2f(drawPosition.x + tileSize.x, drawPosition.y + tileSize.y);
-		quad[3].position = sf::Vector2f(drawPosition.x, drawPosition.y + tileSize.y);
+					//define the corners
+					quad[0].position = sf::Vector2f(drawPosition.x + (texSize.x * i), drawPosition.y + (texSize.y * j));
+					quad[1].position = sf::Vector2f(drawPosition.x + (tileSize.x / repeatx) + (texSize.x * i), drawPosition.y + (texSize.y * j));
+					quad[2].position = sf::Vector2f(drawPosition.x + (tileSize.x / repeatx) + (texSize.x * i), drawPosition.y + (tileSize.y / repeaty) + (texSize.y * j));
+					quad[3].position = sf::Vector2f(drawPosition.x + (texSize.x * i), drawPosition.y + (tileSize.y / repeaty) + (texSize.y * j));
 
-		//define texture coordinates
-		quad[0].texCoords = sf::Vector2f(tilePosition.x, tilePosition.y);
-		quad[1].texCoords = sf::Vector2f(tilePosition.x + tileSize.x, tilePosition.y);
-		quad[2].texCoords = sf::Vector2f(tilePosition.x + tileSize.x, tilePosition.y + tileSize.y);
-		quad[3].texCoords = sf::Vector2f(tilePosition.x, tilePosition.y + tileSize.y);
+					//define texture coordinates
+					quad[0].texCoords = sf::Vector2f(tilePosition.x, tilePosition.y);
+					quad[1].texCoords = sf::Vector2f(tilePosition.x + texSize.x, tilePosition.y);
+					quad[2].texCoords = sf::Vector2f(tilePosition.x + texSize.x, tilePosition.y + texSize.y);
+					quad[3].texCoords = sf::Vector2f(tilePosition.x, tilePosition.y + texSize.y);
+					q += 4;
+				}
+			}
+		}
+		else
+		{
+			sf::Vertex *quad = &m_vertices[m_vertices.getVertexCount() - 4];
+
+			//define the corners
+			quad[0].position = sf::Vector2f(drawPosition.x, drawPosition.y);
+			quad[1].position = sf::Vector2f(drawPosition.x + tileSize.x, drawPosition.y);
+			quad[2].position = sf::Vector2f(drawPosition.x + tileSize.x, drawPosition.y + tileSize.y);
+			quad[3].position = sf::Vector2f(drawPosition.x, drawPosition.y + tileSize.y);
+
+			//define texture coordinates
+			quad[0].texCoords = sf::Vector2f(tilePosition.x, tilePosition.y);
+			quad[1].texCoords = sf::Vector2f(tilePosition.x + texSize.x, tilePosition.y);
+			quad[2].texCoords = sf::Vector2f(tilePosition.x + texSize.x, tilePosition.y + texSize.y);
+			quad[3].texCoords = sf::Vector2f(tilePosition.x, tilePosition.y + texSize.y);
+		}
 
 		return true;
 	}
@@ -70,12 +99,13 @@ RenderSystem::~RenderSystem()
 }
 
 
-void RenderSystem::runSystem(std::vector<std::unique_ptr<Entity>>& entityList, std::vector<std::string> tilesets)
+void RenderSystem::runSystem(std::vector<std::unique_ptr<Entity>>& entityList, std::vector<std::string> tilesets, std::clock_t dt)
 {
+	_dt = dt;
 	for (auto ts : tilesets)
 	{
 		DrawEntity drawEntity;
-		int entityCount = 0;
+		int currentQuad = 0;
 		for (auto& ent : entityList)
 		{
 			std::array<bool, components::SIZE> cKey = ent->componentKey;
@@ -85,16 +115,18 @@ void RenderSystem::runSystem(std::vector<std::unique_ptr<Entity>>& entityList, s
 				ComponentRender* cRender = ent->getComponent<ComponentRender>(components::COMPONENT_RENDER);
 				ComponentPosition* cPos = ent->getComponent<ComponentPosition>(components::COMPONENT_POSITION);
 				std::string tileset = cRender->getTileset();
+				bool repeated = cRender->repeated();
+
 				if (ts == tileset)
 				{
-					drawEntity.load(tileset, cRender->getTileSize(), cRender->getTilePosition(), cPos->getPosition(), entityCount);
+					drawEntity.load(tileset, cRender->getTileSize(), cRender->getTexSize(), cRender->getTilePosition(), cPos->getPosition(), currentQuad, repeated);
 
-					entityCount++;
+					currentQuad++;
 				}
 			}
 		}
 		sf::Transform t;
 		window->draw(drawEntity, t);
 	}
-	
+
 }

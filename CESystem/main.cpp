@@ -1,4 +1,5 @@
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 #include <iostream>
 #include <memory>
 
@@ -25,15 +26,23 @@ int main()
 	std::vector<std::unique_ptr<Entity>> entityList;
 	std::vector<std::string> tilesets =
 	{
-		"textures.bmp",
+		"BGuy.png",
 		"texture1.bmp",
-		"BGuy.png"
+		"textures.bmp",
+		"NGuy.png"
 	};
 
+	// Sound test
+	sf::SoundBuffer buffer;
+	if (!buffer.loadFromFile("beat.wav"))
+		return -1;
+	sf::Sound beat;
+	beat.setBuffer(buffer);
+	beat.setLoop(true);
+	beat.play();
+
 	sf::RenderWindow window(sf::VideoMode(800, 800), "Component Entity System");
-	sf::View view(sf::FloatRect(0, 0, 800, 800));
-	//view.setViewport(sf::FloatRect(0, 0, 1, 1));
-	
+	sf::View view(sf::FloatRect(0, 0, 800, 800));	
 	//window.setFramerateLimit(60);
 
 	RenderSystem renderSystem(window);
@@ -42,13 +51,14 @@ int main()
 	InputSystem inputSystem;
 	MouseInput mouseInput;
 	
-	auto &player = std::make_unique<Entity>();
+	auto player = std::make_unique<Entity>();
 	auto block = std::make_unique<Entity>();
 	auto block2 = std::make_unique<Entity>();
+	auto ground = std::make_unique<Entity>();
 
-	player->addComponent(std::make_unique<ComponentRender>("BGuy.png", sf::Vector2u(32, 32), sf::Vector2u(0, 0)));
+	player->addComponent(std::make_unique<ComponentRender>("NGuy.png", sf::Vector2u(128, 128), sf::Vector2u(0, 0), sf::Vector2u(64,64), false));
 	player->addComponent(std::make_unique<ComponentPosition>(sf::Vector2f(0.0, 0.0)));
-	player->addComponent(std::make_unique<ComponentAABB>(sf::Vector2f(24.0, 24.0), sf::Vector2f(4.0, 4.0)));
+	player->addComponent(std::make_unique<ComponentAABB>(sf::Vector2f(32.0, 16.0), sf::Vector2f(48.0, 96.0)));
 	player->addComponent(std::make_unique<ComponentMovement>(0, 0));
 	player->addComponent(std::make_unique<ComponentPlayerInput>());
 	player->addComponent(std::make_unique<ComponentCollision>());
@@ -61,7 +71,7 @@ int main()
 	player->getComponent<ComponentPlayerInput>(components::COMPONENT_INPUT)->setInput(sf::Keyboard::W, actions::moveActions::MOVE_UP);
 	player->getComponent<ComponentPlayerInput>(components::COMPONENT_INPUT)->setInput(sf::Keyboard::S, actions::moveActions::MOVE_DOWN);
 	
-	block->addComponent(std::make_unique<ComponentRender>("textures.bmp", sf::Vector2u(32, 32), sf::Vector2u(32, 32)));
+	block->addComponent(std::make_unique<ComponentRender>("textures.bmp", sf::Vector2u(32, 32), sf::Vector2u(0, 0), sf::Vector2u(32, 32), false));
 	block->addComponent(std::make_unique<ComponentPosition>(sf::Vector2f(32.0f, 64.0f)));
 	block->addComponent(std::make_unique<ComponentAABB>(sf::Vector2f(32.0, 32.0), sf::Vector2f(0.0, 0.0)));
 	block->addComponent(std::make_unique<ComponentCollision>());
@@ -69,7 +79,7 @@ int main()
 	block->getComponent<ComponentCollision>(components::COMPONENT_COLLISION)->setFlag(collisionType::SOLID, true);
 	block->addTag("block");
 
-	block2->addComponent(std::make_unique<ComponentRender>("texture1.bmp", sf::Vector2u(32, 32), sf::Vector2u(32, 32)));
+	block2->addComponent(std::make_unique<ComponentRender>("texture1.bmp", sf::Vector2u(32, 32), sf::Vector2u(32, 32), sf::Vector2u(32, 32), false));
 	block2->addComponent(std::make_unique<ComponentPosition>(sf::Vector2f(64, 32)));
 	block2->addComponent(std::make_unique<ComponentAABB>(sf::Vector2f(32, 32), sf::Vector2f(0.0, 0.0)));
 	block2->addComponent(std::make_unique<ComponentCollision>());
@@ -78,15 +88,20 @@ int main()
 	block2->addComponent(std::make_unique<ComponentEvent>());
 	block2->getComponent<ComponentEvent>(components::COMPONENT_EVENT)->addGlobalCollisionEvent(std::make_unique<MoveBlock>("block", sf::Vector2f(20,20)));
 	
+	ground->addComponent(std::make_unique<ComponentRender>("texture1.bmp", sf::Vector2u(5000, 5000), sf::Vector2u(0, 64), sf::Vector2u(64, 64), true));
+	ground->addComponent(std::make_unique<ComponentPosition>(sf::Vector2f(0, 0)));
+	
+	entityList.push_back(std::move(ground));
+	entityList.push_back(std::move(player));
 	entityList.push_back(std::move(block2));
 	entityList.push_back(std::move(block));
-	entityList.push_back(std::move(player));
+	
 
 	// RANDOM BLOCKS FOR TESTING COLLISION AND PERFORMANCE
-	for (int i = 0; i < 4000; ++i)
+	for (int i = 0; i < 800; ++i)
 	{
 		auto random = std::make_unique<Entity>();
-		random->addComponent(std::make_unique<ComponentRender>("texture1.bmp", sf::Vector2u(32, 32), sf::Vector2u(0, 0)));
+		random->addComponent(std::make_unique<ComponentRender>("texture1.bmp", sf::Vector2u(32, 32), sf::Vector2u(64, 64), sf::Vector2u(32, 32), false));
 		//random->addComponent(std::make_unique<ComponentMovement>(1, 0));
 		random->addComponent(std::make_unique<ComponentPosition>(sf::Vector2f(rand() % 5000, rand() % 5000 + 100)));
 		random->addComponent(std::make_unique<ComponentAABB>(sf::Vector2f(32.0, 32.0), sf::Vector2f(0.0, 0.0)));
@@ -144,26 +159,27 @@ int main()
 
 			while (deltaTime >= 16)
 			{
-				inputSystem.runSystem(entityList, keys);
+				inputSystem.runSystem(entityList, keys, currentFrameTime);
 				sf::Vector2i mousePosition = sf::Mouse::getPosition(window);
-				mouseInput.runSystem(entityList, mousePosition, currentFrameTime);
+				sf::Vector2i mouseWorldPos = (sf::Vector2i)window.mapPixelToCoords(mousePosition);
+				mouseInput.runSystem(entityList, mouseWorldPos, currentFrameTime);
 				movementSystem.runSystem(entityList);
 				collisionSystem.runSystem(entityList);
 				
-				deltaTime -= 16;
-			}
-			// Make make scene follow the player
-			for (auto& ent : entityList)
-			{
-				if (ent->hasTag("player"))
+				for (auto& ent : entityList)
 				{
-					view.setCenter(ent->getComponent<ComponentPosition>(components::COMPONENT_POSITION)->getPosition());
-					window.setView(view);
+					if (ent->hasTag("player"))
+					{
+						view.setCenter(ent->getComponent<ComponentPosition>(components::COMPONENT_POSITION)->getPosition());
+						window.setView(view);
+					}
 				}
+
+				deltaTime -= 16;
 			}
 
 			window.clear();
-			renderSystem.runSystem(entityList, tilesets);
+			renderSystem.runSystem(entityList, tilesets, deltaTime);
 			window.display();
 			
 			for (std::vector<std::unique_ptr<Entity>>::iterator it = entityList.begin(); it != entityList.end();)

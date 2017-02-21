@@ -1,12 +1,14 @@
 #include "ComponentRender.h"
 #include <iostream>
 
-ComponentRender::ComponentRender(std::string tileset, sf::Vector2u tileSize, sf::Vector2u tilePosition)
+ComponentRender::ComponentRender(std::string tileset, sf::Vector2u tileSize, sf::Vector2u tilePosition, sf::Vector2u texSize, bool repeat)
 	: Component(components::COMPONENT_RENDER)
 {
-	this->tileset = tileset;
-	this->tileSize = tileSize;
-	this->tilePosition = tilePosition;
+	_tileset = tileset;
+	_tileSize = tileSize;
+	_tilePosition = tilePosition;
+	_texSize = texSize;
+	_repeat = repeat;
 }
 
 
@@ -17,35 +19,50 @@ ComponentRender::~ComponentRender()
 
 std::string ComponentRender::getTileset()
 {
-	return tileset;
+	return _tileset;
 }
 
 
 sf::Vector2u ComponentRender::getTileSize()
 {
-	return tileSize;
+	return _tileSize;
 }
 
 
 sf::Vector2u ComponentRender::getTilePosition()
 {
-	return tilePosition;
+	return _tilePosition;
 }
 
 
+sf::Vector2u ComponentRender::getTexSize()
+{
+	return _texSize;
+}
+
+bool ComponentRender::repeated()
+{
+	return _repeat;
+}
+
 void ComponentRender::setTileSize(sf::Vector2u tileSize)
 {
-	this->tileSize = tileSize;
+	_tileSize = tileSize;
 }
 
 
 void ComponentRender::setTileset(std::string tileset)
 {
-	this->tileset = tileset;
+	_tileset = tileset;
 }
 
 
 void ComponentRender::setTilePosition(sf::Vector2u tilePosition)
 {
-	this->tilePosition = tilePosition;
+	_tilePosition = tilePosition;
+}
+
+void ComponentRender::setTexSize(sf::Vector2u texSize)
+{
+	_texSize = texSize;
 }

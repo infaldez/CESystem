@@ -6,22 +6,25 @@
 class ComponentRender : public Component
 {
 private:
-	std::string tileset;
-	sf::Vector2u tileSize;
-	sf::Vector2u tilePosition;
+	std::string _tileset;
+	sf::Vector2u _tileSize;
+	sf::Vector2u _tilePosition;
+	sf::Vector2u _texSize;
+	bool _repeat;
 	
 public:
-	ComponentRender(std::string tileset, sf::Vector2u tileSize, sf::Vector2u tilePosition);
+	ComponentRender(std::string tileset, sf::Vector2u tileSize, sf::Vector2u tilePosition, sf::Vector2u texSize, bool repeat);
 	~ComponentRender();
 
 	std::string getTileset();
 	sf::Vector2u getTileSize();
 	sf::Vector2u getTilePosition();
-	sf::Vector2f getPosition();
-	sf::Vector2f getOldPosition();
+	sf::Vector2u getTexSize();
+	bool repeated();
 
 	void setTileSize(sf::Vector2u tileSize);
 	void setTileset(std::string tileset);
 	void setTilePosition(sf::Vector2u tilePosition);
+	void setTexSize(sf::Vector2u texSize);
 
 };

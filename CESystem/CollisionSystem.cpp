@@ -167,32 +167,29 @@ float sweepTestAABB(Entity* ent1, Entity* ent2, float& normalx, float& normaly)
 	}
 }
 
-// returns position 1
-int getGridPos1(sf::Vector2i pos)
+// Return the corner coordinates of the grid
+int getGridCoord1(sf::Vector2i pos)
 {
 	pos.x = pos.x / (SCREENSIZE / GRID_COLUMNS);
 	pos.y = pos.y / (SCREENSIZE / GRID_ROWS);
 	return pos.x + pos.y * GRID_ROWS;
 }
 
-// returns position 2
-int getGridPos2(sf::Vector2i pos, sf::Vector2i size)
+int getGridCoord2(sf::Vector2i pos, sf::Vector2i size)
 {
 	int x = (pos.x + size.x) / (SCREENSIZE / GRID_COLUMNS);
 	int y = pos.y / (SCREENSIZE / GRID_ROWS);
 	return x + y * GRID_ROWS;
 }
 
-// returns position 3
-int getGridPos3(sf::Vector2i pos, sf::Vector2i size)
+int getGridCoord3(sf::Vector2i pos, sf::Vector2i size)
 {
 	int x = (pos.x + size.x) / (SCREENSIZE / GRID_COLUMNS);
 	int y = (pos.y + size.y) / (SCREENSIZE / GRID_ROWS);
 	return x + y * GRID_ROWS;
 }
 
-// returns position 4
-int getGridPos4(sf::Vector2i pos, sf::Vector2i size)
+int getGridCoord4(sf::Vector2i pos, sf::Vector2i size)
 {
 	int x = pos.x / (SCREENSIZE / GRID_COLUMNS);
 	int y = (pos.y + size.y) / (SCREENSIZE / GRID_ROWS);
@@ -204,10 +201,10 @@ std::vector<int> CollisionSystem::getGridPositions(sf::Vector2i position, sf::Ve
 {
 	std::vector<int> positions;
 
-	positions.push_back(getGridPos1(position));
-	positions.push_back(getGridPos2(position, size));
-	positions.push_back(getGridPos3(position, size));
-	positions.push_back(getGridPos4(position, size));
+	positions.push_back(getGridCoord1(position));
+	positions.push_back(getGridCoord2(position, size));
+	positions.push_back(getGridCoord3(position, size));
+	positions.push_back(getGridCoord4(position, size));
 
 	return positions;
 }
@@ -225,7 +222,9 @@ void CollisionSystem::createCollisionMap(std::vector<std::unique_ptr<Entity>>& e
 			ComponentPosition* cPosition = ent->getComponent<ComponentPosition>(components::COMPONENT_POSITION);
 			ComponentAABB* cAABB = ent->getComponent<ComponentAABB>(components::COMPONENT_AABB);
 			sf::Vector2i pos = (sf::Vector2i)cPosition->getPosition();
+			sf::Vector2i offset = (sf::Vector2i)cAABB->getOffsetPosition();
 			sf::Vector2i size = (sf::Vector2i)cAABB->getExtents();
+			pos += offset;
 			std::vector<int> positions = getGridPositions(pos, size);
 
 			if (positions[0] < GRID_COUNT &&

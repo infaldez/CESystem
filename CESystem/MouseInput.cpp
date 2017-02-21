@@ -36,7 +36,7 @@ void MouseInput::runSystem(std::vector<std::unique_ptr<Entity>>& entityList, sf:
 					float rotation = atan2f(rPos.y - mPos.y, rPos.x - mPos.x) * 180.f / 3.14f;
 
 					auto click = std::make_unique<Entity>();
-					click->addComponent(std::make_unique<ComponentRender>("texture1.bmp", sf::Vector2u(32, 32), sf::Vector2u(64, 64)));
+					click->addComponent(std::make_unique<ComponentRender>("texture1.bmp", sf::Vector2u(32, 32), sf::Vector2u(64, 64), sf::Vector2u(32, 32), false));
 					click->addComponent(std::make_unique<ComponentPosition>(sf::Vector2f(rPos.x + 16, rPos.y + 16)));
 					click->addComponent(std::make_unique<ComponentAABB>(sf::Vector2f(32.0, 32.0), sf::Vector2f(0.0, 0.0)));
 					click->addComponent(std::make_unique<ComponentCollision>());

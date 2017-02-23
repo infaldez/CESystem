@@ -4,7 +4,7 @@
 ComponentHealth::ComponentHealth(int health)
 	: Component(components::COMPONENT_HEALTH)
 {
-	this->health = health;
+	this->_health = health;
 }
 
 
@@ -15,11 +15,11 @@ ComponentHealth::~ComponentHealth()
 
 void ComponentHealth::setHealth(int health)
 {
-	this->health = health;
+	this->_health = health;
 }
 
 
 int ComponentHealth::getHealth()
 {
-	return health;
+	return _health;
 }

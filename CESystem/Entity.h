@@ -11,10 +11,21 @@
 #include <vector>
 #include <iostream>
 #include <memory>
-#include<array>
+#include <array>
+#include <boost/serialization/vector.hpp>
+#include <boost/serialization/unique_ptr.hpp>
 
 class Entity
 {
+	friend class boost::serialization::access;
+	template<class Archive>
+	void serialize(Archive& ar, const unsigned int version)
+	{
+		ar & _tags;
+		ar & _components;
+		ar & componentKey;
+	}
+
 private:
 	std::vector<std::unique_ptr<Component>> _components;
 	std::vector<std::string> _tags;

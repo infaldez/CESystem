@@ -18,20 +18,20 @@ ComponentMovement::~ComponentMovement()
 
 void ComponentMovement::setRotation(float rotation)
 {
-	this->rotation = rotation;
-	this->_setVelocity(this->rotation, this->speed);
+	this->_rotation = rotation;
+	this->_setVelocity(this->_rotation, this->_speed);
 }
 
 
 void ComponentMovement::setSpeed(float speed)
 {
-	this->speed = speed;
-	this->_setVelocity(this->rotation, this->speed);
+	this->_speed = speed;
+	this->_setVelocity(this->_rotation, this->_speed);
 }
 
 void ComponentMovement::setVelocity(sf::Vector2f velocity)
 {
-	this->velocity = velocity;
+	this->_velocity = velocity;
 }
 
 /*
@@ -41,32 +41,32 @@ void ComponentMovement::_setVelocity(float rotation, float speed)
 {
 	// Set scale
 	float radians = (rotation - 90) * 3.14159265359 / 180;
-	this->scale = sf::Vector2f(cos(radians), sin(radians));
+	this->_scale = sf::Vector2f(cos(radians), sin(radians));
 
 	// Set velocity
-	this->velocity = sf::Vector2f(this->scale.x * speed, this->scale.y * speed);
+	this->_velocity = sf::Vector2f(this->_scale.x * speed, this->_scale.y * speed);
 }
 
 
 float ComponentMovement::getRotation()
 {
-	return rotation;
+	return _rotation;
 }
 
 
 float ComponentMovement::getSpeed()
 {
-	return speed;
+	return _speed;
 }
 
 
 sf::Vector2f ComponentMovement::getVelocity()
 {
-	return velocity;
+	return _velocity;
 }
 
 
 sf::Vector2f ComponentMovement::getScale()
 {
-	return scale;
+	return _scale;
 }

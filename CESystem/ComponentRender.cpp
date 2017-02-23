@@ -1,5 +1,4 @@
 #include "ComponentRender.h"
-#include <iostream>
 
 ComponentRender::ComponentRender(std::string tileset, sf::Vector2u tileSize, sf::Vector2u tilePosition, sf::Vector2u texSize, bool repeat)
 	: Component(components::COMPONENT_RENDER)

@@ -1,27 +1,26 @@
 #include "ComponentEvent.h"
 
-
-void ComponentEvent::addLocalCollisionEvent(std::function<void(Entity*, Entity*)> colFcn)
+void ComponentEvent::addLocalCollisionEvent(std::unique_ptr<Event> evnt)
 {
-	localCollisionEvents.push_back((colFcn));
+	_localCollisionEvents.push_back(std::move(evnt));
 }
 
-void ComponentEvent::addGlobalCollisionEvent(std::unique_ptr<Event> e)
+void ComponentEvent::addGlobalCollisionEvent(std::unique_ptr<Event> evnt)
 {
-	globalCollisionEvents.push_back(std::move(e));
+	_globalCollisionEvents.push_back(std::move(evnt));
 }
 
 void ComponentEvent::runLocalCollisionEvents(Entity* a, Entity* b)
 {
-	for (auto& colFnc : localCollisionEvents)
-		colFnc(a, b);
+	for (auto& e : _localCollisionEvents)
+		e->executeLocal(a, b);
 }
 
 void ComponentEvent::runGlobalCollisionEvents(std::vector<std::unique_ptr<Entity>>& entityList)
 {
-	for (auto& e : globalCollisionEvents)
+	for (auto& e : _globalCollisionEvents)
 	{
-		e->execute(entityList);
+		e->executeGlobal(entityList);
 	}
 }
 

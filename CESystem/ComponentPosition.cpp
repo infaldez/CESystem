@@ -1,6 +1,5 @@
 #include "ComponentPosition.h"
 
-
 ComponentPosition::ComponentPosition(sf::Vector2f position)
 	: Component(components::COMPONENT_POSITION)
 {
@@ -36,4 +35,3 @@ void ComponentPosition::setPosition(sf::Vector2f position)
 	this->previousPosition = this->position;
 	this->position = position;
 }
-

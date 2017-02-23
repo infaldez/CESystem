@@ -9,8 +9,15 @@
 
 class ComponentPlayerInput : public Component
 {
+	friend class boost::serialization::access;
+	template<class Archive>
+	void serialize(Archive& ar, const unsigned int version)
+	{
+		ar & boost::serialization::base_object<Component>(*this);
+		ar & _inputMap;
+	}
 private:
-	std::map <sf::Keyboard::Key, actions::moveActions> inputMap;
+	std::map <sf::Keyboard::Key, actions::moveActions> _inputMap;
 
 public:
 	ComponentPlayerInput();

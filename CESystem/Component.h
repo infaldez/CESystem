@@ -1,4 +1,7 @@
 #pragma once
+
+#include <boost/serialization/access.hpp>
+
 namespace components
 {
 	enum id{
@@ -21,8 +24,16 @@ namespace components
 
 class Component
 {
+	friend class boost::serialization::access;
+	template<class Archive>
+	void serialize(Archive& ar, const unsigned int version)
+	{
+		ar & cId;
+	}
+
 public:
 	int cId;
+	Component(){};
 	Component(enum components::id cid);
-	~Component();
+	virtual ~Component();
 };

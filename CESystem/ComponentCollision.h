@@ -10,19 +10,26 @@ enum collisionType{
 
 class ComponentCollision : public Component
 {
+	friend class boost::serialization::access;
+	template<class Archive>
+	void serialize(Archive& ar, const unsigned int version)
+	{
+		ar & boost::serialization::base_object<Component>(*this);
+		ar & _flags;
+	}
 private:
-	bool flags[collisionType::COUNT];
+	bool _flags[collisionType::COUNT];
 
 public:
 	ComponentCollision();
 	~ComponentCollision();
 
 	void setFlag(collisionType cType, bool state) {
-		flags[cType] = state;
+		_flags[cType] = state;
 	}
 
 	bool getFlag(collisionType cType) {
-		return flags[cType];
+		return _flags[cType];
 	}
 };
 

@@ -16,11 +16,11 @@ ComponentPlayerInput::~ComponentPlayerInput()
 
 void ComponentPlayerInput::setInput(sf::Keyboard::Key key, actions::moveActions action)
 {
-	inputMap[key] = action;
+	_inputMap[key] = action;
 }
 
 
 std::map<sf::Keyboard::Key, actions::moveActions> ComponentPlayerInput::getInputMap()
 {		
-	return inputMap;
+	return _inputMap;
 }

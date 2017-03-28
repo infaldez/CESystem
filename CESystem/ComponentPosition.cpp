@@ -5,6 +5,7 @@ ComponentPosition::ComponentPosition(sf::Vector2f position)
 {
 	this->position = position;
 	this->previousPosition = position;
+	original = position;
 }
 
 
@@ -24,6 +25,11 @@ sf::Vector2f ComponentPosition::getPreviousPosition()
 	return previousPosition;
 }
 
+
+sf::Vector2f ComponentPosition::getOriginalPosition()
+{
+	return original;
+}
 
 void ComponentPosition::setNewPosition(sf::Vector2f position)
 {

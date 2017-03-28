@@ -11,11 +11,13 @@ class ComponentPosition : public Component
 	void serialize(Archive& ar, const unsigned int version)
 	{
 		ar & boost::serialization::base_object<Component>(*this);
-		ar & position.x;
-		ar & position.y;
+		ar & position.x & position.y;
 		ar & previousPosition.x;
 		ar & previousPosition.y;
 	}
+private:
+	sf::Vector2f original;
+
 public:
 	ComponentPosition(){};
 	ComponentPosition(sf::Vector2f position);
@@ -29,4 +31,5 @@ public:
 
 	sf::Vector2f getPosition();
 	sf::Vector2f getPreviousPosition();
+	sf::Vector2f getOriginalPosition();
 };

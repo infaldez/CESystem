@@ -7,7 +7,7 @@
 #include "EntityPlayer.h"
 #include <map>
 
-InputSystem::InputSystem()
+InputSystem::InputSystem(Game& game) : _game(game)
 {
 }
 
@@ -17,7 +17,7 @@ InputSystem::~InputSystem()
 }
 
 
-void InputSystem::runSystem(std::vector<std::unique_ptr<Entity>>& entityList, bool keys[], std::clock_t dt)
+void InputSystem::runSystem(std::vector<std::unique_ptr<Entity>>& entityList, bool keys[], float dt)
 {
 	for (std::size_t i = 0; i != entityList.size(); i++)
 	{

@@ -1,27 +1,36 @@
 #include "ComponentEvent.h"
 
-void ComponentEvent::addLocalCollisionEvent(std::unique_ptr<Event> evnt)
+void ComponentEvent::addCollisionEvent(std::unique_ptr<Event> evnt)
 {
-	_localCollisionEvents.push_back(std::move(evnt));
+	_collisionEvents.push_back(std::move(evnt));
 }
 
-void ComponentEvent::addGlobalCollisionEvent(std::unique_ptr<Event> evnt)
+void ComponentEvent::addClickEvent(std::unique_ptr<Event> evnt)
 {
-	_globalCollisionEvents.push_back(std::move(evnt));
+	_clickEvents.push_back(std::move(evnt));
 }
 
-void ComponentEvent::runLocalCollisionEvents(Entity* a, Entity* b)
+void ComponentEvent::addTimedEvent(std::unique_ptr<Event> evnt)
 {
-	for (auto& e : _localCollisionEvents)
-		e->executeLocal(a, b);
+	_timedEvents.push_back(std::move(evnt));
 }
 
-void ComponentEvent::runGlobalCollisionEvents(std::vector<std::unique_ptr<Entity>>& entityList)
+void ComponentEvent::runCollisionEvents(Entity* a, Entity* b, std::vector<std::unique_ptr<Entity>>& entityList)
 {
-	for (auto& e : _globalCollisionEvents)
-	{
-		e->executeGlobal(entityList);
-	}
+	for (auto& e : _collisionEvents)
+		e->executeCollisionEvents(a, b, entityList);
+}
+
+void ComponentEvent::runClickEvent(Entity* a, sf::Vector2i mousePosition)
+{
+	for (auto& e : _clickEvents)
+		e->executeClick(a, mousePosition);
+}
+
+void ComponentEvent::runTimedEvent(Entity* a, float time)
+{
+	for (auto& e : _timedEvents)
+		e->executeTimedEvent(a, time);
 }
 
 ComponentEvent::ComponentEvent() 

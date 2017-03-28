@@ -8,14 +8,16 @@
 #include "ComponentCollision.h"
 #include "ComponentMovement.h"
 #include "ActionMove.h"
+#include "Game.h"
 
 class InputSystem
 {
 private:
 	ActionMove actionMove;
+	Game& _game;
 public:
-	void runSystem(std::vector<std::unique_ptr<Entity>>& entityList, bool keys[], std::clock_t dt);
+	void runSystem(std::vector<std::unique_ptr<Entity>>& entityList, bool keys[], float dt);
 
-	InputSystem();
+	InputSystem(Game& game);
 	~InputSystem();
 };

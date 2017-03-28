@@ -8,11 +8,11 @@
 class ActionMove
 {
 private:
-	std::clock_t _dt;
+	float _dt;
 public:
 	ActionMove();
 	~ActionMove();
 
-	void move(Entity* entity, std::map<sf::Keyboard::Key, actions::moveActions> inputs, bool keys[], std::clock_t dt);
+	void move(Entity* entity, std::map<sf::Keyboard::Key, actions::moveActions> inputs, bool keys[], float dt);
 };
 

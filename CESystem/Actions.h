@@ -10,6 +10,8 @@ namespace actions
 		MOVE_LEFT,
 		MOVE_UP,
 		MOVE_DOWN,
+		CHARGE,
+		SLASH,
 
 		COUNT
 	};

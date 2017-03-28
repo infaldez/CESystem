@@ -7,6 +7,8 @@ Entity::Entity()
 	for (int i = 0; i < components::SIZE; i++) {
 		componentKey[i] = false;
 	}
+	
+	_save = true;
 }
 
 
@@ -34,5 +36,15 @@ void Entity::addTag(std::string tag)
 bool Entity::hasTag(std::string tag)
 {
 	return std::find(_tags.begin(), _tags.end(), tag) != _tags.end();
+}
+
+void Entity::setSave(bool save)
+{
+	_save = save;
+}
+
+bool Entity::getSave()
+{
+	return _save;
 }
 

@@ -6,6 +6,7 @@
 
 #include "Component.h"
 #include "Actions.h"
+#include <boost/serialization/map.hpp>
 
 class ComponentPlayerInput : public Component
 {

@@ -25,8 +25,8 @@ ISSUES
 */
 
 #define SCREENSIZE 5000
-#define GRID_ROWS 10
-#define GRID_COLUMNS 10
+#define GRID_ROWS 8
+#define GRID_COLUMNS 8
 #define GRID_COUNT GRID_ROWS * GRID_COLUMNS
 
 
@@ -385,12 +385,10 @@ void CollisionSystem::runSystem(std::vector<std::unique_ptr<Entity>>& entityList
 					if (aabbCheck(ent1, ent2))
 					{
 						if (ent1->componentKey[components::COMPONENT_EVENT] == true){
-							ent1->getComponent<ComponentEvent>(components::COMPONENT_EVENT)->runLocalCollisionEvents(ent1, ent2);
-							ent1->getComponent<ComponentEvent>(components::COMPONENT_EVENT)->runGlobalCollisionEvents(entityList);
+							ent1->getComponent<ComponentEvent>(components::COMPONENT_EVENT)->runCollisionEvents(ent1, ent2, entityList);
 						}
 						if (ent2->componentKey[components::COMPONENT_EVENT] == true){
-							ent2->getComponent<ComponentEvent>(components::COMPONENT_EVENT)->runLocalCollisionEvents(ent1, ent2);
-							ent2->getComponent<ComponentEvent>(components::COMPONENT_EVENT)->runGlobalCollisionEvents(entityList);
+							ent2->getComponent<ComponentEvent>(components::COMPONENT_EVENT)->runCollisionEvents(ent1, ent2, entityList);
 						}
 
 

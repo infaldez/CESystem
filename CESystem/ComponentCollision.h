@@ -21,7 +21,8 @@ private:
 	bool _flags[collisionType::COUNT];
 
 public:
-	ComponentCollision();
+	ComponentCollision(){}
+	ComponentCollision(bool solid);
 	~ComponentCollision();
 
 	void setFlag(collisionType cType, bool state) {

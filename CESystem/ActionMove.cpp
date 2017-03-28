@@ -9,7 +9,7 @@
 
 #define SPEED 5.0f
 
-ActionMove::ActionMove()
+ActionMove::ActionMove() : _dt(0)
 {
 }
 
@@ -18,12 +18,13 @@ ActionMove::~ActionMove()
 {
 }
 
-void ActionMove::move(Entity* entity, std::map<sf::Keyboard::Key, actions::moveActions> inputs, bool keys[], std::clock_t dt)
+void ActionMove::move(Entity* entity, std::map<sf::Keyboard::Key, actions::moveActions> inputs, bool keys[], float dt)
 {
 	ComponentMovement* movement = entity->getComponent<ComponentMovement>(components::COMPONENT_MOVEMENT);
 	ComponentRender* render = entity->getComponent<ComponentRender>(components::COMPONENT_RENDER);
 	float rotation = 0.0f;
 	float speed = 0.0f;
+	float speedboost = 1.0f;
 	bool actions[actions::COUNT] = { false };
 
 	for (std::map<sf::Keyboard::Key, actions::moveActions>::iterator i = inputs.begin(); i != inputs.end(); ++i)
@@ -32,74 +33,94 @@ void ActionMove::move(Entity* entity, std::map<sf::Keyboard::Key, actions::moveA
 			actions[i->second] = true;
 	}
 
+	if (actions[actions::CHARGE] == true)
+	{
+		speedboost = 3.0f;
+	}
+		
+
 	if (actions[actions::MOVE_RIGHT]){
 		rotation = 90.0f;
-		speed = SPEED;
-		if (dt - _dt > 333) {
-			render->setTilePosition(sf::Vector2u((render->getTilePosition().x + 64) % 256, 64));
+		speed = SPEED * speedboost;
+		if (dt - _dt >= 100) {
+			render->setTilePosition(sf::Vector2u((render->getTilePosition().x + 64) % (64 * 8), 32 * 30));
 			_dt = dt;
 		}
 	}
 	if (actions[actions::MOVE_LEFT]){
 		rotation = 270.0f;
-		speed = SPEED;
-		if (dt - _dt > 333) {
-			render->setTilePosition(sf::Vector2u((render->getTilePosition().x + 64) % 256, 128));
+		speed = SPEED * speedboost;
+		if (dt - _dt >= 100) {
+			render->setTilePosition(sf::Vector2u((render->getTilePosition().x + 64) % (64 * 8), 32 * 28));
 			_dt = dt;
 		}
 	}
 	if (actions[actions::MOVE_DOWN]){
 		rotation = 180.0f;
-		speed = SPEED;
-		if (dt - _dt > 333){
-			render->setTilePosition(sf::Vector2u((render->getTilePosition().x + 64) % 256, render->getTilePosition().y));
+		speed = SPEED * speedboost;
+		if (dt - _dt > 100){
+			render->setTilePosition(sf::Vector2u((render->getTilePosition().x + 64) % (64 * 8), render->getTilePosition().y));
 			_dt = dt;
 		}
 	}
 	if (actions[actions::MOVE_UP]){
 		rotation = 0.0f;
-		speed = SPEED;
-		if (dt - _dt > 333){
-			render->setTilePosition(sf::Vector2u((render->getTilePosition().x + 64) % 256, render->getTilePosition().y));
+		speed = SPEED * speedboost;
+		if (dt - _dt > 100){
+			render->setTilePosition(sf::Vector2u((render->getTilePosition().x + 64) % (64 * 8), render->getTilePosition().y));
 			_dt = dt;
 		}
 	}
 	if (actions[actions::MOVE_UP] && actions[actions::MOVE_RIGHT]){
 		rotation = 45.0f;
-		speed = SPEED;
-		if (dt - _dt > 333){
-			render->setTilePosition(sf::Vector2u((render->getTilePosition().x + 64) % 256, 64));
+		speed = SPEED * speedboost;
+		if (dt - _dt >= 100) {
+			render->setTilePosition(sf::Vector2u((render->getTilePosition().x + 64) % (64 * 8), 32 * 30));
 			_dt = dt;
 		}
 	}
 	if (actions[actions::MOVE_RIGHT] && actions[actions::MOVE_DOWN]){
 		rotation = 135.0f;
-		speed = SPEED;
-		if (dt - _dt > 333){
-			render->setTilePosition(sf::Vector2u((render->getTilePosition().x + 64) % 256, 64));
+		speed = SPEED * speedboost;
+		if (dt - _dt >= 100) {
+			render->setTilePosition(sf::Vector2u((render->getTilePosition().x + 64) % (64 * 8), 32 * 30));
 			_dt = dt;
 		}
 	}
 	if (actions[actions::MOVE_DOWN] && actions[actions::MOVE_LEFT]){
 		rotation = 225.0f;
-		speed = SPEED;
-		if (dt - _dt > 333){
-			render->setTilePosition(sf::Vector2u((render->getTilePosition().x + 64) % 256, 128));
+		speed = SPEED * speedboost;
+		if (dt - _dt >= 100) {
+			render->setTilePosition(sf::Vector2u((render->getTilePosition().x + 64) % (64 * 8), 32 * 28));
 			_dt = dt;
 		}
 	}
 	if (actions[actions::MOVE_LEFT] && actions[actions::MOVE_UP]){
 		rotation = 315.0f;
-		speed = SPEED;
-		if (dt - _dt > 333){
-			render->setTilePosition(sf::Vector2u((render->getTilePosition().x + 64) % 256, 128));
+		speed = SPEED * speedboost;
+		if (dt - _dt >= 100) {
+			render->setTilePosition(sf::Vector2u((render->getTilePosition().x + 64) % (64 * 8), 32 * 28));
 			_dt = dt;
 		}
 	}
+	if (actions[actions::SLASH] && actions[actions::MOVE_RIGHT]){
+		//if (dt - _dt >= 100) {
+			render->setTilePosition(sf::Vector2u((64 * 4), 32 * 26));
+			_dt = dt;
+		//}
+	}
+	if (actions[actions::SLASH] && actions[actions::MOVE_LEFT]){
+		//if (dt - _dt >= 100) {
+		render->setTilePosition(sf::Vector2u((64 * 4), 32 * 24));
+		_dt = dt;
+		//}
+	}
+
+
 	// If the player is idle
-	if (speed == 0 && dt - _dt > 500)
+	if (speed == 0 && dt - _dt > 333)
 	{
-		render->setTilePosition(sf::Vector2u((render->getTilePosition().x + 64) % 128, 0));
+		render->setTilePosition(sf::Vector2u((render->getTilePosition().x + 64) % (64 * 3), 32 * 26));
 		_dt = dt;
 	}
 

@@ -12,9 +12,10 @@ class ComponentRender : public Component
 		ar & boost::serialization::base_object<Component>(*this);
 		ar & _tileset;
 		ar & _tileSize.x & _tileSize.y;
-		ar & _tilePosition.y & _tilePosition.y;
+		ar & _tilePosition.x & _tilePosition.y;
 		ar & _texSize.x & _texSize.y;
 		ar & _repeat;
+		ar & _layer;
 	}
 
 private:
@@ -23,6 +24,7 @@ private:
 	sf::Vector2u _tilePosition;
 	sf::Vector2u _texSize;
 	bool _repeat;
+	int _layer;
 
 public:
 	ComponentRender(){};
@@ -33,6 +35,8 @@ public:
 	sf::Vector2u getTileSize();
 	sf::Vector2u getTilePosition();
 	sf::Vector2u getTexSize();
+	int getLayer();
+	void setLayer(int layer);
 	bool repeated();
 
 	void setTileSize(sf::Vector2u tileSize);

@@ -8,6 +8,7 @@ ComponentRender::ComponentRender(std::string tileset, sf::Vector2u tileSize, sf:
 	_tilePosition = tilePosition;
 	_texSize = texSize;
 	_repeat = repeat;
+	_layer = 0;
 }
 
 
@@ -37,6 +38,16 @@ sf::Vector2u ComponentRender::getTilePosition()
 sf::Vector2u ComponentRender::getTexSize()
 {
 	return _texSize;
+}
+
+int ComponentRender::getLayer()
+{
+	return _layer;
+}
+
+void ComponentRender::setLayer(int layer)
+{
+	_layer = layer;
 }
 
 bool ComponentRender::repeated()

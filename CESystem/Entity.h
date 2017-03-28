@@ -24,21 +24,26 @@ class Entity
 		ar & _tags;
 		ar & _components;
 		ar & componentKey;
+		ar & _save;
 	}
 
 private:
 	std::vector<std::unique_ptr<Component>> _components;
 	std::vector<std::string> _tags;
+	bool _save;
+
 
 public:
 	std::array<bool, components::SIZE> componentKey;
-	
+
 	Entity();
 	~Entity();
 
 	void addComponent(std::unique_ptr<Component> component);
 	void addTag(std::string tag);
 	bool hasTag(std::string tag);
+	void setSave(bool save);
+	bool getSave();
 
 	template <class cType>
 	cType* getComponent(components::id cId)
@@ -53,5 +58,4 @@ public:
 		}
 		return nullptr;
 	}
-
 };

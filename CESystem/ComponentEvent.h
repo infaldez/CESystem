@@ -13,18 +13,21 @@ class ComponentEvent : public Component
 	void serialize(Archive& ar, const unsigned int version)
 	{
 		ar & boost::serialization::base_object<Component>(*this);
-		ar & _localCollisionEvents;
-		ar & _globalCollisionEvents;
+		ar & _collisionEvents;
+		ar & _clickEvents;
 	}
 private:
-	std::vector<std::unique_ptr<Event>> _localCollisionEvents;
-	std::vector<std::unique_ptr<Event>> _globalCollisionEvents;
+	std::vector<std::unique_ptr<Event>> _collisionEvents;
+	std::vector<std::unique_ptr<Event>> _clickEvents;
+	std::vector<std::unique_ptr<Event>> _timedEvents;
 
 public:
-	void addLocalCollisionEvent(std::unique_ptr<Event> evnt);
-	void addGlobalCollisionEvent(std::unique_ptr<Event> evnt);
-	void runLocalCollisionEvents(Entity* a, Entity* b);
-	void runGlobalCollisionEvents(std::vector<std::unique_ptr<Entity>>& entityList);
+	void addCollisionEvent(std::unique_ptr<Event> evnt);
+	void addClickEvent(std::unique_ptr<Event> evnt);
+	void addTimedEvent(std::unique_ptr<Event> evnt);
+	void runCollisionEvents(Entity* a, Entity* b, std::vector<std::unique_ptr<Entity>>& entityList);
+	void runClickEvent(Entity* a, sf::Vector2i mousePosition);
+	void runTimedEvent(Entity* a, float time);
 
 	ComponentEvent();
 	~ComponentEvent();

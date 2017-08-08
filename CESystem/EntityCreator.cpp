@@ -109,7 +109,7 @@ namespace entitycreator
 		std::vector<PathSequence::SeqItem> seq{
 			{ -32, -90, 6, PathSequence::seqCondition::X },
 			{ 32, 90, 2, PathSequence::seqCondition::X },
-			{ 1000, 90, 0, PathSequence::seqCondition::TIME },
+			{ 200, 180, 2, PathSequence::seqCondition::TIME },
 			{ -32, 0, 4, PathSequence::seqCondition::Y }
 		};
 		e->addTimedEvent(std::make_unique<PathSequence>(seq, entity.get()));

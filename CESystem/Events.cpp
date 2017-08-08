@@ -75,7 +75,14 @@ void PathSequence::executeTimedEvent(Entity* a, float time)
 	{
 	case PathSequence::TIME:
 		if (time - previousSequenceTime > _seq->transitionValue)
+		{
+			if (a->componentKey[components::COMPONENT_POSITION] == true)
+			{
+				ComponentPosition* pos = a->getComponent<ComponentPosition>(components::COMPONENT_POSITION);
+				startingDistance = pos->getPosition();
+			}
 			change = true;
+		}
 		break;
 	case PathSequence::X:
 		if (a->componentKey[components::COMPONENT_POSITION] == true)

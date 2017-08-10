@@ -5,36 +5,30 @@
 #include <functional>
 #include <memory>
 #include "Editor.h"
-class Loop
-{
-public:
-	virtual void runSystems(){}
-	virtual void run()
-	{
-			runSystems();
-	}
+#include <iostream>
+
+enum GameState {
+	GAME,
+	EDITOR
 };
 
-class EditorLoop : public Loop
+
+class GameMode : public Loop
 {
-	virtual void runSystems(){ }
+	void run()  { std::cout << "game" << std::endl; }
 };
 
 class Game
 {
 private:
-	bool running = true;
-	bool pause = false;
-	float deltaTime = 0.0;
-	int fps = 0;
-	int layer = 0;
+
 public:
 
-	EditorLoop loopstate;
+	EditorMode editorMode;
+	GameMode gameMode;
 
-	sf::View mapview;
-	sf::View menuView;
-	LeftClick leftA;
+	Loop* gameState;
+
 
 	Game();
 	~Game();

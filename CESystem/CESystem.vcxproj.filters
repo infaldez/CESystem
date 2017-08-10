@@ -209,5 +209,8 @@
     <ClInclude Include="TestMap.h">
       <Filter>Header Files\Maps</Filter>
     </ClInclude>
+    <ClInclude Include="Loop.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

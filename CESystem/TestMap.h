@@ -6,9 +6,9 @@ class Game;
 class TestMap : public Map
 {
 private:
-	Game* _game;
+	Loop* _game;
 public:
-	TestMap(std::string name, Game* game);
+	TestMap(std::string name, Loop* game);
 	~TestMap();
 
 	virtual void createMap();

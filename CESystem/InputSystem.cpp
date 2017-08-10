@@ -7,7 +7,7 @@
 #include "EntityPlayer.h"
 #include <map>
 
-InputSystem::InputSystem(Game& game) : _game(game)
+InputSystem::InputSystem(Loop& game) : _game(game)
 {
 }
 

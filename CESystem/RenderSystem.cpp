@@ -127,7 +127,7 @@ void DrawEntity::loadgrid()
 /*
 	RENDERSYSTEM
 */
-RenderSystem::RenderSystem(sf::RenderWindow& window, Game& game) : _game(game)
+RenderSystem::RenderSystem(sf::RenderWindow& window, Loop& game) : _game(game)
 {
 	this->window = &window;
 }
@@ -189,6 +189,11 @@ void RenderSystem::createRTexture(std::vector<std::unique_ptr<Entity>>& entityLi
 		}
 	}
 	
+}
+
+void renderText()
+{
+
 }
 
 void RenderSystem::runSystem(std::vector<std::unique_ptr<Entity>>& entityList, std::vector<std::string> tilesets)

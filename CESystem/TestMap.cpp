@@ -9,7 +9,7 @@
 #include "Editor.h"
 
 
-TestMap::TestMap(std::string name, Game* game) 
+TestMap::TestMap(std::string name, Loop* game) 
 	: Map(name), _game(game)
 {
 }
@@ -74,8 +74,8 @@ void TestMap::createMap()
 	}
 
 
-	/*// SAVE BUTTON
-	auto button = std::make_unique<Entity>();
+	// SAVE BUTTON
+	/*auto button = std::make_unique<Entity>();
 	button->addComponent(std::make_unique<ComponentText>("Save", "arial.ttf"));
 	button->addComponent(std::make_unique<ComponentPosition>(sf::Vector2f(1000, 1050)));
 	button->addComponent(std::make_unique<ComponentEvent>());

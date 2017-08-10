@@ -8,7 +8,7 @@
 #include "states.h"
 #include "EntityCreator.h"
 
-MouseInput::MouseInput(Game& game, LeftClick& leftC) : _game(game), _leftC(leftC)
+MouseInput::MouseInput(Loop& game, LeftClick& leftC) : _game(game), _leftC(leftC)
 {
 	this->time = 0;
 }

@@ -14,10 +14,10 @@ class InputSystem
 {
 private:
 	ActionMove actionMove;
-	Game& _game;
+	Loop& _game;
 public:
 	void runSystem(std::vector<std::unique_ptr<Entity>>& entityList, bool keys[], float dt);
 
-	InputSystem(Game& game);
+	InputSystem(Loop& game);
 	~InputSystem();
 };

@@ -19,6 +19,7 @@
 #include "states.h"
 #include "EntityCreator.h"
 
+
 EditorMode::EditorMode()
 {
 }
@@ -59,7 +60,7 @@ void EditorMode::run()
 	MovementSystem movementSystem;
 	CollisionSystem collisionSystem;
 	InputSystem inputSystem(*this);
-	MouseInput mouseInput(*this, leftA);
+	MouseInput mouseInput(*this);
 
 	TestMap map("test", this);
 	//map.loadMap();

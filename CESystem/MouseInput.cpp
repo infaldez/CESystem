@@ -8,7 +8,9 @@
 #include "states.h"
 #include "EntityCreator.h"
 
-MouseInput::MouseInput(Loop& game, LeftClick& leftC) : _game(game), _leftC(leftC)
+#include "Loop.h"
+
+MouseInput::MouseInput(Loop& game) : _game(game)
 {
 	this->time = 0;
 }
@@ -92,19 +94,19 @@ void MouseInput::editorClick(std::vector<std::unique_ptr<Entity>>& entityList, s
 {
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 	{
-		switch (_leftC.state)
+		switch (LeftClick::state)
 		{
 		case CREATE_SOLID:
-			entityList.push_back(entitycreator::createSolid(sf::Vector2f(mousePosition), _leftC.tilePos, _leftC.layer));
+			entityList.push_back(entitycreator::createSolid(sf::Vector2f(mousePosition), LeftClick::tilePos, LeftClick::layer));
 			break;
 		case CREATE_PASSABLE:
-			entityList.push_back(entitycreator::createPassable(sf::Vector2f(mousePosition), _leftC.tilePos, _leftC.layer));
+			entityList.push_back(entitycreator::createPassable(sf::Vector2f(mousePosition), LeftClick::tilePos, LeftClick::layer));
 			break;
 		case CREATE_PLAYER:
-			entityList.push_back(entitycreator::player(sf::Vector2f(mousePosition), _leftC.layer));
+			entityList.push_back(entitycreator::player(sf::Vector2f(mousePosition), LeftClick::layer));
 			break;
 		case CREATE_DAMAGEWALL:
-			entityList.push_back(entitycreator::damagewall(sf::Vector2f(mousePosition), _leftC.layer));
+			entityList.push_back(entitycreator::damagewall(sf::Vector2f(mousePosition), LeftClick::layer));
 			break;
 		default:
 			break;

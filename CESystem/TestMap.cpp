@@ -22,7 +22,7 @@ TestMap::~TestMap()
 void TestMap::createMap()
 {
 	//SELECT PASSABLE
-	LeftClick* lclick = &_game->leftA;
+	//LeftClick* lclick = &_game->leftA;
 	for (int x = 0, y = 0; y < 14; ++x)
 	{
 		auto button = std::make_unique<Entity>();
@@ -32,10 +32,10 @@ void TestMap::createMap()
 		button->addComponent(std::make_unique<ComponentAABB>(sf::Vector2f(32.0, 32.0), sf::Vector2f(0.0, 0.0)));
 		ComponentEvent* e = button->getComponent<ComponentEvent>(components::COMPONENT_EVENT);
 
-		e->addClickEvent(std::make_unique<Click<bool>>([x, y, lclick]()->bool
+		e->addClickEvent(std::make_unique<Click<bool>>([x, y]()->bool
 		{
-			lclick->state = CREATE_PASSABLE;
-			lclick->tilePos = sf::Vector2u(32 * x, 32 * y);
+			LeftClick::state = CREATE_PASSABLE;
+			LeftClick::tilePos = sf::Vector2u(32 * x, 32 * y);
 			return true;
 		}));
 		button->setSave(false);
@@ -57,10 +57,10 @@ void TestMap::createMap()
 		button->addComponent(std::make_unique<ComponentAABB>(sf::Vector2f(32.0, 32.0), sf::Vector2f(0.0, 0.0)));
 		ComponentEvent* e = button->getComponent<ComponentEvent>(components::COMPONENT_EVENT);
 
-		e->addClickEvent(std::make_unique<Click<bool>>([x, y, lclick]()->bool
+		e->addClickEvent(std::make_unique<Click<bool>>([x, y]()->bool
 		{
-			lclick->state = CREATE_SOLID;
-			lclick->tilePos = sf::Vector2u(32 * x, 32 * y);
+			LeftClick::state = CREATE_SOLID;
+			LeftClick::tilePos = sf::Vector2u(32 * x, 32 * y);
 			return true;
 		}));
 		button->setSave(false);
@@ -94,9 +94,9 @@ void TestMap::createMap()
 	button->addComponent(std::make_unique<ComponentEvent>());
 	button->addComponent(std::make_unique<ComponentAABB>(sf::Vector2f(64.0, 64.0), sf::Vector2f(0.0, 0.0)));
 	auto e = button->getComponent<ComponentEvent>(components::COMPONENT_EVENT);
-	e->addClickEvent(std::make_unique<Click<bool>>([lclick]()->bool
+	e->addClickEvent(std::make_unique<Click<bool>>([]()->bool
 	{
-		lclick->state = CREATE_PLAYER;
+		LeftClick::state = CREATE_PLAYER;
 		return true;
 	}));
 	button->setSave(false);
@@ -109,9 +109,9 @@ void TestMap::createMap()
 	button->addComponent(std::make_unique<ComponentEvent>());
 	button->addComponent(std::make_unique<ComponentAABB>(sf::Vector2f(32, 32), sf::Vector2f(0.0, 0.0)));
 	e = button->getComponent<ComponentEvent>(components::COMPONENT_EVENT);
-	e->addClickEvent(std::make_unique<Click<bool>>([lclick]()->bool
+	e->addClickEvent(std::make_unique<Click<bool>>([]()->bool
 	{
-		lclick->state = CREATE_DAMAGEWALL;
+		LeftClick::state = CREATE_DAMAGEWALL;
 		return true;
 	}));
 
@@ -125,9 +125,9 @@ void TestMap::createMap()
 	button->addComponent(std::make_unique<ComponentEvent>());
 	button->addComponent(std::make_unique<ComponentAABB>(sf::Vector2f(50.0, 30.0), sf::Vector2f(0.0, 0.0)));
 	e = button->getComponent<ComponentEvent>(components::COMPONENT_EVENT);
-	e->addClickEvent(std::make_unique<Click<bool>>([lclick]() -> bool
+	e->addClickEvent(std::make_unique<Click<bool>>([]() -> bool
 	{
-		lclick->layer += 1;
+		LeftClick::layer += 1;
 		return true;
 	}));
 
@@ -140,9 +140,9 @@ void TestMap::createMap()
 	button->addComponent(std::make_unique<ComponentEvent>());
 	button->addComponent(std::make_unique<ComponentAABB>(sf::Vector2f(50.0, 30.0), sf::Vector2f(0.0, 0.0)));
 	e = button->getComponent<ComponentEvent>(components::COMPONENT_EVENT);
-	e->addClickEvent(std::make_unique<Click<bool>>([lclick]() -> bool
+	e->addClickEvent(std::make_unique<Click<bool>>([]() -> bool
 	{
-		lclick->layer -= 1;
+		LeftClick::layer -= 1;
 		return true;
 	}));
 

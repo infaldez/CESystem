@@ -9,8 +9,8 @@
 #include "Editor.h"
 
 
-TestMap::TestMap(std::string name, Loop* game) 
-	: Map(name), _game(game)
+TestMap::TestMap(std::string name, std::map<std::string, sf::View>& views)
+	: Map(name), _views(views)
 {
 }
 
@@ -157,7 +157,8 @@ void TestMap::createMap()
 	nbutton->addComponent(std::make_unique<ComponentAABB>(sf::Vector2f(32, 32), sf::Vector2f(0.0, 0.0)));
 	auto en = nbutton->getComponent<ComponentEvent>(components::COMPONENT_EVENT);
 	ComponentPosition* npos = nbutton->getComponent<ComponentPosition>(components::COMPONENT_POSITION);
-	sf::View& menu = _game->menuView;
+	
+	sf::View& menu = _views.find("menuView")->second;
 	//BACK BUTTON
 	auto bbutton = std::make_unique<Entity>();
 	bbutton->addComponent(std::make_unique<ComponentRender>("completeSet.png", sf::Vector2u(32, 32), sf::Vector2u(32 * 31, 32 * 31), sf::Vector2u(32, 32), false));

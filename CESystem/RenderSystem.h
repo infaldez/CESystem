@@ -27,7 +27,7 @@ public:
 class RenderSystem
 {
 private:
-	Loop& _game;
+	std::map<std::string, sf::View>& _views;
 
 	bool readT = true;
 	sf::Text _text;
@@ -42,7 +42,7 @@ private:
 public:
 	void runSystem(std::vector<std::unique_ptr<Entity>>& entityList, std::vector<std::string> tilesets);
 
-	RenderSystem(sf::RenderWindow& window, Loop& game);
+	RenderSystem(sf::RenderWindow& window, std::map<std::string, sf::View>& views);
 	~RenderSystem();
 };
 

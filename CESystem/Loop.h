@@ -42,8 +42,8 @@ public:
 	float deltaTime = 0.0;
 	int fps = 0;
 
-	//LeftClick leftA;
-	sf::View mapview, menuView;
+	float lastFrameTime;
+	float fpsClockStart;
 
 	Loop() {};
 

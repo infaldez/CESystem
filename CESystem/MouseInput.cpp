@@ -10,7 +10,7 @@
 
 #include "Loop.h"
 
-MouseInput::MouseInput(Loop& game) : _game(game)
+MouseInput::MouseInput(std::map<std::string, sf::View>& views) : _views(views)
 {
 	this->time = 0;
 }

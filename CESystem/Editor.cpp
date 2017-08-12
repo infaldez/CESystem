@@ -22,6 +22,21 @@
 
 EditorMode::EditorMode()
 {
+	lastFrameTime = clock();
+	fpsClockStart = clock();
+
+	window.create(sf::VideoMode(1920, 1080), "Component Entity System");
+
+	sf::View mapView = sf::View(sf::FloatRect(0, 0, 1920, 1080 * 0.65));
+	sf::View menuView = sf::View(sf::FloatRect(960, 1024, 1920, 1080 * 0.35));
+	mapView.setViewport(sf::FloatRect(0, 0, 1, 0.65));
+	mapView.zoom(0.5);
+	menuView.setViewport(sf::FloatRect(0, 0.65, 1, 0.35));
+
+	views.insert(std::pair<std::string, sf::View>("mapView", mapView));
+	views.insert(std::pair<std::string, sf::View>("menuView", menuView));
+	
+	window.setFramerateLimit(90);
 }
 
 
@@ -45,24 +60,17 @@ void EditorMode::run()
 	beat.setLoop(true);
 	beat.play();*/
 
-	sf::RenderWindow window(sf::VideoMode(1920, 1080), "Component Entity System");
-	mapview = sf::View(sf::FloatRect(0, 0, 1920, 1080 * 0.65));
-	menuView = sf::View(sf::FloatRect(960, 1024, 1920, 1080 * 0.35));
-	mapview.setViewport(sf::FloatRect(0, 0, 1, 0.65));
-	mapview.zoom(0.5);
-	menuView.setViewport(sf::FloatRect(0, 0.65, 1, 0.35));
-	window.setFramerateLimit(90);
 
 	sf::FloatRect menu(0, 1080 * 0.65, 1920, 1080 * 0.35);
 	sf::FloatRect tileEditor(0, 0, 1920, 1080 * 0.65);
 
-	RenderSystem renderSystem(window, *this);
+	RenderSystem renderSystem(window, views);
 	MovementSystem movementSystem;
 	CollisionSystem collisionSystem;
-	InputSystem inputSystem(*this);
-	MouseInput mouseInput(*this);
+	InputSystem inputSystem(views);
+	MouseInput mouseInput(views);
 
-	TestMap map("test", this);
+	TestMap map("test", views);
 	//map.loadMap();
 	std::vector<std::unique_ptr<Entity>>& entityList = map._entityList;
 	entityList.clear();
@@ -71,8 +79,7 @@ void EditorMode::run()
 	/*
 	Loop
 	*/
-	float lastFrameTime = clock();
-	float fpsClockStart = clock();
+
 
 	//loop start
 	while (running)
@@ -92,14 +99,14 @@ void EditorMode::run()
 			{
 				if (menu.contains(sf::Vector2f(event.mouseButton.x, event.mouseButton.y)))
 				{
-					window.setView(menuView);
+					window.setView(views.find("menuView")->second);
 					sf::Vector2i mousePosition = sf::Mouse::getPosition(window);
 					sf::Vector2i mouseWorldPos = (sf::Vector2i)window.mapPixelToCoords(mousePosition);
 					mouseInput.eventClick(entityList, mouseWorldPos);
 				}
 				else if (tileEditor.contains(sf::Vector2f(event.mouseButton.x, event.mouseButton.y)))
 				{
-					window.setView(mapview);
+					window.setView(views.find("mapView")->second);
 					sf::Vector2i mousePosition = sf::Mouse::getPosition(window);
 					sf::Vector2i mouseWorldPos = (sf::Vector2i)window.mapPixelToCoords(mousePosition);
 					mouseInput.editorClick(entityList, mouseWorldPos);

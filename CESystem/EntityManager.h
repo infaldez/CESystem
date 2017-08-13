@@ -34,12 +34,13 @@ class EntityManager
 		ar.register_type(static_cast<ComponentCollision*>(NULL));
 		ar.register_type(static_cast<ComponentAABB*>(NULL));
 		ar.register_type(static_cast<ComponentText*>(NULL));
-
-		ar.register_type(static_cast<MoveBlock*>(NULL));
+		
+		//ar.register_type(static_cast<MoveBlock*>(NULL));
 		ar.register_type(static_cast<DoDamage*>(NULL));
-//		ar.register_type(static_cast<Click*>(NULL));
-		ar.register_type(static_cast<Save*>(NULL));
-
+		//ar.register_type(static_cast<Click*>(NULL));
+		//ar.register_type(static_cast<Save*>(NULL));
+		ar.register_type(static_cast<PathSequence*>(NULL));
+		
 		ar & _entityList;
 	}
 public:

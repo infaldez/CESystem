@@ -94,6 +94,7 @@
     <ClCompile Include="ComponentPosition.cpp" />
     <ClCompile Include="ComponentRender.cpp" />
     <ClCompile Include="ComponentText.cpp" />
+    <ClCompile Include="DebugMap.cpp" />
     <ClCompile Include="Editor.cpp" />
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="EntityCreator.cpp" />
@@ -126,6 +127,7 @@
     <ClInclude Include="ComponentPosition.h" />
     <ClInclude Include="ComponentRender.h" />
     <ClInclude Include="ComponentText.h" />
+    <ClInclude Include="DebugMap.h" />
     <ClInclude Include="Editor.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="Actions.h" />

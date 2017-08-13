@@ -2,6 +2,7 @@
 
 #include "Entity.h"
 #include <boost/serialization/access.hpp>
+#include <boost/serialization/base_object.hpp>
 #include <string>
 /*
 	Event base
@@ -124,6 +125,29 @@ public:
 	~Save(){}
 };
 
+enum seqCondition
+{
+	TIME,
+	X,
+	Y
+};
+
+struct SeqItem
+{
+	friend class boost::serialization::access;
+	template<class Archive>
+	void serialize(Archive& ar, const unsigned int version)
+	{
+		ar & transitionValue & rotation & speed;
+		ar & transitionCondition;
+	}
+
+	float transitionValue;
+	float rotation;
+	float speed;
+	seqCondition transitionCondition;
+};
+
 class PathSequence : public Event
 {
 	friend class boost::serialization::access;
@@ -131,31 +155,22 @@ class PathSequence : public Event
 	void serialize(Archive& ar, const unsigned int version)
 	{
 		ar & boost::serialization::base_object<Event>(*this);
+		ar &  _sequence;
+		ar & previousSequenceTime;
+		ar & startingDistance.x & startingDistance.y;
+		ar & init;
 	}
 
 public:
-	enum seqCondition
-	{
-		TIME,
-		X,
-		Y
-	};
-
-	struct SeqItem
-	{
-		float transitionValue;
-		float rotation;
-		float speed;
-		seqCondition transitionCondition;
-	};
-
+	bool init;
 	std::vector<SeqItem> _sequence;
 	float previousSequenceTime;
 	sf::Vector2f startingDistance;
-	seqCondition _condition;
+	//seqCondition _condition;
 	virtual void executeTimedEvent(Entity* a, float time);
 
 	PathSequence(std::vector<SeqItem> sequence, Entity* entity) : _sequence(sequence) {
+		init = false;
 		_seq = _sequence.begin();
 		previousSequenceTime = 0;
 

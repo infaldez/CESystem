@@ -21,9 +21,13 @@ TestMap::~TestMap()
 
 void TestMap::createMap()
 {
+
+	_entityManager.add(entitycreator::player(sf::Vector2f(32, 32), 1));
+	_entityManager.add(entitycreator::damagewall(sf::Vector2f(128, 128), 1));
+
 	//SELECT PASSABLE
 	//LeftClick* lclick = &_game->leftA;
-	for (int x = 0, y = 0; y < 14; ++x)
+	/*for (int x = 0, y = 0; y < 14; ++x)
 	{
 		auto button = std::make_unique<Entity>();
 		button->addComponent(std::make_unique<ComponentRender>("completeSet.png", sf::Vector2u(32, 32), sf::Vector2u(32 * x, 32 * y), sf::Vector2u(32, 32), true));
@@ -71,7 +75,7 @@ void TestMap::createMap()
 			y++;
 			x = -1;
 		}
-	}
+	}*/
 
 
 	// SAVE BUTTON
@@ -88,7 +92,7 @@ void TestMap::createMap()
 
 
 	// PLAYER BUTTON
-	auto button = std::make_unique<Entity>();
+	/*auto button = std::make_unique<Entity>();
 	button->addComponent(std::make_unique<ComponentRender>("completeSet.png", sf::Vector2u(64, 64), sf::Vector2u(0, 32 * 26), sf::Vector2u(64, 64), false));
 	button->addComponent(std::make_unique<ComponentPosition>(sf::Vector2f(960 + 32 * 20, 1024)));
 	button->addComponent(std::make_unique<ComponentEvent>());
@@ -100,10 +104,10 @@ void TestMap::createMap()
 		return true;
 	}));
 	button->setSave(false);
-	_entityManager.add(button);
+	_entityManager.add(button);*/
 
 	// DAMAGE WALL BUTTON
-	button = std::make_unique<Entity>();
+	/*button = std::make_unique<Entity>();
 	button->addComponent(std::make_unique<ComponentRender>("completeSet.png", sf::Vector2u(32, 32), sf::Vector2u(32 * 2, 32 * 17), sf::Vector2u(32, 32), false));
 	button->addComponent(std::make_unique<ComponentPosition>(sf::Vector2f(960 + 32 * 22, 1024)));
 	button->addComponent(std::make_unique<ComponentEvent>());
@@ -188,5 +192,5 @@ void TestMap::createMap()
 	_entityManager.add(nbutton);
 
 	bbutton->setSave(false);
-	_entityManager.add(bbutton);
+	_entityManager.add(bbutton);*/
 }

@@ -106,11 +106,11 @@ namespace entitycreator
 				float speed;
 				seqCondition transitionCondition;
 		*/
-		std::vector<PathSequence::SeqItem> seq{
-			{ -32, -90, 6, PathSequence::seqCondition::X },
-			{ 32, 90, 2, PathSequence::seqCondition::X },
-			{ 200, 180, 2, PathSequence::seqCondition::TIME },
-			{ -32, 0, 4, PathSequence::seqCondition::Y }
+		std::vector<SeqItem> seq{
+			{ -32, -90, 6, seqCondition::X },
+			{ 32, 90, 2, seqCondition::X },
+			{ 200, 180, 2, seqCondition::TIME },
+			{ -32, 0, 4, seqCondition::Y }
 		};
 		e->addTimedEvent(std::make_unique<PathSequence>(seq, entity.get()));
 

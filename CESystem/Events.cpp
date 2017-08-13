@@ -70,10 +70,17 @@ void MoveBlock::executeCollisionEvents(Entity* a, Entity* b, std::vector<std::un
 
 void PathSequence::executeTimedEvent(Entity* a, float time)
 {
+
+	if (!init)
+	{
+		_seq = _sequence.begin();
+		init = true;
+	}
+		
 	bool change = false;
 	switch (_seq->transitionCondition)
 	{
-	case PathSequence::TIME:
+	case seqCondition::TIME:
 		if (time - previousSequenceTime > _seq->transitionValue)
 		{
 			if (a->componentKey[components::COMPONENT_POSITION] == true)
@@ -84,7 +91,7 @@ void PathSequence::executeTimedEvent(Entity* a, float time)
 			change = true;
 		}
 		break;
-	case PathSequence::X:
+	case seqCondition::X:
 		if (a->componentKey[components::COMPONENT_POSITION] == true)
 		{
 			ComponentPosition* pos = a->getComponent<ComponentPosition>(components::COMPONENT_POSITION);
@@ -103,7 +110,7 @@ void PathSequence::executeTimedEvent(Entity* a, float time)
 				
 		}
 		break;
-	case PathSequence::Y:
+	case seqCondition::Y:
 		if (a->componentKey[components::COMPONENT_POSITION] == true)
 		{
 			ComponentPosition* pos = a->getComponent<ComponentPosition>(components::COMPONENT_POSITION);

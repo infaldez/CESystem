@@ -1,6 +1,7 @@
 #pragma once
 
 #include <boost/serialization/access.hpp>
+#include <boost/serialization/base_object.hpp>
 
 namespace components
 {

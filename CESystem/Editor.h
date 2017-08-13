@@ -10,13 +10,14 @@
 #include "CollisionSystem.h"
 #include "InputSystem.h"
 #include "MouseInput.h"
+
 #include "TestMap.h"
+#include "DebugMap.h"
 
 class EditorMode : public Loop
 {
 private:
 	std::unique_ptr<TestMap> map;
-	//std::vector<std::unique_ptr<Entity>>& entityList;
 
 	RenderSystem renderSystem;
 	MovementSystem movementSystem;
@@ -24,7 +25,6 @@ private:
 	InputSystem inputSystem;
 	MouseInput mouseInput;
 
-	//sf::RenderWindow window;
 	sf::FloatRect menu, tileEditor;
 
 	std::map<std::string, sf::View> views;

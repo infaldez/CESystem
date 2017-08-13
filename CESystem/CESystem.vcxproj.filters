@@ -129,6 +129,9 @@
     <ClCompile Include="GameMode.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="DebugMap.cpp">
+      <Filter>Source Files\Maps</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component.h">
@@ -223,6 +226,9 @@
     </ClInclude>
     <ClInclude Include="GameMode.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DebugMap.h">
+      <Filter>Header Files\Maps</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

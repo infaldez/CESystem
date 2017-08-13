@@ -15,6 +15,7 @@ class ComponentEvent : public Component
 		ar & boost::serialization::base_object<Component>(*this);
 		ar & _collisionEvents;
 		ar & _clickEvents;
+		ar & _timedEvents;
 	}
 private:
 	std::vector<std::unique_ptr<Event>> _collisionEvents;

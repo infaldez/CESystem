@@ -108,6 +108,7 @@ void EditorMode::run()
 			if (event.key.code == sf::Keyboard::Escape)
 			{
 				StaticGameState::gameState = GAME;
+				map->saveMap();
 			}
 		}
 	}
@@ -137,18 +138,18 @@ void EditorMode::run()
 
 		while (deltaTime >= 16)
 		{
-			movementSystem.runSystem(map->_entityList);
-			collisionSystem.runSystem(map->_entityList);
+			//movementSystem.runSystem(map->_entityList);
+			//collisionSystem.runSystem(map->_entityList);
 			deltaTime -= 16;
 		}
-		for (auto& e : map->_entityList)
+		/*for (auto& e : map->_entityList)
 		{
 			if (e->componentKey[components::COMPONENT_EVENT] == true)
 			{
 				Entity* ent = e.get();
 				e->getComponent<ComponentEvent>(components::COMPONENT_EVENT)->runTimedEvent(ent, currentFrameTime);
 			}
-		}
+		}*/
 
 		renderSystem.runSystem(map->_entityList, tilesets);
 

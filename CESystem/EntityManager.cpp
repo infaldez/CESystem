@@ -27,3 +27,12 @@ void EntityManager::deleteEntities()
 		else { ++it; }
 	}
 }
+
+Entity* EntityManager::findEntityByTag(std::string tag)
+{
+	for (auto &ent : _entityList)
+	{
+		if (ent->hasTag(tag))
+			return ent.get();
+	}
+}

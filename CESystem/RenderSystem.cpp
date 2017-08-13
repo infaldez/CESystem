@@ -10,6 +10,8 @@
 #include <string>
 #include "ComponentText.h"
 
+#include "Loop.h"
+
 void DrawEntity::clear()
 {
 	m_vertices.clear();
@@ -184,7 +186,7 @@ void RenderSystem::createRTexture(std::vector<std::unique_ptr<Entity>>& entityLi
 					_text.setFont(_font);
 					_text.setString(cText->getText());
 					_text.setPosition(cPos->getPosition());
-					//window->draw(_text);
+					_texts.push_back(_text);
 				}
 			}
 		}
@@ -199,6 +201,7 @@ void renderText()
 
 void RenderSystem::runSystem(std::vector<std::unique_ptr<Entity>>& entityList, std::vector<std::string> tilesets)
 {
+	_texts.clear();
 
 	for (auto& ent : entityList)
 	{
@@ -213,22 +216,20 @@ void RenderSystem::runSystem(std::vector<std::unique_ptr<Entity>>& entityList, s
 	}
 
 	createRTexture(entityList, tilesets);
-	/*
-	_rtexture.display();
-	window->clear(sf::Color(200, 150, 50));
-
-	sf::Sprite scene(_rtexture.getTexture());
-	window->setView(_game.menuView);
-	window->draw(scene);
-	window->setView(_game.mapview);
-	window->draw(scene);*/
-	grid.loadgrid();
 
 	for (auto& view : *_views)
 	{
 		window->setView(view.second);
 		window->draw(drawEntity);
-		window->draw(grid);
+		
+		for (auto& text : _texts)
+			window->draw(text);
+
+		if (StaticGameState::gameState == EDITOR)
+		{
+			grid.loadgrid();
+			window->draw(grid);
+		}
 	}
 
 	window->display();

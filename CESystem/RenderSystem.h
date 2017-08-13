@@ -30,11 +30,13 @@ private:
 
 	bool readT = true;
 	sf::Text _text;
+	std::vector<sf::Text> _texts;
 	sf::Font _font;
 	float _dt;
 	sf::RenderWindow* window;
 	DrawEntity drawEntity;
 	DrawEntity grid;
+
 
 	void createRTexture(std::vector<std::unique_ptr<Entity>>& entityList, std::vector<std::string> tilesets);
 

@@ -37,7 +37,7 @@ class EntityManager
 		
 		//ar.register_type(static_cast<MoveBlock*>(NULL));
 		ar.register_type(static_cast<DoDamage*>(NULL));
-		//ar.register_type(static_cast<Click*>(NULL));
+		ar.register_type(static_cast<Click*>(NULL));
 		//ar.register_type(static_cast<Save*>(NULL));
 		ar.register_type(static_cast<PathSequence*>(NULL));
 		
@@ -50,6 +50,7 @@ public:
 
 	void add(std::unique_ptr<Entity>& Ent, bool save = true);
 	void deleteEntities();
+	Entity* findEntityByTag(std::string);
 };
 
 

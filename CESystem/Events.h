@@ -68,7 +68,6 @@ public:
 	~MoveBlock(){}
 };
 
-template<typename T>
 class Click : public Event
 {
 	friend class boost::serialization::access;
@@ -78,7 +77,7 @@ class Click : public Event
 		ar & boost::serialization::base_object<Event>(*this);
 	}
 public:	
-	std::function<T(void)> _lcFunc;
+	std::function<void()> _lcFunc;
 
 	void executeClick(Entity* a, sf::Vector2i mpos)
 	{
@@ -100,7 +99,7 @@ public:
 	}
 
 	Click(){};
-	Click(std::function<T(void)> lcFunc) : _lcFunc(lcFunc){}
+	Click(std::function<void()> lcFunc) : _lcFunc(lcFunc){}
 
 	~Click(){}
 };
@@ -125,6 +124,10 @@ public:
 	~Save(){}
 };
 
+
+/*
+	SEQUENCE EVENT
+*/
 enum seqCondition
 {
 	TIME,
@@ -166,7 +169,6 @@ public:
 	std::vector<SeqItem> _sequence;
 	float previousSequenceTime;
 	sf::Vector2f startingDistance;
-	//seqCondition _condition;
 	virtual void executeTimedEvent(Entity* a, float time);
 
 	PathSequence(std::vector<SeqItem> sequence, Entity* entity) : _sequence(sequence) {

@@ -115,7 +115,7 @@ void EditorMode::run()
 
 	if (!pause)
 	{
-		float currentFrameTime = clock();
+		/*float currentFrameTime = clock();
 		float elapsed = currentFrameTime - lastFrameTime;
 		lastFrameTime = currentFrameTime;
 		deltaTime += elapsed;
@@ -129,19 +129,19 @@ void EditorMode::run()
 			if (sf::Keyboard::isKeyPressed(key)){
 				keys[key] = true;
 			}
-		}
+		}*/
 
-		sf::Vector2i mousePosition = sf::Mouse::getPosition(window);
-		sf::Vector2i mouseWorldPos = (sf::Vector2i)window.mapPixelToCoords(mousePosition);
-		inputSystem.runSystem(map->_entityList, keys, currentFrameTime);
-		mouseInput.runSystem(map->_entityList, mouseWorldPos, currentFrameTime);
+		//sf::Vector2i mousePosition = sf::Mouse::getPosition(window);
+		//sf::Vector2i mouseWorldPos = (sf::Vector2i)window.mapPixelToCoords(mousePosition);
+		//inputSystem.runSystem(map->_entityList, keys, currentFrameTime);
+		//mouseInput.runSystem(map->_entityList, mouseWorldPos, currentFrameTime);
 
-		while (deltaTime >= 16)
+		/*while (deltaTime >= 16)
 		{
 			//movementSystem.runSystem(map->_entityList);
 			//collisionSystem.runSystem(map->_entityList);
 			deltaTime -= 16;
-		}
+		}*/
 		/*for (auto& e : map->_entityList)
 		{
 			if (e->componentKey[components::COMPONENT_EVENT] == true)
@@ -150,7 +150,7 @@ void EditorMode::run()
 				e->getComponent<ComponentEvent>(components::COMPONENT_EVENT)->runTimedEvent(ent, currentFrameTime);
 			}
 		}*/
-
+	
 		renderSystem.runSystem(map->_entityList, tilesets);
 
 		map->_entityManager.deleteEntities();

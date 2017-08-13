@@ -66,7 +66,7 @@ namespace entitycreator
 		position = griddedPosition(position);
 		std::unique_ptr<Entity> player = std::make_unique<Entity>();
 
-		player->addComponent(std::make_unique<ComponentRender>(TILESET, sf::Vector2u(64, 64), sf::Vector2u(0, 300), sf::Vector2u(64, 64), false));
+		player->addComponent(std::make_unique<ComponentRender>(TILESET, sf::Vector2u(64, 64), sf::Vector2u(0, 768), sf::Vector2u(64, 64), false));
 		player->addComponent(std::make_unique<ComponentPosition>(position));
 		player->addComponent(std::make_unique<ComponentAABB>(sf::Vector2f(32.0, 32.0), sf::Vector2f(16.0, 32.0)));
 		player->addComponent(std::make_unique<ComponentMovement>(0, 0));
@@ -82,6 +82,8 @@ namespace entitycreator
 		player->getComponent<ComponentPlayerInput>(components::COMPONENT_INPUT)->setInput(sf::Keyboard::S, actions::moveActions::MOVE_DOWN);
 		player->getComponent<ComponentPlayerInput>(components::COMPONENT_INPUT)->setInput(sf::Keyboard::LShift, actions::moveActions::CHARGE);
 		player->getComponent<ComponentPlayerInput>(components::COMPONENT_INPUT)->setInput(sf::Keyboard::Space, actions::moveActions::SLASH);
+
+		player->getComponent<ComponentRender>(components::COMPONENT_RENDER)->setLayer(layer);
 
 		return std::move(player);
 	}

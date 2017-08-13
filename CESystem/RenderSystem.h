@@ -6,7 +6,6 @@
 
 #include "Entity.h"
 #include "ComponentRender.h"
-#include "Game.h"
 
 class DrawEntity : public sf::Drawable, public sf::Transformable
 {
@@ -27,7 +26,7 @@ public:
 class RenderSystem
 {
 private:
-	std::map<std::string, sf::View>& _views;
+	std::map<std::string, sf::View>* _views;
 
 	bool readT = true;
 	sf::Text _text;
@@ -44,5 +43,6 @@ public:
 
 	RenderSystem(sf::RenderWindow& window, std::map<std::string, sf::View>& views);
 	~RenderSystem();
+	RenderSystem() {};
 };
 

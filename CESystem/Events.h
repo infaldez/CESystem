@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Entity.h"
-#include "Game.h"
 #include <boost/serialization/access.hpp>
 #include <string>
 /*

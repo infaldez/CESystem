@@ -1,6 +1,12 @@
 #pragma once
 
 #include <SFML/Graphics.hpp>
+#include "Enums.h"
+
+class StaticGameState {
+public:
+	static GameState gameState;
+};
 
 enum leftCLickState
 {
@@ -36,7 +42,8 @@ public:
 class Loop
 {
 public:
-	int layer = 0;
+	sf::RenderWindow& window;
+
 	bool running = true;
 	bool pause = false;
 	float deltaTime = 0.0;
@@ -45,7 +52,7 @@ public:
 	float lastFrameTime;
 	float fpsClockStart;
 
-	Loop() {};
+	Loop(sf::RenderWindow& window);
 
 	virtual void runSystems() {};
 	virtual void run() {};

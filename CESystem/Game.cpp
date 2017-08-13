@@ -1,9 +1,11 @@
 #include "Game.h"
 
-
-Game::Game()
+Game::Game() : editorMode(EditorMode(window)), gameMode(GameMode(window))
 {
-	this->gameState = &editorMode;
+	window.create(sf::VideoMode(1920, 1080), "Component Entity System");
+	running = true;
+	this->gameLoop = &editorMode;
+	StaticGameState::gameState = EDITOR;
 }
 
 
@@ -14,5 +16,18 @@ Game::~Game()
 
 void Game::run()
 {
-	gameState->run();
+	while (running)
+	{
+		switch (StaticGameState::gameState)
+		{
+		case GameState::EDITOR:
+			gameLoop = &editorMode;
+			break;
+		case GameState::GAME:
+			gameLoop = &gameMode;
+			break;
+		}
+		
+		gameLoop->run();
+	}
 }

@@ -100,6 +100,7 @@
     <ClCompile Include="EntityManager.cpp" />
     <ClCompile Include="Events.cpp" />
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="GameMode.cpp" />
     <ClCompile Include="InputSystem.cpp" />
     <ClCompile Include="IOmanager.cpp" />
     <ClCompile Include="Loop.cpp" />
@@ -130,8 +131,10 @@
     <ClInclude Include="Actions.h" />
     <ClInclude Include="EntityCreator.h" />
     <ClInclude Include="EntityManager.h" />
+    <ClInclude Include="Enums.h" />
     <ClInclude Include="Events.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="GameMode.h" />
     <ClInclude Include="InputSystem.h" />
     <ClInclude Include="IOmanager.h" />
     <ClInclude Include="Loop.h" />

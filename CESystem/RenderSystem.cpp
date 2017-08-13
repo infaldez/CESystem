@@ -127,8 +127,9 @@ void DrawEntity::loadgrid()
 /*
 	RENDERSYSTEM
 */
-RenderSystem::RenderSystem(sf::RenderWindow& window, std::map<std::string, sf::View>& views) : _views(views)
+RenderSystem::RenderSystem(sf::RenderWindow& window, std::map<std::string, sf::View>& views)
 {
+	_views = &views;
 	this->window = &window;
 }
 
@@ -205,8 +206,8 @@ void RenderSystem::runSystem(std::vector<std::unique_ptr<Entity>>& entityList, s
 		{
 			sf::Vector2f pos = ent->getComponent<ComponentPosition>(components::COMPONENT_POSITION)->getPosition();
 
-				_views.find("mapView")->second.setCenter(pos);
-				window->setView(_views.find("mapView")->second);
+				_views->find("mapView")->second.setCenter(pos);
+				window->setView(_views->find("mapView")->second);
 
 		}
 	}
@@ -223,7 +224,7 @@ void RenderSystem::runSystem(std::vector<std::unique_ptr<Entity>>& entityList, s
 	window->draw(scene);*/
 	grid.loadgrid();
 
-	for (auto& view : _views)
+	for (auto& view : *_views)
 	{
 		window->setView(view.second);
 		window->draw(drawEntity);

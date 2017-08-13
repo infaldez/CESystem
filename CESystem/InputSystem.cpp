@@ -7,8 +7,9 @@
 #include "EntityPlayer.h"
 #include <map>
 
-InputSystem::InputSystem(std::map<std::string, sf::View>& views) : _views(views)
+InputSystem::InputSystem(std::map<std::string, sf::View>& views)
 {
+	this->_views = &views;
 }
 
 

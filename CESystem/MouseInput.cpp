@@ -10,8 +10,9 @@
 
 #include "Loop.h"
 
-MouseInput::MouseInput(std::map<std::string, sf::View>& views) : _views(views)
+MouseInput::MouseInput(std::map<std::string, sf::View>& views)
 {
+	this->_views = &views;
 	this->time = 0;
 }
 

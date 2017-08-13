@@ -5,35 +5,29 @@
 #include <functional>
 #include <memory>
 #include "Editor.h"
+#include "GameMode.h"
 #include <iostream>
 
-enum GameState {
-	GAME,
-	EDITOR
-};
+#include "Enums.h"
 
 
-class GameMode : public Loop
-{
-	void run()  { std::cout << "game" << std::endl; }
-};
+
 
 class Game
 {
 private:
-
+	bool running;
 public:
+	sf::RenderWindow window;
 
 	EditorMode editorMode;
 	GameMode gameMode;
 
-	Loop* gameState;
-
+	Loop* gameLoop;
 
 	Game();
 	~Game();
 
 	void run();
-
 };
 

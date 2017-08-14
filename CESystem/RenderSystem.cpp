@@ -140,11 +140,21 @@ RenderSystem::~RenderSystem()
 {
 }
 
+int changeTopLayer(int layer, int topLayer)
+{
+	if (StaticGameState::gameState == EDITOR)
+		return topLayer;
+	else if (layer > topLayer)
+		return layer;
+	else
+		return topLayer;
+}
 
 void RenderSystem::createRTexture(std::vector<std::unique_ptr<Entity>>& entityList, std::vector<std::string> tilesets)
 {
 	// keep track of the highest layer assigned to any render
-	int topLayer = 0;
+	int topLayer = changeTopLayer(0, LeftClick::layer);
+
 	window->clear();
 	drawEntity.clear();
 	for (int layer = 0; layer <= topLayer; layer++)
@@ -160,7 +170,7 @@ void RenderSystem::createRTexture(std::vector<std::unique_ptr<Entity>>& entityLi
 				{
 					ComponentRender* cRender = ent->getComponent<ComponentRender>(components::COMPONENT_RENDER);
 					if (cRender->getLayer() > topLayer)
-						topLayer = cRender->getLayer();
+						topLayer = changeTopLayer(cRender->getLayer(), topLayer);
 					if (cRender->getLayer() != layer)
 						continue;
 

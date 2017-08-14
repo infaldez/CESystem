@@ -113,4 +113,21 @@ void MouseInput::editorClick(std::vector<std::unique_ptr<Entity>>& entityList, s
 			break;
 		}
 	}
+	if (sf::Mouse::isButtonPressed(sf::Mouse::Right))
+	{
+		for (auto& ent : entityList)
+		{
+			if (ent->componentKey[components::COMPONENT_POSITION] == true)
+			{
+			
+				sf::Vector2i pos = (sf::Vector2i)ent->getComponent<ComponentPosition>(components::COMPONENT_POSITION)->getPosition();
+
+				if (pos.x/32 == mousePosition.x/32 && pos.y/32 == mousePosition.y/32)
+				{
+					ent->componentKey[components::DELETE] = true;
+				}
+					
+			}			
+		}
+	}
 }

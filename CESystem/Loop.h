@@ -14,6 +14,7 @@ enum leftCLickState
 	CREATE_PASSABLE,
 	CREATE_PLAYER,
 	CREATE_DAMAGEWALL,
+	CREATE_ENEMY,
 
 	NOTHING
 };
@@ -46,6 +47,8 @@ public:
 
 	bool running = true;
 	bool pause = false;
+	bool resume = false;
+
 	float deltaTime = 0.0;
 	int fps = 0;
 

@@ -1,9 +1,10 @@
 #include "componentDamage.h"
 
 
-componentDamage::componentDamage(int dmg) : Component(components::COMPONENT_DAMAGE)
+componentDamage::componentDamage(int dmg, bool destroyOnImpact) : Component(components::COMPONENT_DAMAGE)
 {
 	this->_dmg = dmg;
+	this->_destroyOnImpact = destroyOnImpact;
 }
 
 
@@ -20,4 +21,9 @@ void componentDamage::setDamage(int dmg)
 int componentDamage::getDamage()
 {
 	return _dmg;
+}
+
+bool componentDamage::destroyOnImpact()
+{
+	return _destroyOnImpact;
 }

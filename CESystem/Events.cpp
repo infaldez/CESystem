@@ -33,25 +33,67 @@ Save::Save(std::string name, EntityManager& em) : name(name), em(&em)
 
 }
 
-void DoDamage::executeCollisionEvents(Entity* a, Entity* b, std::vector<std::unique_ptr<Entity>>& entityList)
+
+void DoDamage::executeCollisionEvents(Entity* eventOwner, Entity* b, std::vector<std::unique_ptr<Entity>>& entityList)
 {
-	if (a->componentKey[components::COMPONENT_DAMAGE] == true &&
+	/*
+		GROUPS
+	*/
+	std::vector<std::string> allies{
+		"player",
+	};
+
+	std::vector<std::string> enemies{
+		"enemy"
+	};
+
+	/*
+		Hits something with health
+	*/
+	if (eventOwner->componentKey[components::COMPONENT_DAMAGE] == true &&
 		b->componentKey[components::COMPONENT_HEALTH] == true)
 	{
 		ComponentHealth* health = b->getComponent<ComponentHealth>(components::COMPONENT_HEALTH);
-		componentDamage* dmg = a->getComponent<componentDamage>(components::COMPONENT_DAMAGE);
+		componentDamage* dmg = eventOwner->getComponent<componentDamage>(components::COMPONENT_DAMAGE);
+		
+		eventOwner->componentKey[components::DELETE] = true;
 
-		health->setHealth(health->getHealth() - dmg->getDamage());
-		//a->componentKey[components::DELETE] = true;
-		if (health->getHealth() <= 0)
+		for (auto enemy : enemies)
 		{
+			if (b->hasTag(enemy))
+			{
+				health->setHealth(health->getHealth() - dmg->getDamage());
+			}
+		}
+
+		for (auto ally : allies)
+		{
+			if (b->hasTag(ally))
+				eventOwner->componentKey[components::DELETE] = false;
+		}
+		
+		if (health->getHealth() <= 0)
+		{	
+			b->componentKey[components::DELETE] = true;
 			if (b->hasTag("player"))
 			{
-				b->componentKey[components::DELETE] = true;
 				entityList.push_back(entitycreator::player(b->getComponent<ComponentPosition>(components::COMPONENT_POSITION)->getOriginalPosition()));
 			}
-			//b->componentKey[components::DELETE] = true;
+			
 		}
+
+		if (!dmg->destroyOnImpact())
+			eventOwner->componentKey[components::DELETE] = false;
+
+	}
+	/*
+		Hits any solid object
+	*/
+	else if (eventOwner->componentKey[components::COMPONENT_DAMAGE] == true &&
+		b->componentKey[components::COMPONENT_COLLISION] == true)
+	{
+		componentDamage* dmg = eventOwner->getComponent<componentDamage>(components::COMPONENT_DAMAGE);
+		dmg->destroyOnImpact() ? eventOwner->componentKey[components::DELETE] = true : eventOwner->componentKey[components::DELETE] = false;
 	}
 }
 
@@ -76,12 +118,12 @@ void PathSequence::executeTimedEvent(Entity* a, float time)
 		_seq = _sequence.begin();
 		init = true;
 	}
-		
+	previousSequenceTime += time;
 	bool change = false;
 	switch (_seq->transitionCondition)
 	{
 	case seqCondition::TIME:
-		if (time - previousSequenceTime > _seq->transitionValue)
+		if (previousSequenceTime > _seq->transitionValue)
 		{
 			if (a->componentKey[components::COMPONENT_POSITION] == true)
 			{
@@ -138,7 +180,7 @@ void PathSequence::executeTimedEvent(Entity* a, float time)
 	{
 		(_seq == _sequence.end() - 1) ? _seq = _sequence.begin() : _seq++;
 		
-		previousSequenceTime = time;
+		previousSequenceTime = 0;
 
 		if (a->componentKey[components::COMPONENT_MOVEMENT] == true)
 		{

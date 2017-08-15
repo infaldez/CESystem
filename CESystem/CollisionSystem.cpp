@@ -388,7 +388,7 @@ void CollisionSystem::runSystem(std::vector<std::unique_ptr<Entity>>& entityList
 							ent1->getComponent<ComponentEvent>(components::COMPONENT_EVENT)->runCollisionEvents(ent1, ent2, entityList);
 						}
 						if (ent2->componentKey[components::COMPONENT_EVENT] == true){
-							ent2->getComponent<ComponentEvent>(components::COMPONENT_EVENT)->runCollisionEvents(ent1, ent2, entityList);
+							ent2->getComponent<ComponentEvent>(components::COMPONENT_EVENT)->runCollisionEvents(ent2, ent1, entityList);
 						}
 
 

@@ -12,6 +12,10 @@
 class GameMode : public Loop
 {
 private:
+	bool init = false;
+	float currentFrameTime = 0;
+	float elapsed = 0;
+
 	std::unique_ptr<DebugMap> map;
 
 	RenderSystem renderSystem;

@@ -3,9 +3,6 @@
 
 GameMode::GameMode(sf::RenderWindow& window) : Loop(window)
 {
-	lastFrameTime = clock();
-	fpsClockStart = clock();
-
 	//window.create(sf::VideoMode(1920, 1080), "Component Entity System");
 
 	sf::View mapView = sf::View(sf::FloatRect(0, 0, 1920, 1080));
@@ -35,6 +32,20 @@ GameMode::~GameMode()
 
 void GameMode::run()
 {
+	if (!init)
+	{
+		lastFrameTime = clock();
+		fpsClockStart = clock();
+		init = true;
+	}
+
+	if (resume)
+	{
+		lastFrameTime = clock();
+		resume = false;
+		pause = false;
+	}
+
 	sf::Event event;
 	while (window.pollEvent(event))
 	{
@@ -50,16 +61,18 @@ void GameMode::run()
 		{
 			if (event.key.code == sf::Keyboard::Escape)
 			{
+				resume = true;
+				pause = true;
 				StaticGameState::gameState = EDITOR;
 				map->loadMap();
 			}
 		}
 	}
-
+	
 	if (!pause)
 	{
-		float currentFrameTime = clock();
-		float elapsed = currentFrameTime - lastFrameTime;
+		currentFrameTime = clock();
+		elapsed = currentFrameTime - lastFrameTime;
 		lastFrameTime = currentFrameTime;
 		deltaTime += elapsed;
 
@@ -76,8 +89,8 @@ void GameMode::run()
 
 		sf::Vector2i mousePosition = sf::Mouse::getPosition(window);
 		sf::Vector2i mouseWorldPos = (sf::Vector2i)window.mapPixelToCoords(mousePosition);
-		inputSystem.runSystem(map->_entityList, keys, currentFrameTime);
-		mouseInput.runSystem(map->_entityList, mouseWorldPos, currentFrameTime);
+		inputSystem.runSystem(map->_entityList, keys, elapsed);
+		mouseInput.runSystem(map->_entityList, mouseWorldPos, elapsed);
 
 		while (deltaTime >= 16)
 		{
@@ -90,7 +103,7 @@ void GameMode::run()
 			if (e->componentKey[components::COMPONENT_EVENT] == true)
 			{
 				Entity* ent = e.get();
-				e->getComponent<ComponentEvent>(components::COMPONENT_EVENT)->runTimedEvent(ent, currentFrameTime);
+				e->getComponent<ComponentEvent>(components::COMPONENT_EVENT)->runTimedEvent(ent, elapsed);
 			}
 		}
 
@@ -106,5 +119,5 @@ void GameMode::run()
 			std::cout << fps << std::endl;
 			fps = 0;
 		}
-	}
+	} 	
 }

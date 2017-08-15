@@ -98,7 +98,7 @@ namespace entitycreator
 		entity->addComponent(std::make_unique<ComponentAABB>(sf::Vector2f(TILE_SIZE, TILE_SIZE), sf::Vector2f(0, 0)));
 		entity->addComponent(std::make_unique<ComponentCollision>(false));
 		entity->addComponent(std::make_unique<ComponentMovement>(0, 0));
-		entity->addComponent(std::make_unique<componentDamage>(10));
+		entity->addComponent(std::make_unique<componentDamage>(10, false));
 		entity->addComponent(std::make_unique<ComponentEvent>());
 		auto e = entity->getComponent<ComponentEvent>(components::COMPONENT_EVENT);
 		e->addCollisionEvent(std::make_unique<DoDamage>());
@@ -121,6 +121,24 @@ namespace entitycreator
 		return std::move(entity);
 	}
 
+	// ENEMY
+	std::unique_ptr<Entity> enemy(sf::Vector2f position, int layer)
+	{
+		position = griddedPosition(position);
+		std::unique_ptr<Entity> entity = std::make_unique<Entity>();
+
+		entity->addComponent(std::make_unique<ComponentRender>(TILESET, sf::Vector2u(64, 64), sf::Vector2u(0, 768), sf::Vector2u(64, 64), false));
+		entity->addComponent(std::make_unique<ComponentPosition>(position));
+		entity->addComponent(std::make_unique<ComponentAABB>(sf::Vector2f(32.0, 32.0), sf::Vector2f(16.0, 32.0)));
+		entity->addComponent(std::make_unique<ComponentMovement>(0, 0));
+		entity->addComponent(std::make_unique<ComponentCollision>(true));
+		entity->addComponent(std::make_unique<ComponentHealth>(20));
+		entity->addTag("enemy");
+
+		entity->getComponent<ComponentRender>(components::COMPONENT_RENDER)->setLayer(layer);
+
+		return std::move(entity);
+	}
 }
 
 

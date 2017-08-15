@@ -15,7 +15,7 @@ private:
 	ActionMove actionMove;
 	std::map<std::string, sf::View>* _views;
 public:
-	void runSystem(std::vector<std::unique_ptr<Entity>>& entityList, bool keys[], float dt);
+	void runSystem(std::vector<std::unique_ptr<Entity>>& entityList, bool keys[], float elapsed);
 
 	InputSystem(std::map<std::string, sf::View>& views);
 	~InputSystem();

@@ -37,7 +37,7 @@ class DoDamage : public Event
 		ar & boost::serialization::base_object<Event>(*this);
 	}
 public:
-	virtual void executeCollisionEvents(Entity* a, Entity* b, std::vector<std::unique_ptr<Entity>>& entityList);
+	virtual void executeCollisionEvents(Entity* eventOwner, Entity* b, std::vector<std::unique_ptr<Entity>>& entityList);
 	
 	DoDamage(){}
 	~DoDamage(){}
@@ -182,7 +182,6 @@ public:
 			entity->getComponent<ComponentMovement>(components::COMPONENT_MOVEMENT)->setRotation(_seq->rotation);
 			entity->getComponent<ComponentMovement>(components::COMPONENT_MOVEMENT)->setSpeed(_seq->speed);
 			startingDistance = entity->getComponent<ComponentPosition>(components::COMPONENT_POSITION)->getPosition();
-			std::cout << startingDistance.x << std::endl;
 		}
 	}
 	PathSequence(){}

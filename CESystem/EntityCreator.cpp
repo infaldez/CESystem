@@ -4,6 +4,7 @@
 #include "ComponentEvent.h"
 #include "Events.h"
 #include "ComponentHealth.h"
+#include "ComponentAnimation.h"
 
 #define TILE_SIZE 32
 #define TILESET "completeSet.png"
@@ -74,6 +75,7 @@ namespace entitycreator
 		player->addComponent(std::make_unique<ComponentCollision>(true));
 		player->addComponent(std::make_unique<componentMouseInput>());
 		player->addComponent(std::make_unique<ComponentHealth>(10));
+
 		player->addTag("player");
 
 		player->getComponent<ComponentPlayerInput>(components::COMPONENT_INPUT)->setInput(sf::Keyboard::A, actions::moveActions::MOVE_LEFT);
@@ -133,6 +135,13 @@ namespace entitycreator
 		entity->addComponent(std::make_unique<ComponentMovement>(0, 0));
 		entity->addComponent(std::make_unique<ComponentCollision>(true));
 		entity->addComponent(std::make_unique<ComponentHealth>(20));
+		entity->addComponent(std::make_unique<ComponentAnimation>(AnimData(std::vector<sf::Vector2f>{
+			{ 0, 768 },
+			{ 64, 768 },
+			{ 128, 768 }
+
+		}, 33)));
+
 		entity->addTag("enemy");
 
 		entity->getComponent<ComponentRender>(components::COMPONENT_RENDER)->setLayer(layer);

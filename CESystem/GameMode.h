@@ -6,6 +6,7 @@
 #include "CollisionSystem.h"
 #include "InputSystem.h"
 #include "MouseInput.h"
+#include "AnimationSystem.h"
 #include "TestMap.h"
 #include "DebugMap.h"
 
@@ -23,6 +24,8 @@ private:
 	CollisionSystem collisionSystem;
 	InputSystem inputSystem;
 	MouseInput mouseInput;
+	AnimationSystem animationSystem;
+
 
 	std::map<std::string, sf::View> views;
 	std::vector<std::string> tilesets;

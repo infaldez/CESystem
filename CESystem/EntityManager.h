@@ -16,6 +16,7 @@
 #include "ComponentCollision.h"
 #include "ComponentAABB.h"
 #include "ComponentText.h"
+#include "ComponentAnimation.h"
 
 class EntityManager
 {
@@ -34,6 +35,7 @@ class EntityManager
 		ar.register_type(static_cast<ComponentCollision*>(NULL));
 		ar.register_type(static_cast<ComponentAABB*>(NULL));
 		ar.register_type(static_cast<ComponentText*>(NULL));
+		ar.register_type(static_cast<ComponentAnimation*>(NULL));
 		
 		//ar.register_type(static_cast<MoveBlock*>(NULL));
 		ar.register_type(static_cast<DoDamage*>(NULL));

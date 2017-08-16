@@ -20,6 +20,7 @@ GameMode::GameMode(sf::RenderWindow& window) : Loop(window)
 	collisionSystem = CollisionSystem();
 	inputSystem = InputSystem(views);
 	mouseInput = MouseInput(views);
+	animationSystem = AnimationSystem();
 
 	map = std::make_unique<DebugMap>("test");
 	map->_entityList.clear();
@@ -96,6 +97,7 @@ void GameMode::run()
 		{
 			movementSystem.runSystem(map->_entityList);
 			collisionSystem.runSystem(map->_entityList);
+			animationSystem.runSystem(map->_entityList, elapsed);
 			deltaTime -= 16;
 		}
 		for (auto& e : map->_entityList)

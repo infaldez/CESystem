@@ -132,6 +132,12 @@
     <ClCompile Include="DebugMap.cpp">
       <Filter>Source Files\Maps</Filter>
     </ClCompile>
+    <ClCompile Include="ComponentAnimation.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AnimationSystem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component.h">
@@ -229,6 +235,12 @@
     </ClInclude>
     <ClInclude Include="DebugMap.h">
       <Filter>Header Files\Maps</Filter>
+    </ClInclude>
+    <ClInclude Include="ComponentAnimation.h">
+      <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="AnimationSystem.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

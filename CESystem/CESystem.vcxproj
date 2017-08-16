@@ -81,9 +81,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="ActionMove.cpp" />
+    <ClCompile Include="AnimationSystem.cpp" />
     <ClCompile Include="CollisionSystem.cpp" />
     <ClCompile Include="Component.cpp" />
     <ClCompile Include="ComponentAABB.cpp" />
+    <ClCompile Include="ComponentAnimation.cpp" />
     <ClCompile Include="ComponentCollision.cpp" />
     <ClCompile Include="componentDamage.cpp" />
     <ClCompile Include="ComponentEvent.cpp" />
@@ -114,9 +116,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ActionMove.h" />
+    <ClInclude Include="AnimationSystem.h" />
     <ClInclude Include="CollisionSystem.h" />
     <ClInclude Include="Component.h" />
     <ClInclude Include="ComponentAABB.h" />
+    <ClInclude Include="ComponentAnimation.h" />
     <ClInclude Include="ComponentCollision.h" />
     <ClInclude Include="componentDamage.h" />
     <ClInclude Include="ComponentEvent.h" />

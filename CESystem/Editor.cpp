@@ -110,47 +110,31 @@ void EditorMode::run()
 				StaticGameState::gameState = GAME;
 				map->saveMap();
 			}
+			if (event.key.code == sf::Keyboard::Right)
+			{
+				sf::Vector2f cPos = views.find("mapView")->second.getCenter();
+				views.find("mapView")->second.setCenter(cPos.x + 32, cPos.y);
+			}
+			if (event.key.code == sf::Keyboard::Left)
+			{
+				sf::Vector2f cPos = views.find("mapView")->second.getCenter();
+				views.find("mapView")->second.setCenter(cPos.x - 32, cPos.y);
+			}
+			if (event.key.code == sf::Keyboard::Up)
+			{
+				sf::Vector2f cPos = views.find("mapView")->second.getCenter();
+				views.find("mapView")->second.setCenter(cPos.x , cPos.y - 32);
+			}
+			if (event.key.code == sf::Keyboard::Down)
+			{
+				sf::Vector2f cPos = views.find("mapView")->second.getCenter();
+				views.find("mapView")->second.setCenter(cPos.x, cPos.y + 32);
+			}
 		}
 	}
 
 	if (!pause)
 	{
-		/*float currentFrameTime = clock();
-		float elapsed = currentFrameTime - lastFrameTime;
-		lastFrameTime = currentFrameTime;
-		deltaTime += elapsed;
-
-		//read inputs and register pressed keys in keys[]
-		bool keys[sf::Keyboard::KeyCount] = { false };
-		for (int keyI = sf::Keyboard::Unknown; keyI != sf::Keyboard::KeyCount; keyI++)
-		{
-			sf::Keyboard::Key key = static_cast<sf::Keyboard::Key>(keyI);
-
-			if (sf::Keyboard::isKeyPressed(key)){
-				keys[key] = true;
-			}
-		}*/
-
-		//sf::Vector2i mousePosition = sf::Mouse::getPosition(window);
-		//sf::Vector2i mouseWorldPos = (sf::Vector2i)window.mapPixelToCoords(mousePosition);
-		//inputSystem.runSystem(map->_entityList, keys, currentFrameTime);
-		//mouseInput.runSystem(map->_entityList, mouseWorldPos, currentFrameTime);
-
-		/*while (deltaTime >= 16)
-		{
-			//movementSystem.runSystem(map->_entityList);
-			//collisionSystem.runSystem(map->_entityList);
-			deltaTime -= 16;
-		}*/
-		/*for (auto& e : map->_entityList)
-		{
-			if (e->componentKey[components::COMPONENT_EVENT] == true)
-			{
-				Entity* ent = e.get();
-				e->getComponent<ComponentEvent>(components::COMPONENT_EVENT)->runTimedEvent(ent, currentFrameTime);
-			}
-		}*/
-	
 		renderSystem.runSystem(map->_entityList, tilesets);
 
 		map->_entityManager.deleteEntities();

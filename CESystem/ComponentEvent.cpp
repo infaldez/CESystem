@@ -27,10 +27,10 @@ void ComponentEvent::runClickEvent(Entity* a, sf::Vector2i mousePosition)
 		e->executeClick(a, mousePosition);
 }
 
-void ComponentEvent::runTimedEvent(Entity* a, float time)
+void ComponentEvent::runTimedEvent(Entity* a, float time, std::vector<std::unique_ptr<Entity>>& entityList)
 {
 	for (auto& e : _timedEvents)
-		e->executeTimedEvent(a, time);
+		e->executeTimedEvent(a, time, entityList);
 }
 
 ComponentEvent::ComponentEvent() 

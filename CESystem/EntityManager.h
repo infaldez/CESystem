@@ -42,6 +42,8 @@ class EntityManager
 		ar.register_type(static_cast<Click*>(NULL));
 		//ar.register_type(static_cast<Save*>(NULL));
 		ar.register_type(static_cast<PathSequence*>(NULL));
+		ar.register_type(static_cast<AddFollowEvent*>(NULL));
+		ar.register_type(static_cast<FollowEvent*>(NULL));
 		
 		ar & _entityList;
 	}

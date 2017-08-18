@@ -41,7 +41,7 @@ void ActionMove::move(Entity* entity, std::map<sf::Keyboard::Key, actions::moveA
 	}
 		
 
-	if (actions[actions::MOVE_RIGHT]){
+	if (actions[actions::MOVE_RIGHT] && !actions[actions::MOVE_LEFT]){
 		rotation = 90.0f;
 		speed = SPEED * speedboost;
 		if (_dt >= 100) {
@@ -49,7 +49,7 @@ void ActionMove::move(Entity* entity, std::map<sf::Keyboard::Key, actions::moveA
 			_dt = 0;
 		}
 	}
-	if (actions[actions::MOVE_LEFT]){
+	if (actions[actions::MOVE_LEFT] && !actions[actions::MOVE_RIGHT]){
 		rotation = 270.0f;
 		speed = SPEED * speedboost;
 		if (_dt >= 100) {
@@ -57,7 +57,7 @@ void ActionMove::move(Entity* entity, std::map<sf::Keyboard::Key, actions::moveA
 			_dt = 0;
 		}
 	}
-	if (actions[actions::MOVE_DOWN]){
+	if (actions[actions::MOVE_DOWN] && !actions[actions::MOVE_UP]){
 		rotation = 180.0f;
 		speed = SPEED * speedboost;
 		if (_dt > 100){
@@ -65,7 +65,7 @@ void ActionMove::move(Entity* entity, std::map<sf::Keyboard::Key, actions::moveA
 			_dt = 0;
 		}
 	}
-	if (actions[actions::MOVE_UP]){
+	if (actions[actions::MOVE_UP] && !actions[actions::MOVE_DOWN]){
 		rotation = 0.0f;
 		speed = SPEED * speedboost;
 		if (_dt > 100){
@@ -73,7 +73,7 @@ void ActionMove::move(Entity* entity, std::map<sf::Keyboard::Key, actions::moveA
 			_dt = 0;
 		}
 	}
-	if (actions[actions::MOVE_UP] && actions[actions::MOVE_RIGHT]){
+	if (actions[actions::MOVE_UP] && actions[actions::MOVE_RIGHT] && !(actions[actions::MOVE_DOWN] || actions[actions::MOVE_LEFT])){
 		rotation = 45.0f;
 		speed = SPEED * speedboost;
 		if (_dt >= 100) {
@@ -81,7 +81,7 @@ void ActionMove::move(Entity* entity, std::map<sf::Keyboard::Key, actions::moveA
 			_dt = 0;
 		}
 	}
-	if (actions[actions::MOVE_RIGHT] && actions[actions::MOVE_DOWN]){
+	if (actions[actions::MOVE_RIGHT] && actions[actions::MOVE_DOWN] && !(actions[actions::MOVE_LEFT] || actions[actions::MOVE_UP])){
 		rotation = 135.0f;
 		speed = SPEED * speedboost;
 		if (_dt >= 100) {
@@ -89,7 +89,7 @@ void ActionMove::move(Entity* entity, std::map<sf::Keyboard::Key, actions::moveA
 			_dt = 0;
 		}
 	}
-	if (actions[actions::MOVE_DOWN] && actions[actions::MOVE_LEFT]){
+	if (actions[actions::MOVE_DOWN] && actions[actions::MOVE_LEFT] && !(actions[actions::MOVE_UP] || actions[actions::MOVE_RIGHT])){
 		rotation = 225.0f;
 		speed = SPEED * speedboost;
 		if (_dt >= 100) {
@@ -97,7 +97,7 @@ void ActionMove::move(Entity* entity, std::map<sf::Keyboard::Key, actions::moveA
 			_dt = 0;
 		}
 	}
-	if (actions[actions::MOVE_LEFT] && actions[actions::MOVE_UP]){
+	if (actions[actions::MOVE_LEFT] && actions[actions::MOVE_UP] && !(actions[actions::MOVE_RIGHT] || actions[actions::MOVE_DOWN])){
 		rotation = 315.0f;
 		speed = SPEED * speedboost;
 		if (_dt >= 100) {

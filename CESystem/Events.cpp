@@ -97,6 +97,57 @@ void DoDamage::executeCollisionEvents(Entity* eventOwner, Entity* b, std::vector
 	}
 }
 
+void FollowEvent::executeTimedEvent(Entity* eventOwner, float time, std::vector<std::unique_ptr<Entity>>& entityList)
+{
+	elapsed += time;
+	if (elapsed < 250)
+	{
+		return;
+	}
+		
+
+	for (auto& ent : entityList)
+	{
+		if (ent->hasTag("player"))
+		{
+			if (ent->componentKey[components::COMPONENT_POSITION] == true &&
+				eventOwner->componentKey[components::COMPONENT_POSITION] == true)
+			{
+				sf::Vector2f pPos = ent->getComponent<ComponentPosition>(components::COMPONENT_POSITION)->getPosition();
+				sf::Vector2f ePos = eventOwner->getComponent<ComponentPosition>(components::COMPONENT_POSITION)->getPosition();
+
+				float angle = atan2(pPos.y - ePos.y, pPos.x - ePos.x) * 180 / 3.14159265358979323846;
+				int distance = sqrt(pow(pPos.x - ePos.x, 2) + pow(pPos.y - ePos.y, 2));
+
+				if (eventOwner->componentKey[components::COMPONENT_MOVEMENT] == true)
+				{
+					eventOwner->getComponent<ComponentMovement>(components::COMPONENT_MOVEMENT)->setRotation(angle + 90);
+					eventOwner->getComponent<ComponentMovement>(components::COMPONENT_MOVEMENT)->setSpeed(distance/25);
+				}
+			}
+		}
+	}
+	elapsed = 0;
+}
+
+void AddFollowEvent::executeCollisionEvents(Entity* eventOwner, Entity* b, std::vector<std::unique_ptr<Entity>>& entityList)
+{
+	/*
+		eventOwner = item
+		b = player etc.
+	*/
+	if (!added && b->hasTag("player"))
+	{
+		added = true;
+		if (eventOwner->componentKey[components::COMPONENT_EVENT] == true)
+		{
+			auto e = eventOwner->getComponent<ComponentEvent>(components::COMPONENT_EVENT);
+			eventOwner->getComponent<ComponentCollision>(components::COMPONENT_COLLISION)->addGroup("item");
+			e->addTimedEvent(std::make_unique<FollowEvent>());
+		}
+	}
+}
+
 void MoveBlock::executeCollisionEvents(Entity* a, Entity* b, std::vector<std::unique_ptr<Entity>>& entityList)
 {
 	for (auto& ent : entityList)
@@ -110,7 +161,7 @@ void MoveBlock::executeCollisionEvents(Entity* a, Entity* b, std::vector<std::un
 	}
 }
 
-void PathSequence::executeTimedEvent(Entity* a, float time)
+void PathSequence::executeTimedEvent(Entity* a, float time, std::vector<std::unique_ptr<Entity>>& entityList)
 {
 
 	if (!init)

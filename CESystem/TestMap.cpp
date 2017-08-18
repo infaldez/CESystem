@@ -117,6 +117,20 @@ void TestMap::createMap()
 	button->setSave(false);
 	_entityManager.add(button);
 
+	// ADD FOLLOW ITEM BUTTON
+	button = std::make_unique<Entity>();
+	button->addComponent(std::make_unique<ComponentRender>("completeSet.png", sf::Vector2u(32, 32), sf::Vector2u(0, 32 * 26), sf::Vector2u(32, 32), false));
+	button->addComponent(std::make_unique<ComponentPosition>(sf::Vector2f(960 + 32 * 30, 1024)));
+	button->addComponent(std::make_unique<ComponentEvent>());
+	button->addComponent(std::make_unique<ComponentAABB>(sf::Vector2f(64.0, 64.0), sf::Vector2f(0.0, 0.0)));
+	e = button->getComponent<ComponentEvent>(components::COMPONENT_EVENT);
+	e->addClickEvent(std::make_unique<Click>([]()->void
+	{
+		LeftClick::state = CREATE_ITEM;
+	}));
+	button->setSave(false);
+	_entityManager.add(button);
+
 	// DAMAGE WALL BUTTON
 	button = std::make_unique<Entity>();
 	button->addComponent(std::make_unique<ComponentRender>("completeSet.png", sf::Vector2u(32, 32), sf::Vector2u(32 * 2, 32 * 17), sf::Vector2u(32, 32), false));

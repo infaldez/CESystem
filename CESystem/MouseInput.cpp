@@ -110,6 +110,9 @@ void MouseInput::editorClick(std::vector<std::unique_ptr<Entity>>& entityList, s
 		case CREATE_ENEMY:
 			entityList.push_back(entitycreator::enemy(sf::Vector2f(mousePosition), LeftClick::layer));
 			break;
+		case CREATE_ITEM:
+			entityList.push_back(entitycreator::createItem(sf::Vector2f(mousePosition), LeftClick::layer));
+			break;
 		default:
 			break;
 		}

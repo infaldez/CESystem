@@ -321,6 +321,30 @@ bool aabbCheck(Entity* ent1, Entity* ent2)
 	return false;
 }
 
+bool checkGroup(Entity* ent1, Entity* ent2)
+{
+	auto c1 = ent1->getComponent<ComponentCollision>(components::COMPONENT_COLLISION);
+	auto c2 = ent2->getComponent<ComponentCollision>(components::COMPONENT_COLLISION);
+
+	if (c1->belongsToGroup() || c2->belongsToGroup())
+	{
+		for (auto g : c1->getGroups())
+		{
+			for (auto g2 : c2->getGroups())
+			{ 
+				if (g == g2)
+				{
+					return true;
+				}				
+			}
+		}
+		return false;
+	} 
+	if (!c1->belongsToGroup() && !c2->belongsToGroup())
+		return true;
+	
+}
+
 struct impactData
 {
 	impactData(int aPos, float eTime) : arrayPos(aPos), entryTime(eTime){}
@@ -349,7 +373,7 @@ void CollisionSystem::runSystem(std::vector<std::unique_ptr<Entity>>& entityList
 					{
 						Entity* ent2 = it->second.at(j);
 
-						if (aabbCheck(ent1, ent2))
+						if (aabbCheck(ent1, ent2) && checkGroup(ent1, ent2))
 						{
 							// Do a sweep test and push the results into timeOfImpact		
 							float entryTime, normalx, normaly;
@@ -384,6 +408,7 @@ void CollisionSystem::runSystem(std::vector<std::unique_ptr<Entity>>& entityList
 
 					if (aabbCheck(ent1, ent2))
 					{
+						// Run collision events
 						if (ent1->componentKey[components::COMPONENT_EVENT] == true){
 							ent1->getComponent<ComponentEvent>(components::COMPONENT_EVENT)->runCollisionEvents(ent1, ent2, entityList);
 						}

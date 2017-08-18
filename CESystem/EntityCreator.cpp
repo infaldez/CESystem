@@ -62,6 +62,25 @@ namespace entitycreator
 		return std::move(entity);
 	}
 
+	std::unique_ptr<Entity> createItem(sf::Vector2f position, int layer){
+
+		position = griddedPosition(position);
+		std::unique_ptr<Entity> entity = std::make_unique<Entity>();
+
+		entity->addComponent(std::make_unique<ComponentRender>(TILESET, sf::Vector2u(TILE_SIZE, TILE_SIZE), sf::Vector2u(32 * 19, 0), sf::Vector2u(TILE_SIZE, TILE_SIZE), true));
+		entity->addComponent(std::make_unique<ComponentPosition>(position));
+		entity->addComponent(std::make_unique<ComponentAABB>(sf::Vector2f(TILE_SIZE, TILE_SIZE), sf::Vector2f(0, 0)));
+		entity->addComponent(std::make_unique<ComponentCollision>(true));
+		entity->addComponent(std::make_unique<ComponentMovement>(0, 0));
+		entity->addComponent(std::make_unique<ComponentEvent>());
+
+		entity->getComponent<ComponentRender>(components::COMPONENT_RENDER)->setLayer(layer);
+		auto e = entity->getComponent<ComponentEvent>(components::COMPONENT_EVENT);
+		e->addCollisionEvent(std::make_unique<AddFollowEvent>());
+
+		return std::move(entity);
+	}
+
 	std::unique_ptr<Entity> player(sf::Vector2f position, int layer)
 	{
 		position = griddedPosition(position);

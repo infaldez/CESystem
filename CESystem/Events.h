@@ -18,7 +18,7 @@ class Event
 public:
 	virtual void executeCollisionEvents(Entity* a, Entity* b, std::vector<std::unique_ptr<Entity>>& entityList){}
 	virtual void executeClick(Entity* a, sf::Vector2i mpos){}
-	virtual void executeTimedEvent(Entity* a, float time){}
+	virtual void executeTimedEvent(Entity* a, float time, std::vector<std::unique_ptr<Entity>>& entityList){}
 
 	Event(){}
 	virtual ~Event(){};
@@ -43,6 +43,42 @@ public:
 	~DoDamage(){}
 };
 
+/*
+	ADD AND FOLLOW EVENT
+*/
+class FollowEvent : public Event
+{
+	friend class boost::serialization::access;
+	template<class Archive>
+	void serialize(Archive& ar, const unsigned int version)
+	{
+		ar & boost::serialization::base_object<Event>(*this);
+	}
+public:
+	float elapsed = 0;
+
+	virtual void executeTimedEvent(Entity* a, float time, std::vector<std::unique_ptr<Entity>>& entityList);
+
+	FollowEvent(){}
+	~FollowEvent(){}
+};
+
+class AddFollowEvent : public Event
+{
+	friend class boost::serialization::access;
+	template<class Archive>
+	void serialize(Archive& ar, const unsigned int version)
+	{
+		ar & boost::serialization::base_object<Event>(*this);
+		ar & added;
+	}
+public:
+	bool added = false;
+	virtual void executeCollisionEvents(Entity* eventOwner, Entity* b, std::vector<std::unique_ptr<Entity>>& entityList);
+
+	AddFollowEvent(){}
+	~AddFollowEvent(){}
+};
 
 /*
 	GLOBAL COLLISION EVENTS
@@ -169,7 +205,7 @@ public:
 	std::vector<SeqItem> _sequence;
 	float previousSequenceTime;
 	sf::Vector2f startingDistance;
-	virtual void executeTimedEvent(Entity* a, float time);
+	virtual void executeTimedEvent(Entity* a, float time, std::vector<std::unique_ptr<Entity>>& entityList);
 
 	PathSequence(std::vector<SeqItem> sequence, Entity* entity) : _sequence(sequence) {
 		init = false;

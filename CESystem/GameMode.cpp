@@ -105,7 +105,7 @@ void GameMode::run()
 			if (e->componentKey[components::COMPONENT_EVENT] == true)
 			{
 				Entity* ent = e.get();
-				e->getComponent<ComponentEvent>(components::COMPONENT_EVENT)->runTimedEvent(ent, elapsed);
+				e->getComponent<ComponentEvent>(components::COMPONENT_EVENT)->runTimedEvent(ent, elapsed, map->_entityList);
 			}
 		}
 

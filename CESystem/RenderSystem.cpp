@@ -215,7 +215,7 @@ void RenderSystem::runSystem(std::vector<std::unique_ptr<Entity>>& entityList, s
 
 	for (auto& ent : entityList)
 	{
-		if (ent->hasTag("player"))
+		if (ent->hasTag("player") && StaticGameState::gameState != EDITOR)
 		{
 			sf::Vector2f pos = ent->getComponent<ComponentPosition>(components::COMPONENT_POSITION)->getPosition();
 

@@ -28,7 +28,7 @@ public:
 	void addTimedEvent(std::unique_ptr<Event> evnt);
 	void runCollisionEvents(Entity* a, Entity* b, std::vector<std::unique_ptr<Entity>>& entityList);
 	void runClickEvent(Entity* a, sf::Vector2i mousePosition);
-	void runTimedEvent(Entity* a, float time);
+	void runTimedEvent(Entity* a, float time, std::vector<std::unique_ptr<Entity>>& entityList);
 
 	ComponentEvent();
 	~ComponentEvent();

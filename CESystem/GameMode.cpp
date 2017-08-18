@@ -77,6 +77,8 @@ void GameMode::run()
 		lastFrameTime = currentFrameTime;
 		deltaTime += elapsed;
 
+		std::cout << currentFrameTime << std::endl;
+
 		//read inputs and register pressed keys in keys[]
 		bool keys[sf::Keyboard::KeyCount] = { false };
 		for (int keyI = sf::Keyboard::Unknown; keyI != sf::Keyboard::KeyCount; keyI++)
@@ -108,7 +110,6 @@ void GameMode::run()
 				e->getComponent<ComponentEvent>(components::COMPONENT_EVENT)->runTimedEvent(ent, elapsed, map->_entityList);
 			}
 		}
-
 		renderSystem.runSystem(map->_entityList, tilesets);
 
 		map->_entityManager.deleteEntities();

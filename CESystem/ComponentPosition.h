@@ -14,7 +14,7 @@ class ComponentPosition : public Component
 		ar & position.x & position.y;
 		ar & previousPosition.x;
 		ar & previousPosition.y;
-		ar & original.x, original.y;
+		ar & original.x & original.y;
 	}
 private:
 	sf::Vector2f original;

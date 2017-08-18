@@ -103,6 +103,15 @@ void EditorMode::run()
 				mouseInput.editorClick(map->_entityList, mouseWorldPos);
 			}
 		}
+		if (event.type == sf::Event::MouseWheelScrolled)
+		{
+			if (event.mouseWheelScroll.delta == 1)
+				views.find("mapView")->second.zoom(0.5);
+
+			if (event.mouseWheelScroll.delta == -1)
+				views.find("mapView")->second.zoom(1.5);	
+
+		}
 		if (event.type == sf::Event::KeyPressed)
 		{
 			if (event.key.code == sf::Keyboard::Escape)

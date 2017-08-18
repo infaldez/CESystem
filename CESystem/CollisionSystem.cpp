@@ -412,9 +412,9 @@ void CollisionSystem::runSystem(std::vector<std::unique_ptr<Entity>>& entityList
 						if (ent1->componentKey[components::COMPONENT_EVENT] == true){
 							ent1->getComponent<ComponentEvent>(components::COMPONENT_EVENT)->runCollisionEvents(ent1, ent2, entityList);
 						}
-						if (ent2->componentKey[components::COMPONENT_EVENT] == true){
+						/*if (ent2->componentKey[components::COMPONENT_EVENT] == true){
 							ent2->getComponent<ComponentEvent>(components::COMPONENT_EVENT)->runCollisionEvents(ent2, ent1, entityList);
-						}
+						}*/
 
 
 						// if both A and B are solid do collision things

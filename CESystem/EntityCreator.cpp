@@ -93,9 +93,10 @@ namespace entitycreator
 		player->addComponent(std::make_unique<ComponentPlayerInput>());
 		player->addComponent(std::make_unique<ComponentCollision>(true));
 		player->addComponent(std::make_unique<componentMouseInput>());
-		player->addComponent(std::make_unique<ComponentHealth>(10));
+		player->addComponent(std::make_unique<ComponentHealth>(50, 100));
 
 		player->addTag("player");
+		player->addTag("ally");
 
 		player->getComponent<ComponentPlayerInput>(components::COMPONENT_INPUT)->setInput(sf::Keyboard::A, actions::moveActions::MOVE_LEFT);
 		player->getComponent<ComponentPlayerInput>(components::COMPONENT_INPUT)->setInput(sf::Keyboard::D, actions::moveActions::MOVE_RIGHT);
@@ -137,6 +138,9 @@ namespace entitycreator
 		};
 		e->addTimedEvent(std::make_unique<PathSequence>(seq, entity.get()));
 
+		entity->getComponent<componentDamage>(components::COMPONENT_DAMAGE)->addAllyGroup("enemy");
+		entity->addTag("enemy");
+
 		entity->getComponent<ComponentRender>(components::COMPONENT_RENDER)->setLayer(layer);
 
 		return std::move(entity);
@@ -148,19 +152,24 @@ namespace entitycreator
 		position = griddedPosition(position);
 		std::unique_ptr<Entity> entity = std::make_unique<Entity>();
 
-		entity->addComponent(std::make_unique<ComponentRender>(TILESET, sf::Vector2u(64, 64), sf::Vector2u(0, 768), sf::Vector2u(64, 64), false));
+		entity->addComponent(std::make_unique<ComponentRender>(TILESET, sf::Vector2u(32, 32), sf::Vector2u(0, 32 * 23), sf::Vector2u(32, 32), false));
 		entity->addComponent(std::make_unique<ComponentPosition>(position));
-		entity->addComponent(std::make_unique<ComponentAABB>(sf::Vector2f(32.0, 32.0), sf::Vector2f(16.0, 32.0)));
+		entity->addComponent(std::make_unique<ComponentAABB>(sf::Vector2f(32.0, 32.0), sf::Vector2f(0.0, 0.0)));
 		entity->addComponent(std::make_unique<ComponentMovement>(0, 0));
 		entity->addComponent(std::make_unique<ComponentCollision>(true));
-		entity->addComponent(std::make_unique<ComponentHealth>(20));
+		entity->addComponent(std::make_unique<componentDamage>(10, false));
+		entity->addComponent(std::make_unique<ComponentHealth>(30, 10));
 		entity->addComponent(std::make_unique<ComponentAnimation>(AnimData(std::vector<sf::Vector2f>{
-			{ 0, 768 },
-			{ 64, 768 },
-			{ 128, 768 }
-
-		}, 33)));
-
+			{ 0, 32*23 },
+			{ 32, 32*23 },
+		}, 20)));
+		entity->addComponent(std::make_unique<ComponentEvent>());
+		
+		auto e = entity->getComponent<ComponentEvent>(components::COMPONENT_EVENT);
+		e->addCollisionEvent(std::make_unique<DoDamage>());
+		e->addTimedEvent(std::make_unique<FollowEvent>());
+		
+		entity->getComponent<componentDamage>(components::COMPONENT_DAMAGE)->addAllyGroup("enemy");
 		entity->addTag("enemy");
 
 		entity->getComponent<ComponentRender>(components::COMPONENT_RENDER)->setLayer(layer);

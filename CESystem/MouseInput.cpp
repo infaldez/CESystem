@@ -52,6 +52,8 @@ void MouseInput::runSystem(std::vector<std::unique_ptr<Entity>>& entityList, sf:
 					auto e = click->getComponent<ComponentEvent>(components::COMPONENT_EVENT);
 					e->addCollisionEvent(std::make_unique<DoDamage>());
 
+					click->getComponent<componentDamage>(components::COMPONENT_DAMAGE)->addAllyGroup("ally");
+
 					click->getComponent<ComponentCollision>(components::COMPONENT_COLLISION)->setFlag(collisionType::SOLID, false);
 					entityList.push_back(std::move(click));
 					this->time = 0;

@@ -37,17 +37,6 @@ Save::Save(std::string name, EntityManager& em) : name(name), em(&em)
 void DoDamage::executeCollisionEvents(Entity* eventOwner, Entity* b, std::vector<std::unique_ptr<Entity>>& entityList)
 {
 	/*
-		GROUPS
-	*/
-	std::vector<std::string> allies{
-		"player",
-	};
-
-	std::vector<std::string> enemies{
-		"enemy"
-	};
-
-	/*
 		Hits something with health
 	*/
 	if (eventOwner->componentKey[components::COMPONENT_DAMAGE] == true &&
@@ -56,35 +45,35 @@ void DoDamage::executeCollisionEvents(Entity* eventOwner, Entity* b, std::vector
 		ComponentHealth* health = b->getComponent<ComponentHealth>(components::COMPONENT_HEALTH);
 		componentDamage* dmg = eventOwner->getComponent<componentDamage>(components::COMPONENT_DAMAGE);
 		
-		eventOwner->componentKey[components::DELETE] = true;
 
-		for (auto enemy : enemies)
+		if (dmg->getAllyGroups().size() > 0)
 		{
-			if (b->hasTag(enemy))
+			for (auto group : dmg->getAllyGroups())
 			{
-				health->setHealth(health->getHealth() - dmg->getDamage());
+				if (!b->hasTag(group)) // is not ally with group -> do dmg
+				{
+					if (dmg->destroyOnImpact())
+						eventOwner->componentKey[components::DELETE] = true;
+					health->doDmg(dmg->getDamage());
+				}
 			}
 		}
-
-		for (auto ally : allies)
+		else // No allies -> damage everything
 		{
-			if (b->hasTag(ally))
-				eventOwner->componentKey[components::DELETE] = false;
+			if (dmg->destroyOnImpact())
+				eventOwner->componentKey[components::DELETE] = true;
+			health->doDmg(dmg->getDamage());
 		}
-		
+
+
 		if (health->getHealth() <= 0)
 		{	
 			b->componentKey[components::DELETE] = true;
 			if (b->hasTag("player"))
 			{
 				entityList.push_back(entitycreator::player(b->getComponent<ComponentPosition>(components::COMPONENT_POSITION)->getOriginalPosition()));
-			}
-			
+			}		
 		}
-
-		if (!dmg->destroyOnImpact())
-			eventOwner->componentKey[components::DELETE] = false;
-
 	}
 	/*
 		Hits any solid object

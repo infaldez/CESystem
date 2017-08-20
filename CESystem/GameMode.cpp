@@ -77,8 +77,6 @@ void GameMode::run()
 		lastFrameTime = currentFrameTime;
 		deltaTime += elapsed;
 
-		std::cout << currentFrameTime << std::endl;
-
 		//read inputs and register pressed keys in keys[]
 		bool keys[sf::Keyboard::KeyCount] = { false };
 		for (int keyI = sf::Keyboard::Unknown; keyI != sf::Keyboard::KeyCount; keyI++)

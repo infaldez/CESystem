@@ -37,26 +37,32 @@ void MouseInput::runSystem(std::vector<std::unique_ptr<Entity>>& entityList, sf:
 			{
 				if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 				{
-					ComponentPosition* position = entityList.at(i)->getComponent<ComponentPosition>(components::COMPONENT_POSITION);
-					sf::Vector2f rPos = position->getPosition();
-					float rotation = atan2f(rPos.y - mPos.y, rPos.x - mPos.x) * 180.f / 3.14f;
+					if (cKey[components::COMPONENT_INVENTORY] == true)
+					{
+						if (entityList.at(i)->getComponent<ComponentInventory>(components::COMPONENT_INVENTORY)->getAmount("gun") > 0)
+						{
+							ComponentPosition* position = entityList.at(i)->getComponent<ComponentPosition>(components::COMPONENT_POSITION);
+							sf::Vector2f rPos = position->getPosition();
+							float rotation = atan2f(rPos.y - mPos.y, rPos.x - mPos.x) * 180.f / 3.14f;
 
-					auto click = std::make_unique<Entity>();
-					click->addComponent(std::make_unique<ComponentRender>("completeSet.png", sf::Vector2u(32, 32), sf::Vector2u(64, 64), sf::Vector2u(32, 32), false));
-					click->addComponent(std::make_unique<ComponentPosition>(sf::Vector2f(rPos.x + 16, rPos.y + 16)));
-					click->addComponent(std::make_unique<ComponentAABB>(sf::Vector2f(32.0, 32.0), sf::Vector2f(0.0, 0.0)));
-					click->addComponent(std::make_unique<ComponentCollision>(false));
-					click->addComponent(std::make_unique<ComponentMovement>(10, rotation - 90));
-					click->addComponent(std::make_unique<componentDamage>(10, true));
-					click->addComponent(std::make_unique<ComponentEvent>());
-					auto e = click->getComponent<ComponentEvent>(components::COMPONENT_EVENT);
-					e->addCollisionEvent(std::make_unique<DoDamage>());
+							auto click = std::make_unique<Entity>();
+							click->addComponent(std::make_unique<ComponentRender>("completeSet.png", sf::Vector2u(32, 32), sf::Vector2u(64, 64), sf::Vector2u(32, 32), false));
+							click->addComponent(std::make_unique<ComponentPosition>(sf::Vector2f(rPos.x + 16, rPos.y + 16)));
+							click->addComponent(std::make_unique<ComponentAABB>(sf::Vector2f(32.0, 32.0), sf::Vector2f(0.0, 0.0)));
+							click->addComponent(std::make_unique<ComponentCollision>(false));
+							click->addComponent(std::make_unique<ComponentMovement>(10, rotation - 90));
+							click->addComponent(std::make_unique<componentDamage>(10, true));
+							click->addComponent(std::make_unique<ComponentEvent>());
+							auto e = click->getComponent<ComponentEvent>(components::COMPONENT_EVENT);
+							e->addCollisionEvent(std::make_unique<DoDamage>());
 
-					click->getComponent<componentDamage>(components::COMPONENT_DAMAGE)->addAllyGroup("ally");
+							click->getComponent<componentDamage>(components::COMPONENT_DAMAGE)->addAllyGroup("ally");
 
-					click->getComponent<ComponentCollision>(components::COMPONENT_COLLISION)->setFlag(collisionType::SOLID, false);
-					entityList.push_back(std::move(click));
-					this->time = 0;
+							click->getComponent<ComponentCollision>(components::COMPONENT_COLLISION)->setFlag(collisionType::SOLID, false);
+							entityList.push_back(std::move(click));
+							this->time = 0;
+						}
+					}
 				}
 			}
 		}

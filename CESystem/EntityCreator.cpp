@@ -5,6 +5,7 @@
 #include "Events.h"
 #include "ComponentHealth.h"
 #include "ComponentAnimation.h"
+#include "ComponentInventory.h"
 
 #define TILE_SIZE 32
 #define TILESET "completeSet.png"
@@ -94,6 +95,7 @@ namespace entitycreator
 		player->addComponent(std::make_unique<ComponentCollision>(true));
 		player->addComponent(std::make_unique<componentMouseInput>());
 		player->addComponent(std::make_unique<ComponentHealth>(50, 100));
+		player->addComponent(std::make_unique<ComponentInventory>());
 
 		player->addTag("player");
 		player->addTag("ally");

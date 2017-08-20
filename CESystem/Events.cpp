@@ -133,6 +133,8 @@ void AddFollowEvent::executeCollisionEvents(Entity* eventOwner, Entity* b, std::
 			auto e = eventOwner->getComponent<ComponentEvent>(components::COMPONENT_EVENT);
 			eventOwner->getComponent<ComponentCollision>(components::COMPONENT_COLLISION)->addGroup("item");
 			e->addTimedEvent(std::make_unique<FollowEvent>());
+			if (b->componentKey[components::COMPONENT_INVENTORY] == true)
+				b->getComponent<ComponentInventory>(components::COMPONENT_INVENTORY)->addItem("gun", 1);
 		}
 	}
 }

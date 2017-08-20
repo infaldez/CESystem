@@ -138,6 +138,9 @@
     <ClCompile Include="AnimationSystem.cpp">
       <Filter>Source Files\Systems</Filter>
     </ClCompile>
+    <ClCompile Include="ComponentInventory.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component.h">
@@ -240,6 +243,9 @@
       <Filter>Header Files\Components</Filter>
     </ClInclude>
     <ClInclude Include="AnimationSystem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ComponentInventory.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
